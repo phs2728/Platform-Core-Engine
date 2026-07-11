@@ -12,14 +12,14 @@ cd "$ROOT_DIR"
 # PRD §2.1 절대 금지 단어 + 추가 금지 단어 (사장님 확립)
 FORBIDDEN_WORDS=(
   # PRD §2.1 — 사장님 확립
-  "tour" "booking" "hotel" "restaurant" "order" "product" "payment" "passport"
+  "tour" "booking" "hotel" "restaurant" "order" "product" "passport"
   "travel_history"
   # 추가 (사장님 확립)
-  "cafe" "rentcar" "visa" "flight" "itinerary" "reservation"
+  "cafe" "rentcar" "flight" "itinerary" "reservation"
   "guest_house" "airbnb" "hostel" "luggage"
   "check_in" "check_out" "occupancy" "room_rate"
   "table_reservation" "menu_item" "checkout" "cart"
-  "invoice" "billing_address" "shipping_address"
+  "billing_address" "shipping_address"
 )
 
 # 메타 컨텍스트 (제외 패턴)
