@@ -106,6 +106,86 @@ export {
 } from './use-cases/device/DeviceTrustUseCases.js';
 
 // ═══════════════════════════════════════════
+// Verification (Epic 1)
+// ═══════════════════════════════════════════
+
+export {
+  requestEmailVerificationUseCase,
+  type RequestEmailVerificationInput,
+  type RequestEmailVerificationOutput,
+  type RequestEmailVerificationDeps,
+} from './use-cases/verification/RequestEmailVerificationUseCase.js';
+
+export {
+  confirmEmailVerificationUseCase,
+  type ConfirmEmailVerificationInput,
+  type ConfirmEmailVerificationOutput,
+  type ConfirmEmailVerificationDeps,
+} from './use-cases/verification/ConfirmEmailVerificationUseCase.js';
+
+export {
+  requestPhoneVerificationUseCase,
+  type RequestPhoneVerificationInput,
+  type RequestPhoneVerificationOutput,
+  type RequestPhoneVerificationDeps,
+} from './use-cases/verification/RequestPhoneVerificationUseCase.js';
+
+export {
+  confirmPhoneVerificationUseCase,
+  type ConfirmPhoneVerificationInput,
+  type ConfirmPhoneVerificationOutput,
+  type ConfirmPhoneVerificationDeps,
+} from './use-cases/verification/ConfirmPhoneVerificationUseCase.js';
+
+export {
+  resendVerificationUseCase,
+  type ResendVerificationInput,
+  type ResendVerificationOutput,
+  type ResendVerificationDeps,
+} from './use-cases/verification/ResendVerificationUseCase.js';
+
+export {
+  sendOtpUseCase,
+  type SendOtpInput,
+  type SendOtpOutput,
+  type SendOtpDeps,
+  type SendOtpChannel,
+} from './use-cases/verification/SendOtpUseCase.js';
+
+// ═══════════════════════════════════════════
+// Password (Epic 2)
+// ═══════════════════════════════════════════
+
+export {
+  changePasswordUseCase,
+  type ChangePasswordInput,
+  type ChangePasswordOutput,
+  type ChangePasswordDeps,
+} from './use-cases/password/ChangePasswordUseCase.js';
+
+export {
+  requestPasswordResetUseCase,
+  type RequestPasswordResetInput,
+  type RequestPasswordResetOutput,
+  type RequestPasswordResetDeps,
+} from './use-cases/password/RequestPasswordResetUseCase.js';
+
+export {
+  confirmPasswordResetUseCase,
+  type ConfirmPasswordResetInput,
+  type ConfirmPasswordResetOutput,
+  type ConfirmPasswordResetDeps,
+} from './use-cases/password/ConfirmPasswordResetUseCase.js';
+
+export {
+  forcePasswordChangeUseCase,
+  isPasswordChangeRequired,
+  type ForcePasswordChangeInput,
+  type ForcePasswordChangeOutput,
+  type ForcePasswordChangeDeps,
+} from './use-cases/password/ForcePasswordChangeUseCase.js';
+
+// ═══════════════════════════════════════════
 // In-Memory Repositories
 // ═══════════════════════════════════════════
 
@@ -122,6 +202,11 @@ export { InMemoryMfaRepository } from './infrastructure/InMemoryMfaRepository.js
 export { InMemoryDeviceRepository } from './infrastructure/InMemoryDeviceRepository.js';
 export { InMemoryRateLimitRepository } from './infrastructure/InMemoryRateLimitRepository.js';
 export { TotpImpl } from './infrastructure/TotpImpl.js';
+export {
+  InMemoryEmailSender,
+  InMemorySmsSender,
+  InMemoryRandom,
+} from './infrastructure/InMemorySenders.js';
 
 // ═══════════════════════════════════════════
 // Audit
