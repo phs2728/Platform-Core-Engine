@@ -171,6 +171,11 @@ Coverage:
 | RFC-040 | P2 | ERP Import Interface (Host hook) |
 | RFC-045 | P2 | JSON Import |
 | RFC-041 | P3 | search 성능 (10K+ 부하) |
+| **RFC-P01** | **P1** | **Price Resolution Service** — `resolvePrice()` 1회 호출로 최종 적용 Price 반환 (Plan + Tier + Time + Currency + Version) |
+| **RFC-P02** | **P1** | **Effective Date Resolution** — 현재 시점 기준 유효한 Price Version 자동 선택 |
+| **RFC-P03** | **P1** | **Multi Currency Resolution** — Exchange Rate 자동 적용 (USD → EUR → JPY → KRW) |
+| **RFC-P04** | **P2** | **Price Simulation** — `simulatePrice()` Tier/Time/Currency 변경 시뮬레이션 (저장 ❌) |
+| **RFC-P05** | **P2** | **Explain API** — `explainPrice()` 가격 결정 근거 반환 (Authorization `explain()` 패턴) |
 
 ---
 
