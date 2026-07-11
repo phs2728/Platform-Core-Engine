@@ -118,7 +118,17 @@ export async function verifyMfaUseCase(
       return Err(new Error('Max attempts exceeded'));
     }
 
-    if (otpRecord.code !== code) {
+    // Security: Use timing-safe comparison (Sprint 2C-4 fix)
+    const { timingSafeEqual } = await import('node:crypto');
+    let codeMatch = false;
+    try {
+      const a = Buffer.from(String(otpRecord.code));
+      const b = Buffer.from(String(code));
+      if (a.length === b.length) {
+        codeMatch = timingSafeEqual(a, b);
+      }
+    } catch { codeMatch = false; }
+    if (!codeMatch) {
       await recordAudit(deps.auditLogRepository, {
         accountId: input.accountId,
         tenantId: input.tenantId,

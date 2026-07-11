@@ -91,8 +91,15 @@ export async function confirmPhoneVerificationUseCase(
     );
   }
 
-  // Code 검증
-  if (otpRecord.code !== input.code) {
+  // Code 검증 — Security: timing-safe comparison (Sprint 2C-4 fix)
+  const { timingSafeEqual } = await import('node:crypto');
+  let codeMatch = false;
+  try {
+    const a = Buffer.from(String(otpRecord.code));
+    const b = Buffer.from(String(input.code));
+    if (a.length === b.length) codeMatch = timingSafeEqual(a, b);
+  } catch { codeMatch = false; }
+  if (!codeMatch) {
     await recordAudit(deps.auditLogRepository, {
       accountId: otpRecord.accountId,
       tenantId: input.tenantId,
