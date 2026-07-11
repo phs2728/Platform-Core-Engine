@@ -39,6 +39,22 @@ importers:
         specifier: ^1.6.0
         version: 1.6.1(@types/node@20.19.43)
 
+  apps/communication-demo:
+    dependencies:
+      '@platform/core-sdk':
+        specifier: workspace:*
+        version: link:../../engines/core-sdk
+      '@platform/engine-communication':
+        specifier: workspace:*
+        version: link:../../engines/communication
+    devDependencies:
+      '@types/node':
+        specifier: ^20.11.0
+        version: 20.19.43
+      tsx:
+        specifier: ^4.7.0
+        version: 4.23.0
+
   apps/identity-demo:
     dependencies:
       '@platform/core-sdk':
@@ -57,6 +73,25 @@ importers:
       typescript:
         specifier: ^5.4.0
         version: 5.9.3
+
+  engines/communication:
+    dependencies:
+      '@platform/core-sdk':
+        specifier: workspace:*
+        version: link:../core-sdk
+      zod:
+        specifier: ^3.23.0
+        version: 3.25.76
+    devDependencies:
+      '@types/node':
+        specifier: ^20.11.0
+        version: 20.19.43
+      typescript:
+        specifier: ^5.4.0
+        version: 5.9.3
+      vitest:
+        specifier: ^1.6.0
+        version: 1.6.1(@types/node@20.19.43)
 
   engines/core-sdk:
     dependencies:

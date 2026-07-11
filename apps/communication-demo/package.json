@@ -1,0 +1,18 @@
+{
+  "name": "@platform/communication-demo",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "tsx src/server.ts",
+    "build": "echo 'demo: use tsx for dev'"
+  },
+  "dependencies": {
+    "@platform/engine-communication": "workspace:*",
+    "@platform/core-sdk": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "tsx": "^4.7.0"
+  }
+}

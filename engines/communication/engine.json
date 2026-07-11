@@ -1,0 +1,44 @@
+{
+  "id": "communication",
+  "name": "Communication Engine",
+  "version": "0.1.0",
+  "phase": 2,
+  "status": "Draft",
+  "description": "Universal Communication Layer — Email, SMS, Push, Webhook, In-App, WhatsApp, Telegram, Slack, Discord, Teams, Voice. No Engine may send communication directly.",
+  "depends_on": [
+    "core-sdk",
+    "event-bus",
+    "universal-core"
+  ],
+  "provides": [
+    "IChannelProvider (Plugin)",
+    "IProviderManager",
+    "IMessageRepository",
+    "ITemplateRepository",
+    "IPreferenceRepository",
+    "IAnalyticsRepository",
+    "sendMessageUseCase",
+    "createTemplateUseCase",
+    "setPreferenceUseCase"
+  ],
+  "events_emitted": [
+    "communication.message.queued",
+    "communication.message.sent",
+    "communication.message.failed",
+    "communication.message.dead_letter",
+    "communication.message.retry_scheduled"
+  ],
+  "events_subscribed": [
+    "identity.account.created",
+    "identity.email.verified",
+    "identity.password.reset",
+    "identity.login.success",
+    "identity.login.failed",
+    "booking.created",
+    "booking.cancelled",
+    "payment.completed",
+    "payment.failed",
+    "review.requested",
+    "system.announcement"
+  ]
+}

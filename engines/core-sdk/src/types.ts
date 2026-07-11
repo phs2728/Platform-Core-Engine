@@ -4,7 +4,9 @@
 
 export type EngineName =
   | 'identity'
+  | 'communication'
   | 'notification'
+  | 'event-bus'
   | 'media'
   | 'cms'
   | 'booking'

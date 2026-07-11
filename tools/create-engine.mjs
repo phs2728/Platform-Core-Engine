@@ -68,7 +68,8 @@ function copyRecursive(srcDir, destDir) {
       const content = readFileSync(srcPath, 'utf-8');
       writeFileSync(destPath, replaceVars(content));
     } else {
-      writeFileSync(destPath, content);
+      const raw = readFileSync(srcPath);
+      writeFileSync(destPath, raw);
     }
   }
 }
