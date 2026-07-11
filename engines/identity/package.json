@@ -1,7 +1,7 @@
 {
   "name": "@platform/engine-identity",
-  "version": "1.0.0-rc.1",
-  "description": "Identity Engine — Account/Email Login/Password Hash/Session/Logout (Sprint 2C-1 MVP)",
+  "version": "1.0.0",
+  "description": "Identity Engine \u2014 Account/Email Login/Password Hash/Session/Logout (Sprint 2C-1 MVP)",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
