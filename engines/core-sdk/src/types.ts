@@ -10,6 +10,7 @@ export type EngineName =
   | 'address'
   | 'organization'
   | 'catalog'
+  | 'pricing'
   | 'notification'
   | 'event-bus'
   | 'media'
