@@ -74,6 +74,44 @@ importers:
         specifier: ^5.4.0
         version: 5.9.3
 
+  engines/address:
+    dependencies:
+      '@platform/core-sdk':
+        specifier: workspace:*
+        version: link:../core-sdk
+      zod:
+        specifier: ^3.23.0
+        version: 3.25.76
+    devDependencies:
+      '@types/node':
+        specifier: ^20.11.0
+        version: 20.19.43
+      typescript:
+        specifier: ^5.4.0
+        version: 5.9.3
+      vitest:
+        specifier: ^1.6.0
+        version: 1.6.1(@types/node@20.19.43)
+
+  engines/authorization:
+    dependencies:
+      '@platform/core-sdk':
+        specifier: workspace:*
+        version: link:../core-sdk
+      zod:
+        specifier: ^3.23.0
+        version: 3.25.76
+    devDependencies:
+      '@types/node':
+        specifier: ^20.11.0
+        version: 20.19.43
+      typescript:
+        specifier: ^5.4.0
+        version: 5.9.3
+      vitest:
+        specifier: ^1.6.0
+        version: 1.6.1(@types/node@20.19.43)
+
   engines/communication:
     dependencies:
       '@platform/core-sdk':
@@ -147,6 +185,25 @@ importers:
         specifier: ^1.6.0
         version: 1.6.1(@types/node@20.19.43)
 
+  engines/organization:
+    dependencies:
+      '@platform/core-sdk':
+        specifier: workspace:*
+        version: link:../core-sdk
+      zod:
+        specifier: ^3.23.0
+        version: 3.25.76
+    devDependencies:
+      '@types/node':
+        specifier: ^20.11.0
+        version: 20.19.43
+      typescript:
+        specifier: ^5.4.0
+        version: 5.9.3
+      vitest:
+        specifier: ^1.6.0
+        version: 1.6.1(@types/node@20.19.43)
+
   engines/policy:
     dependencies:
       zod:
@@ -155,6 +212,25 @@ importers:
     devDependencies:
       '@types/node':
         specifier: ^20.0.0
+        version: 20.19.43
+      typescript:
+        specifier: ^5.4.0
+        version: 5.9.3
+      vitest:
+        specifier: ^1.6.0
+        version: 1.6.1(@types/node@20.19.43)
+
+  engines/user:
+    dependencies:
+      '@platform/core-sdk':
+        specifier: workspace:*
+        version: link:../core-sdk
+      zod:
+        specifier: ^3.23.0
+        version: 3.25.76
+    devDependencies:
+      '@types/node':
+        specifier: ^20.11.0
         version: 20.19.43
       typescript:
         specifier: ^5.4.0

@@ -12,7 +12,9 @@ cd "$ROOT_DIR"
 # Glob 패턴으로 안전하게 확장 (bash의 extglob)
 shopt -s globstar nullglob
 
-EXAMPLES=$(find engines/core-sdk/src/*/examples -name "*.ts" 2>/dev/null | sort)
+# Scan both core-sdk examples (errors/result/logger/validation/event per module)
+# AND each engine's own examples/ directory.
+EXAMPLES=$(find engines/core-sdk/src/*/examples engines/*/examples -maxdepth 2 -name "*.ts" 2>/dev/null | sort)
 
 if [ -z "$EXAMPLES" ]; then
   echo "❌ Examples not found."

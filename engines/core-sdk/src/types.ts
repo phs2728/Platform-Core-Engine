@@ -5,6 +5,10 @@
 export type EngineName =
   | 'identity'
   | 'communication'
+  | 'authorization'
+  | 'user'
+  | 'address'
+  | 'organization'
   | 'notification'
   | 'event-bus'
   | 'media'
