@@ -1,0 +1,46 @@
+{
+  "name": "@platform/core-monorepo",
+  "version": "0.1.0",
+  "private": true,
+  "description": "AI Bridge Georgia Platform Core — Monorepo root",
+  "type": "module",
+  "engines": {
+    "node": ">=20",
+    "pnpm": ">=9"
+  },
+  "packageManager": "pnpm@9.0.0",
+  "workspaces": [
+    "engines/*",
+    "packages/*",
+    "tools/*"
+  ],
+  "scripts": {
+    "build": "turbo run build",
+    "test": "turbo run test",
+    "test:coverage": "turbo run test:coverage",
+    "test:security": "turbo run test:security",
+    "lint": "turbo run lint",
+    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md,yaml,yml}\"",
+    "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,json,md,yaml,yml}\"",
+    "typecheck": "turbo run typecheck",
+    "industry-agnostic": "bash tools/scripts/industry-agnostic-check.sh",
+    "prg": "bash tools/scripts/prg-check.sh",
+    "pac": "bash tools/scripts/pac-check.sh",
+    "dep": "tsx tools/scripts/dep-validator.ts"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "@typescript-eslint/eslint-plugin": "^7.0.0",
+    "@typescript-eslint/parser": "^7.0.0",
+    "eslint": "^8.57.0",
+    "eslint-config-prettier": "^9.1.0",
+    "prettier": "^3.2.5",
+    "tsx": "^4.7.0",
+    "turbo": "^1.13.0",
+    "typescript": "^5.4.0",
+    "vitest": "^1.6.0"
+  },
+  "engines": {
+    "node": ">=20.10.0"
+  }
+}

@@ -1104,6 +1104,41 @@ Identity ↔ Notification (CYCLE — C-18 위반)
 - ❌ "문서 개수"
 - ✅ "동작하는 Engine 개수 + PRG 통과율"
 
+### 12.16 C-20 — SDK Stability Rule (사장님 Platform Owner 확립, 2026-07-11)
+
+> **Core SDK는 가장 많이 의존되는 엔진. Minor Release에서 100% 하위 호환 유지.**
+> **Breaking Change는 Major Version에서만 허용.**
+
+```
+Minor (1.0 → 1.1) → 100% 하위 호환
+Major (1.x → 2.0) → Breaking Change 가능 (ADR 필수)
+```
+
+**규칙**:
+- **Minor (backward-compatible)**:
+  - 새 인터페이스 추가 (Optional method)
+  - 새 타입 추가
+  - 새 모듈 추가
+  - 기존 인터페이스에 Optional 필드 추가
+  - **기존 코드 0줄 수정**
+
+- **Major (breaking)**:
+  - 기존 인터페이스 변경
+  - 기존 메서드 시그니처 변경
+  - 기존 타입 변경
+  - 기존 필드 제거
+  - **사장님 승인 + ADR 필수**
+
+- **Patch (bug fix)**:
+  - 기존 동작 변경 없이 버그만 수정
+
+**시작점**: Core SDK v1.0 (Sprint 2B-1 Release 시점)
+
+**이유**:
+- Core SDK는 모든 Engine이 import
+- Breaking Change 시 10~30개 Engine 모두 수정 필요
+- 하위 호환성 보장이 Platform의 안정성
+
 ### 12.14 Platform Core v1.0 Foundation Complete 선언 (사장님 CEO, 2026-07-11)
 
 > **사장님 CEO 확립**:

@@ -1,129 +1,94 @@
-# Platform Backlog (RFC 후보 + 사장님 피드백 TODO)
+# Platform Backlog (RFC Priority)
 
 > **사장님 Platform Owner 확립 (2026-07-11)**:
-> "구현 중 떠오른 아이디어는 RFC 후보 또는 백로그로 기록. 현재 Sprint에서는 구현을 완료하는 것이 우선."
-> **사장님 헌법 §C-19 (Working Software Validates Design)**: 즉석 헌법/PRD 수정 ❌
+> "RFC가 7개까지 늘었습니다. 이 정도면 충분합니다. 이제부터는 RFC를 무한히 만들지 말고 우선순위를 붙이세요."
+> "P1만 현재 개발에 영향을 주고, P2/P3는 백로그로 유지하면 됩니다."
 
-**Status**: 🟡 Backlog (각 RFC는 사장님/Platform CTO 확립 시 Sprint로 진입)
+**Status**: 🟡 Backlog (P1만 현재 개발, P2/P3는 대기)
+
+---
+
+## Priority 정의
+
+| Priority | 의미 | 처리 |
+|---|---|---|
+| **P1** | 현재 개발에 영향. 즉시 처리. | Active Sprint에 포함 |
+| **P2** | 가까운 미래에 필요. 다음 Sprint 검토. | Backlog |
+| **P3** | 장기 백로그. 기회 생기면. | Frozen (사장님 명시 없으면 보류) |
 
 ---
 
 ## Sprint 2A 피드백 TODO (사장님 평가 92/100)
 
-| ID | 항목 | 사유 | 권장 Sprint |
-|---|---|---|---|
-| **RFC-001** | Configuration Engine 분리 (Policy Engine에서 Loader 추출) | SRP 위반. 장기적으로 Configuration Engine이 별도 엔진이 됨. | Phase 2 (Engine Development 순서) |
-| **RFC-002** | Policy Resolution Metadata 확장 | `tenantId`, `engine`, `cacheHit` 필드 추가. Debugging에 필수. | Sprint 2A 후속 또는 2C |
-| **RFC-003** | 3단 Cache (Memory → Redis → DB) | 매번 DB 조회 → Resolver는 비효율. | Sprint 2C (Identity Engine과 함께) |
+| ID | Priority | Target | 항목 | 사유 |
+|---|---|---|---|---|
+| **RFC-001** | **P1** | Phase 2 | Configuration Engine 분리 (Policy Engine에서 Loader 추출) | SRP 위반. 장기적으로 별도 엔진이 됨. |
+| **RFC-002** | **P2** | Sprint 2C | Policy Resolution Metadata 확장 (tenantId, engine, cacheHit) | Debugging에 필수. |
+| **RFC-003** | **P1** | Sprint 2C | 3단 Cache (Memory → Redis → DB) | 매번 DB 조회 → Resolver 비효율. |
+| **RFC-004** | P3 | Future | Watch API (Hot Reload) | 정책 변경 시 자동 reload. 장기. |
+| **RFC-005** | **P2** | Sprint 2B | Event Bus Universal Core 통합 | EventEnvelope과 Universal Core IEventBus 연결. |
+| **RFC-006** | **P2** | Sprint 2C | Repository 인터페이스 (IPolicyRepository) | DB 연결 추상화. |
+| **RFC-007** | P3 | Future | Sprint 2A 후속 (Repository + Provider 실제) | 모노레포 workspace 설정 후 재검토. |
 
-### RFC-001 상세
+### P1 처리 (Active)
 
-**현재**:
-```
-Policy Engine
-├── Resolver
-├── Loader  ← 여기가 문제
-├── Schema
-```
+- **RFC-001**: Phase 2에서 Configuration Engine 신규 엔진으로 분리
+- **RFC-003**: Sprint 2C (Identity Engine과 함께) 3단 Cache 구현
 
-**장기 (사장님 권고)**:
-```
-Configuration Engine (Phase 2)
-├── Loader
-├── Schema
-└── ...
+### P2 처리 (Backlog)
 
-Policy Engine (Phase 1)
-├── Resolver
-└── (Configuration Engine 호출)
-```
+- **RFC-002**: Sprint 2C (Identity Engine 구현 시 Metadata 추가)
+- **RFC-005**: Sprint 2B (Core SDK Event와 함께 Universal Core 통합)
+- **RFC-006**: Sprint 2C (Identity Engine Repository 구현)
 
-**사장님**: "지금은 구현을 멈출 필요는 없지만, **TODO로 남겨두는 것을 권장**합니다."
+### P3 처리 (Frozen)
 
-### RFC-002 상세
-
-**현재 Metadata**:
-```typescript
-interface PolicyResolution {
-  source: PolicySource;
-  policyId?: string;
-  version?: number;
-  resolvedAt: string;
-  schemaRef?: string;
-}
-```
-
-**추가 필요 (사장님)**:
-```typescript
-interface PolicyResolution {
-  // 기존
-  source: PolicySource;
-  policyId?: string;
-  version?: number;
-  resolvedAt: string;
-  schemaRef?: string;
-  // 추가
-  tenantId: string;   // 어느 Tenant
-  engine: EngineName;  // 어느 Engine
-  cacheHit: boolean;   // Memory/Redis/DB 어디서 왔나
-}
-```
-
-### RFC-003 상세
-
-**현재** (Sprint 2A):
-```
-Use Case
-  → IPolicyProvider
-  → (Repository — Sprint 2A 후속)
-  → DB
-```
-
-**3단 Cache (RFC-003)**:
-```
-Use Case
-  → IPolicyProvider
-  → Memory Cache (L1)  ← 가장 빠름
-  → Redis Cache (L2)
-  → DB (L3)
-```
-
-**Cache Invalidation**:
-- Policy 변경 시 `policy.cache.invalidated` Event 발행
-- Consumer (L1, L2)가 자기 캐시 무효화
+- **RFC-004**: Hot Reload — 보류 (성능 최적화 후)
+- **RFC-007**: 모노레포 workspace 정리 — 보류 (사장님 명령 대기)
 
 ---
 
-## 향후 RFC 후보 (장기)
+## 향후 RFC 후보 (장기) — **P3**
 
-| ID | 항목 | 사유 | 비고 |
+| ID | Priority | 항목 | 사유 |
 |---|---|---|---|
-| RFC-004 | Watch API (Hot Reload) | 정책 변경 시 자동 reload | Sprint 2A 후속 |
-| RFC-005 | Event Bus Universal Core 통합 | EventEnvelope과 Universal Core IEventBus 연결 | Sprint 2B |
-| RFC-006 | Repository 인터페이스 | IPolicyRepository 정의 | Sprint 2A 후속 |
-| RFC-007 | Sprint 2A 후속 (Repository + Provider 실제 구현) | DB 연결 + IPolicyProvider 실제 | Sprint 2C와 함께 |
+| RFC-008 | P3 | Notification Engine | Phase 2 예정 |
+| RFC-009 | P3 | Media Engine | Phase 3 예정 |
+| RFC-010 | P3 | CMS Engine | Phase 3 예정 |
+| RFC-011 | P3 | Audit Engine | Phase 4 예정 |
+| RFC-012 | P3 | Permission (RBAC) Engine | Phase 4 예정 |
+| RFC-013 | P3 | Booking Engine | Phase 5 예정 |
+| RFC-014 | P3 | Payment Engine | Phase 5 예정 |
+| RFC-015 | P3 | Review Engine | Phase 5 예정 |
+| RFC-016 | P3 | Analytics Engine | Phase 6 예정 |
+| RFC-017 | P3 | AI Engine | Phase 6 예정 |
+| RFC-018 | P3 | Search Engine | Phase 6 예정 |
+
+> 사장님 명령: "RFC를 무한히 만들지 마십시오." — Phase 2~6 엔진은 **각 Phase 진입 시** RFC 작성.
 
 ---
 
 ## RFC 진입 절차 (사장님 헌법 §C-17 준수)
 
 ```
-1. RFC 후보로 등록 (이 문서)
+1. RFC 후보로 등록 (이 문서) — P1/P2/P3 명시
 2. 사장님/Platform CTO 검토
 3. ADR 작성 (승인 시)
 4. Sprint로 진입 (사장님 명령)
 5. 헌법/PRD 즉석 수정 ❌
 ```
 
+**P1만 즉시 Sprint 진입. P2/P3는 사장님 명령 시.**
+
 ---
 
 ## 사장님 헌법 준수
 
 - **C-17 Stop Designing Rule**: 새 문서 만들지 말고 SPR + Backlog만
-- **C-19 Working Software**: RFC-001~003은 Sprint 2A 후속 또는 Phase 2+에서 구현
+- **C-19 Working Software**: P1 RFC만 Active Sprint에 포함
 
 ---
 
-**End of Platform Backlog v1.0**
+**End of Platform Backlog v1.1** (Priority 추가)
 
-> 사장님 Platform Owner: "TODO로 남겨두는 것을 권장합니다."
+> 사장님 Platform Owner: "P1만 현재 개발에 영향을 주고, P2/P3는 백로그로 유지하면 됩니다."

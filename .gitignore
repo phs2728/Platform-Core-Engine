@@ -1,0 +1,42 @@
+# Build artifacts
+**/dist/
+**/build/
+**/out/
+
+# Dependencies
+**/node_modules/
+
+# Test artifacts
+**/coverage/
+**/.nyc_output/
+
+# Cache
+**/.turbo/
+**/.cache/
+**/.tsbuildinfo
+
+# Logs
+**/logs/
+**/*.log
+**/npm-debug.log*
+**/pnpm-debug.log*
+**/yarn-debug.log*
+**/yarn-error.log*
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+
+# OS
+Thumbs.db
+
+# Test
+**/.vitest-cache/
