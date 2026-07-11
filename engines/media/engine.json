@@ -1,0 +1,81 @@
+{
+  "id": "media",
+  "name": "Media Engine",
+  "version": "0.1.0",
+  "phase": 4,
+  "status": "Draft",
+  "description": "[사장님 확립 2026-07-11] Platform SSoT for all digital assets — images, videos, audio, documents, attachments, 3D models. Industry-Agnostic. Storage Provider Plugin. Organization ownership + CustomDataPolicy. NOT a file storage — manages asset metadata + references only.",
+  "depends_on": [
+    "core-sdk",
+    "policy",
+    "organization",
+    "event-bus"
+  ],
+  "provides": [
+    "createAsset", "updateAsset", "archiveAsset", "restoreAsset", "deleteAsset",
+    "getAsset", "listAssets", "searchAssets",
+    "createVariant", "updateVariant", "deleteVariant",
+    "createCollection", "addAssetToCollection", "removeAssetFromCollection",
+    "attachReference", "detachReference",
+    "updateMetadata", "replaceMetadata",
+    "requestTransformation", "registerTransformation",
+    "createUploadSession", "completeUpload", "cancelUpload",
+    "publishVersion", "rollbackVersion"
+  ],
+  "events_emitted": [
+    "asset.created",
+    "asset.updated",
+    "asset.deleted",
+    "asset.archived",
+    "asset.restored",
+    "asset.variant.created",
+    "asset.collection.created",
+    "asset.reference.attached",
+    "asset.reference.detached",
+    "asset.upload.started",
+    "asset.upload.completed",
+    "asset.transformation.requested",
+    "asset.version.published",
+    "asset.audit.recorded"
+  ],
+  "events_subscribed": [
+    "organization.archived",
+    "organization.deleted"
+  ],
+  "strict_boundaries": {
+    "owns": [
+      "Asset",
+      "AssetVariant",
+      "AssetCollection",
+      "AssetReference",
+      "UploadSession",
+      "AssetVersion",
+      "AssetTransformation",
+      "AssetMetadata",
+      "MediaAudit"
+    ],
+    "forbidden": [
+      "Authentication",
+      "Password",
+      "Session",
+      "OAuth",
+      "MFA",
+      "Permission",
+      "Role",
+      "S3DirectImplementation",
+      "CloudinaryImplementation",
+      "AzureBlobImplementation",
+      "GoogleStorageImplementation",
+      "CDNImplementation",
+      "TransactionCapture",
+      "TransactionRefund",
+      "SlotManagementSystems",
+      "TransactionalCommerce",
+      "StockManagement",
+      "AddressRawField",
+      "EmailRawField",
+      "PhoneRawField",
+      "IndustrySpecificField"
+    ]
+  }
+}
