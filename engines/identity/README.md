@@ -9,6 +9,8 @@
 이 폴더는 `Platform-Core-Engine/engines/identity/` 안에 있습니다.
 루트 README는 플랫폼 소개 — 각 엔진 README는 자기 엔진 소개.
 
+엔진 카탈로그: [`/README.md`](../../README.md) (루트)
+
 ---
 
 ## 이 엔진은 무엇인가?

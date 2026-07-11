@@ -47,14 +47,15 @@ Platform-Core-Engine/
 ├── engines/             ← 모든 엔진이 사는 곳
 │   ├── identity/        ← (현재 작업 중)
 │   ├── notification/    ← (예정)
-│   ├── media/           ← (예정)
-│   ├── cms/             ← (예정)
-│   ├── booking/         ← (예정)
-│   ├── review/          ← (예정)
-│   └── ai/              ← (예정)
+│   ├── media/
+│   ├── cms/
+│   ├── booking/
+│   ├── review/
+│   └── ai/
 ├── packages/            ← 공유 패키지 (universal-core, primitives 등)
-├── shared/              ← 호스트 통합용 어댑터, 예시, 도구
-└── docs/                ← 플랫폼 차원의 문서 (헌장, ADR, KPI)
+├── docs/                ← 플랫폼 차원의 문서 (헌장, ADR, KPI)
+├── examples/            ← 호스트 통합 예시 (Hono, Next.js, Worker Thread)
+└── tools/               ← 모노레포 운영 도구 (검증, CI/CD, 스크립트)
 ```
 
 이 구조는 VS Code, TurboRepo, pnpm Workspace, Nx 같은 모노레포 도구에서 **자연스럽게 확장**됩니다.
