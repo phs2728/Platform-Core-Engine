@@ -1,7 +1,7 @@
 {
   "name": "@aibg/engine-policy",
   "version": "0.1.0",
-  "description": "Policy Engine — Configuration SSoT with 3-tier policy resolution (Global / Engine / Tenant)",
+  "description": "Policy Engine \u2014 Configuration SSoT with 3-tier policy resolution (Global / Engine / Tenant)",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -19,10 +19,6 @@
     "lint": "echo 'lint: deferred to monorepo root'",
     "typecheck": "tsc --noEmit"
   },
-  "dependencies": {
-    "@aibg/core": "^1.0.0",
-    "zod": "^3.23.0"
-  },
   "devDependencies": {
     "@types/node": "^20.0.0",
     "typescript": "^5.4.0",
@@ -30,5 +26,8 @@
   },
   "engines": {
     "node": ">=20"
+  },
+  "dependencies": {
+    "zod": "^3.23.0"
   }
 }

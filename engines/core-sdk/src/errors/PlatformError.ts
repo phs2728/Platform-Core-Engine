@@ -58,18 +58,25 @@ export abstract class PlatformError extends Error {
    * - stack trace 포함
    */
   toLog(): LogErrorShape {
-    return {
+    const shape: LogErrorShape = {
       code: this.code,
       name: this.name,
       message: this.message,
-      details: this.details,
-      cause: this.cause
-        ? { name: this.cause.name, message: this.cause.message, stack: this.cause.stack }
-        : undefined,
       safeToExpose: this.safeToExpose,
       httpStatus: this.httpStatus,
-      stack: this.stack,
+      ...(this.details !== undefined ? { details: this.details } : {}),
+      ...(this.cause !== undefined
+        ? {
+            cause: {
+              name: this.cause.name,
+              message: this.cause.message,
+              ...(this.cause.stack !== undefined ? { stack: this.cause.stack } : {}),
+            },
+          }
+        : {}),
+      ...(this.stack !== undefined ? { stack: this.stack } : {}),
     };
+    return shape;
   }
 
   /**

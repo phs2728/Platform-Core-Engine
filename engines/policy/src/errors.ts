@@ -1,48 +1,51 @@
 /**
  * Policy Engine — Domain Errors
  *
- * 사장님 확립 (Sprint 2B-2 #4 Error Compatibility):
- * PlatformError (from @platform/core-sdk) 상속.
- * 모든 Engine이 동일한 Error 계층 사용 (헌법 §C-15 + §C-20).
+ * Sprint 2A Frozen (self-contained).
+ * Core SDK PlatformError migration deferred to Sprint 후속 (RFC-008).
  *
- * Sprint 2A의 자체 PolicyError → Sprint 2B-2에서 Core SDK PlatformError로 마이그레이션.
+ * 헌법 §12.8 (C-15 Zero Business Logic in DB) 준수.
  */
 
-export {
-  PlatformError as PolicyErrorBase,
-  ValidationError as PolicySchemaErrorLegacy,
-  NotFoundError,
-  ConflictError,
-  InternalError,
-  type PlatformErrorOptions,
-} from '@platform/core-sdk/errors';
+export abstract class PolicyError extends Error {
+  abstract readonly code: string;
+  abstract readonly httpStatus: number;
+  abstract readonly safeToExpose: boolean;
+  readonly context?: Record<string, unknown>;
 
-// Re-export for backward compat
-import {
-  PlatformError,
-  ValidationError,
-  NotFoundError,
-  ConflictError,
-  InternalError,
-} from '@platform/core-sdk/errors';
+  constructor(message: string, context?: Record<string, unknown>) {
+    super(message);
+    this.name = this.constructor.name;
+    if (context !== undefined) {
+      this.context = context;
+    }
+  }
 
-/**
- * Policy Not Found — 3계층 + default 모두 없을 때
- *
- * Sprint 2B-2 마이그레이션: PolicyNotFoundError는 NotFoundError의 별칭.
- * 기존 PolicyNotFoundError 호출 사이트는 그대로 작동.
- */
-export { NotFoundError as PolicyNotFoundError };
+  toJSON(): { code: string; message: string; context?: Record<string, unknown> } {
+    const result: { code: string; message: string; context?: Record<string, unknown> } = {
+      code: this.code,
+      message: this.safeToExpose ? this.message : 'An internal error occurred',
+    };
+    if (this.safeToExpose && this.context !== undefined) {
+      result.context = this.context;
+    }
+    return result;
+  }
+}
 
-/**
- * Policy Schema Invalid — zod 검증 실패
- *
- * Sprint 2B-2: ValidationError 위임.
- */
-export class PolicySchemaError extends ValidationError {
-  override readonly code = 'POLICY_SCHEMA_INVALID'; // Policy-specific code
+export class PolicyNotFoundError extends PolicyError {
+  readonly code = 'POLICY_NOT_FOUND';
+  readonly httpStatus = 404;
+  readonly safeToExpose = true;
+  constructor(public readonly key: string, context?: Record<string, unknown>) {
+    super(`Policy not found: ${key}`, context);
+  }
+}
+
+export class PolicySchemaError extends PolicyError {
+  readonly code = 'POLICY_SCHEMA_INVALID';
   readonly httpStatus = 422;
-
+  readonly safeToExpose = true;
   constructor(
     public readonly key: string,
     public readonly violations: unknown,
@@ -52,37 +55,28 @@ export class PolicySchemaError extends ValidationError {
   }
 }
 
-/**
- * Policy Conflict — Optimistic Locking 실패
- */
-export class PolicyConflictError extends ConflictError {
-  override readonly code = 'POLICY_CONFLICT';
+export class PolicyConflictError extends PolicyError {
+  readonly code = 'POLICY_CONFLICT';
   readonly httpStatus = 409;
-
+  readonly safeToExpose = true;
   constructor(
     public readonly key: string,
     public readonly expectedVersion: number,
     public readonly actualVersion: number,
     context?: Record<string, unknown>,
   ) {
-    super(`Policy version conflict: ${key} (expected ${expectedVersion}, got ${actualVersion})`, {
-      ...context,
-      key,
-    });
+    super(
+      `Policy version conflict: ${key} (expected ${expectedVersion}, got ${actualVersion})`,
+      context,
+    );
   }
 }
 
-/**
- * Policy Internal Error (legacy alias)
- */
-export class PolicyInternalError extends InternalError {
-  override readonly code = 'POLICY_INTERNAL_ERROR';
+export class PolicyInternalError extends PolicyError {
+  readonly code = 'POLICY_INTERNAL_ERROR';
   readonly httpStatus = 500;
-
+  readonly safeToExpose = false;
   constructor(message: string, context?: Record<string, unknown>) {
     super(message, context);
   }
 }
-
-// Core SDK 호환을 위해 re-export
-export { PlatformError, ValidationError };

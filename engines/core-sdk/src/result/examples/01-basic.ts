@@ -17,7 +17,7 @@ console.log('Doubled:', doubled.ok ? doubled.value : null);
 
 // 3. flatMap (async)
 async function example() {
-  const result = await flatMap(success, async (x) => Ok<number, Error>(x + 10));
+  const result = await flatMap(success, async (x) => Ok(x + 10));
   console.log('flatMap:', result.ok ? result.value : null);
 }
 

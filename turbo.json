@@ -1,18 +1,6 @@
 {
   "$schema": "https://turbo.build/schema.json",
-  "globalDependencies": [
-    "tsconfig.base.json",
-    ".eslintrc.cjs",
-    ".prettierrc",
-    "pnpm-workspace.yaml"
-  ],
-  "globalEnv": [
-    "NODE_ENV"
-  ],
-  "globalPassThroughEnv": [
-    "CI"
-  ],
-  "tasks": {
+  "pipeline": {
     "build": {
       "dependsOn": ["^build"],
       "inputs": [
