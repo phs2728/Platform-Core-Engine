@@ -25,7 +25,8 @@
     "import-boundary": "tsx tools/scripts/import-boundary-test.ts",
     "public-api-snapshot": "bash tools/scripts/public-api-snapshot.sh",
     "example-test": "bash tools/scripts/example-test.sh",
-    "commit-lint": "bash tools/scripts/commit-lint.sh"
+    "commit-lint": "bash tools/scripts/commit-lint.sh",
+    "create-engine": "node tools/create-engine.mjs"
   },
   "devDependencies": {
     "@types/node": "^20.11.0",

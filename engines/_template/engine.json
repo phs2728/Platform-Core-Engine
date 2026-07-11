@@ -1,0 +1,15 @@
+{
+  "id": "TEMPLATE_NAME",
+  "name": "TEMPLATE_TITLE Engine",
+  "version": "0.1.0",
+  "phase": 99,
+  "status": "Draft",
+  "description": "TEMPLATE_DESCRIPTION",
+  "depends_on": [
+    "core-sdk",
+    "universal-core"
+  ],
+  "provides": [],
+  "events_emitted": [],
+  "events_subscribed": []
+}
