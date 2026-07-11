@@ -128,7 +128,7 @@ Platform-Core-Engine/
 |---|---|---|---|
 | **policy** | Configuration SSoT, 3계층 정책 해결 (Global/Engine/Tenant) | [engines/policy/README.md](./engines/policy/README.md) | [engine.json](./engines/policy/engine.json) |
 | **core-sdk** | 공통 SDK (Logger, Config, Policy, Errors, Result, Event, Validation) — **v1.0 Stable** (사장님 Platform Owner 승인, 2026-07-11) | [engines/core-sdk/README.md](./engines/core-sdk/README.md) | [engine.json](./engines/core-sdk/engine.json) |
-| **identity** | 인증, 보안, 세션, 자격증명, 감사 (Policy + Core SDK 위에서 동작) | [engines/identity/README.md](./engines/identity/README.md) | [engine.json](./engines/identity/engine.json) |
+| **identity** | 인증, 보안, 세션, 자격증명, 감사, OAuth — **v1.0 RC1** (11 UseCases, 사장님 확립 6 RFC 100% 완료) | [engines/identity/README.md](./engines/identity/README.md) | [engine.json](./engines/identity/engine.json) | [Certification](./docs/Engine_Certification_Identity.md) |
 
 ### 🟡 Phase 2~6 — Engine Development Order (사장님 CEO 확립, 2026-07-11)
 

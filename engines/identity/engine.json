@@ -3,8 +3,13 @@
   "name": "Identity Engine",
   "version": "2.0.0-rc.1",
   "phase": 1,
-  "status": "Sprint 2C-2 Complete (Hardening)",
-  "description": "Authentication, Security, Session, Credential, Audit, OAuth — Sprint 2C-1 MVP + Sprint 2C-2 Hardening (Email Verification, Password Reset, Account Lock, Session Refresh, Audit Log, OAuth Plugin)",
+  "status": "RC1 (Stable 선언 대기, 사장님 결정)",
+  "description": "Authentication, Security, Session, Credential, Audit, OAuth — Sprint 2C-1 MVP + Sprint 2C-2 Hardening (Email Verification, Password Reset, Account Lock, Session Refresh, Audit Log, OAuth Plugin). 11 Use Cases. 사장님 확립 6 RFC + 초기 5개 = 100% 완료.",
+  "sprint_history": {
+    "sprint_2c_1": "MVP — Account/Email Login/Password/Session/Logout",
+    "sprint_2c_2": "Hardening — RFC-026~031 (6개 RFC)",
+    "next_stable": "v1.0 Stable 선언은 사장님 결정 대기"
+  },
   "depends_on": [
     "policy",
     "core-sdk",

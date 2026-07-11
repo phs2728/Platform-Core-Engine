@@ -1,204 +1,361 @@
-# Identity Engine
+# Identity Engine v1.0
 
-> **Industry-Agnostic Platform Core Engine**
+> **AI Bridge Georgia Platform Core — Identity Engine**
 >
-> Authentication · Security · Session · Credential · Audit
-
-> **One Engine = One Folder = One README = One PRD = One TRD**
-
-이 폴더는 `Platform-Core-Engine/engines/identity/` 안에 있습니다.
-루트 README는 플랫폼 소개 — 각 엔진 README는 자기 엔진 소개.
-
-엔진 카탈로그: [`/README.md`](../../README.md) (루트)
-
----
-
-## 이 엔진은 무엇인가?
-
-**Identity Engine**은 AI Bridge Georgia Platform Core의 최상위 공통 엔진입니다.
-
-이 엔진은 **특정 산업을 전혀 알지 모릅니다** — 여행, 호텔, 식당, 카페, 렌트카 등 어떤 도메인에도 종속되지 않습니다.
-
-오직 **계정(Account)과 신원(Identity)만** 관리합니다.
-
-이 엔진은 앞으로 10년 이상 모든 제품(Tour OS, Hospitality OS, Restaurant OS, Cafe OS, RentCar OS 등)이 공통으로 사용합니다.
-
-```
-This is NOT an application.
-This is NOT a demo.
-This is NOT an MVP.
-This is a reusable Platform Core Engine.
-Every design decision maximizes extensibility, configurability and long-term maintainability.
-```
-
----
-
-## 설계 원칙
-
-1. **Industry Agnostic** — 여행/호텔/식당/예약/결제 등 산업 키워드 일절 사용 안 함
-2. **Multi-Tenant** — 모든 데이터는 Tenant 단위, RLS로 격리
-3. **Plugin-Ready** — OAuth Provider는 코드 수정 없이 추가 가능
-4. **Configuration Over Code** — 관리자 UI로 모든 정책 변경
-5. **Encrypt Everything Sensitive** — 비밀번호, 토큰, PII 모두 암호화
-6. **Audit Everything** — 모든 인증 이벤트는 hash chain으로 변조 방지
-7. **API Stability** — 하위 호환 보장 (SemVer)
-
----
-
-## 문서 색인
-
-### 1. PRD & TRD (무엇을, 어떻게)
-
-| 문서 | 내용 |
-|---|---|
-| [docs/01-prd.md](./docs/01-prd.md) | Product Requirements Document |
-| [docs/02-trd.md](./docs/02-trd.md) | Technical Requirements Document |
-
-### 2. 도메인 모델
-
-| 문서 | 내용 |
-|---|---|
-| [docs/03-domain-model.md](./docs/03-domain-model.md) | 9개 엔티티 + Value Objects + Invariants |
-| [docs/04-db-schema.md](./docs/04-db-schema.md) | DDL 명세 + RLS 정책 |
-| [docs/05-erd.md](./docs/05-erd.md) | Mermaid ERD + 시퀀스 다이어그램 |
-
-### 3. API & 이벤트
-
-| 문서 | 내용 |
-|---|---|
-| [docs/06-api-spec.yaml](./docs/06-api-spec.yaml) | OpenAPI 3.1 명세 |
-| [docs/07-events.md](./docs/07-events.md) | 도메인 이벤트 카탈로그 |
-
-### 4. 아키텍처
-
-| 문서 | 내용 |
-|---|---|
-| [docs/08-architecture.md](./docs/08-architecture.md) | 레이어드 아키텍처 + 모듈 책임 |
-| [docs/09-folder-structure.md](./docs/09-folder-structure.md) | 디렉토리 레이아웃 |
-| [docs/10-plugin-architecture.md](./docs/10-plugin-architecture.md) | OAuth Provider 플러그인 추가 절차 |
-
-### 5. 운영 & 보안
-
-| 문서 | 내용 |
-|---|---|
-| [docs/11-test-strategy.md](./docs/11-test-strategy.md) | 단위/통합/E2E/보안 테스트 |
-| [docs/12-admin-console.md](./docs/12-admin-console.md) | 관리자 콘솔 UI 명세 |
-| [docs/13-configuration.md](./docs/13-configuration.md) | 설정 시스템 |
-| [docs/14-security.md](./docs/14-security.md) | 보안 정책 (암호화, Rate Limit, Audit) |
-
-### 6. 결정 사항 (Canonical Source of Truth)
-
-| 문서 | 내용 |
-|---|---|
-| [**docs/15-identity-decisions.md**](./docs/15-identity-decisions.md) | **모든 미결정 사항의 단일 진실 공급원 (Canonical)** |
-
-> 사장님이 결정할 항목, Status, Recommended Value는 15번 문서 참조.
+> 인증 · 세션 · 보안 · 감사 · OAuth
 >
-> `docs/00-sajangnim-review.md`는 **DEPRECATED** — 새 결정은 15번에 추가.
+> **Industry-Agnostic Reusable Engine**
 
-### 7. DDL
-
-| 파일 | 내용 |
-|---|---|
-| [db/schema.sql](./db/schema.sql) | 11개 테이블 + 트리거 + RLS |
+**Version**: v1.0 (Sprint 2C-2 Complete)
+**Status**: 🟢 **RC1** (Stable 선언 사장님 확정 대기)
+**Date**: 2026-07-11
 
 ---
 
-## 데이터 도메인 (11개 테이블)
+## 목적
+
+Identity Engine은 **사용자 신원을 확인**하고, **세션을 관리**하며, **모든 인증 이벤트를 감사 로그에 기록**하는 산업-비종속 엔진입니다.
 
 ```
-users               인증된 신원의 인덱스
-user_identities     User가 가진 신원 (이메일/전화/사용자명/OAuth)
-auth_providers      Tenant가 활성화한 인증 제공자
-credentials         비밀번호 해시 / OAuth 토큰 / TOTP
-password_history    비밀번호 재사용 방지
-sessions            활성 세션
-verification_tokens 이메일/SMS 인증 코드
-password_resets     비밀번호 재설정 토큰
-security_policies   Tenant별 보안 정책 (SSoT)
-audit_logs          Append-Only 감사 로그 (hash chain)
-tenant_credentials  외부 서비스 자격증명 (AES-256-GCM)
+사장님 확립 Sprint 2C-2 — 100% 완료:
+
+✅ Account 생성
+✅ Email 로그인
+✅ Password Hash
+✅ Session 생성
+✅ Logout
+✅ Email Verification (RFC-026)
+✅ Password Reset (RFC-027)
+✅ Account Lock (RFC-028)
+✅ Session Refresh (RFC-029)
+✅ Audit Log (RFC-030)
+✅ OAuth (RFC-031, Plugin Pattern)
 ```
 
-**저장하지 않는 것**: 프로필(이름, 아바타), 주소, 여권, 결제 수단, 업종별 데이터.
+---
+
+## 책임
+
+- **Account**: 사용자 계정 (email 기반)
+- **Authentication**: 자격증명 검증
+- **Session**: Token 발급 + 검증 + Rotation
+- **Authorization**: (RBAC Engine이 Phase 4에서 담당)
+- **Audit**: 모든 보안 이벤트 기록
+- **OAuth**: Plugin Pattern으로 확장 가능
 
 ---
 
-## 기술 스택
+## 사용하지 않는 것 (Phase 후속)
 
-| 영역 | 선택 |
-|---|---|
-| 언어 | TypeScript 5.4+ (strict) |
-| 런타임 | Node 20+ / Bun 1.x / Deno 1.40+ |
-| 패키지 | ESM only |
-| 암호화 | @noble/hashes, @noble/ciphers, jose |
-| 입력 검증 | zod |
-| DB | PostgreSQL 15+ |
-| 캐시 | Redis 7+ |
-| KMS | AWS KMS / GCP KMS / Vault (호스트) |
-
-> 엔진은 특정 SaaS나 DB 드라이버에 종속되지 않습니다. 모든 인프라 의존성은 호스트가 주입합니다.
+- ❌ Profile 정보 (Profile Engine 별도)
+- ❌ 주소/여권 (Phase 5 Booking Engine)
+- ❌ 결제 수단 (Phase 5 Payment Engine)
 
 ---
 
-## Industry Agnostic 검증
+## 의존성
 
-자동 검증 스크립트: `scripts/verify-industry-agnostic.sh`
+```yaml
+depends_on:
+  - core-sdk       # v1.0 Stable
+  - policy         # Configuration SSoT
+  - universal-core # EventBus, EntityStore
+```
+
+**Identity는 다른 Engine을 직접 import하지 않습니다** (헌법 §C-10).
+
+---
+
+## 빠른 시작
+
+### 1. In-Memory로 시작 (테스트 / 개발)
+
+```typescript
+import {
+  createAccountUseCase,
+  loginWithEmailUseCase,
+  logoutUseCase,
+  InMemoryAccountRepository,
+  InMemorySessionRepository,
+  InMemoryEmailSender,
+  InMemoryAuditLogRepository,
+  createLogger,
+} from '@platform/engine-identity';
+
+const accounts = new InMemoryAccountRepository();
+const sessions = new InMemorySessionRepository();
+const audit = new InMemoryAuditLogRepository();
+const email = new InMemoryEmailSender();
+const logger = createLogger({ engine: 'identity' });
+
+// Account 생성
+const createResult = await createAccountUseCase(
+  { email: 'user@example.com', password: 'SecurePass123!', tenantId: 't-1', correlationId: 'r-1' },
+  {
+    accountRepository: accounts,
+    passwordHasher: bcryptHasher,
+    idGenerator: uuidV7Generator,
+    clock: systemClock,
+    eventBus: inProcessBus,
+    auditLogRepository: audit,
+  },
+);
+
+// Login
+const loginResult = await loginWithEmailUseCase(
+  { email: 'user@example.com', password: 'SecurePass123!', tenantId: 't-1', correlationId: 'r-2' },
+  {
+    accountRepository: accounts,
+    passwordHasher: bcryptHasher,
+    sessionSigner: jwtSigner,
+    sessionRepository: sessions,
+    idGenerator: uuidV7Generator,
+    clock: systemClock,
+    eventBus: inProcessBus,
+    auditLogRepository: audit,
+    policy: {
+      maxFailures: 3,
+      lockDurationMinutes: 30,
+      sessionDurationHours: 24,
+    },
+  },
+);
+```
+
+### 2. Production — 실제 DB 연결
+
+```typescript
+import {
+  createAccountUseCase,
+  PostgresAccountRepository,  // Phase 후속에서 구현
+  PostgresSessionRepository,
+  SMTPEmailSender,
+  AuditLogRepository,
+} from '@platform/engine-identity';
+
+const accounts = new PostgresAccountRepository({ pool: pgPool });
+const sessions = new PostgresSessionRepository({ pool: pgPool });
+const email = new SMTPEmailSender({ smtp: smtpConfig });
+const audit = new PostgresAuditLogRepository({ pool: pgPool });
+```
+
+---
+
+## 5단계 Use Case 패턴 (모든 Engine 공통)
+
+```typescript
+// 1. Schema 검증 (zod)
+const validation = validate(schema, input);
+if (!validation.ok) return validation;
+
+// 2. Repository 조회
+const result = await repository.find(input);
+if (!result.ok) return result;
+
+// 3. 비즈니스 로직
+// 4. Repository 쓰기
+// 5. Event 발행 (EventEnvelope)
+await eventBus.emit(envelope);
+
+// 6. Audit 기록
+await auditLogRepository.insert({...});
+
+// 7. Result 반환
+return Ok({...});
+```
+
+---
+
+## Plugin Pattern — OAuth
+
+```typescript
+import { oauthLoginUseCase, GoogleOAuthProvider, IOAuthProvider } from '@platform/engine-identity';
+
+// Host가 제공한 Provider들
+const providers: Record<string, IOAuthProvider> = {
+  google: new GoogleOAuthProvider(clientId, clientSecret),
+  // apple: new AppleOAuthProvider(...),
+  // facebook: new FacebookOAuthProvider(...),
+};
+
+await oauthLoginUseCase(
+  {
+    providerName: 'google',
+    authCode,
+    redirectUri,
+    tenantId: 't-1',
+    correlationId: 'r-1',
+  },
+  {
+    providers,
+    accountRepository: accounts,
+    passwordHasher: bcryptHasher,
+    sessionSigner: jwtSigner,
+    sessionRepository: sessions,
+    idGenerator: uuidV7Generator,
+    clock: systemClock,
+    eventBus: inProcessBus,
+    auditLogRepository: audit,
+    policy: { sessionDurationHours: 24 },
+  },
+);
+```
+
+**새 OAuth Provider 추가 시**: `IOAuthProvider` 구현만 작성 → 기존 코드 무수정 (헌법 §C-9).
+
+---
+
+## Audit Trail
+
+모든 UseCase는 다음 EventType 중 하나 이상을 Audit에 기록:
+
+```typescript
+type AuditEventType =
+  | 'login_success'
+  | 'login_failed'
+  | 'password_changed'
+  | 'password_reset'
+  | 'email_changed'
+  | 'session_revoked'
+  | 'account_locked'
+  | 'account_unlocked'
+  | 'email_verified'
+  | 'session_refreshed'
+  | 'oauth_login'
+  | 'oauth_unlinked';
+```
+
+---
+
+## Event (EventEnvelope 사용)
+
+### auth.login.success
+
+```json
+{
+  "eventId": "01HXXXX...",
+  "aggregateId": "user-uuid",
+  "occurredAt": "2026-07-11T08:00:00.000Z",
+  "version": "1.0.0",
+  "tenantId": "tenant-uuid",
+  "correlationId": "req-uuid",
+  "causationId": "",
+  "engine": "identity",
+  "eventType": "auth.login.success",
+  "schemaRef": "auth.login.success.v1",
+  "payload": { "accountId": "user-uuid", "sessionId": "sess-uuid", "loginAt": "..." }
+}
+```
+
+12+ event types (eventType과 schemaRef 매핑).
+
+---
+
+## 보안 원칙
+
+### Token Storage
+
+```typescript
+// ✅ Token → SHA256 Hash → DB
+import { hashToken } from '@platform/engine-identity';
+const tokenHash = hashToken(rawToken);  // SHA256
+await verificationTokenRepository.insert({ rawToken, ... });  // hash 자동 저장
+
+// ❌ raw Token을 DB에 저장 (절대 금지)
+await db.query('INSERT INTO tokens (token) VALUES ($1)', [rawToken]);
+```
+
+### Account Lock
+
+```yaml
+maxFailures: 3
+lockDurationMinutes: 30
+```
+
+### Session Rotation
+
+```typescript
+// 60분 이상 남은 경우 자동 Rotation
+const result = await refreshSessionUseCase(input, deps);
+result.newSessionToken;  // 새 Token
+```
+
+---
+
+## API Endpoints (Host가 노출)
+
+| Method | Path | UseCase |
+|---|---|---|
+| POST | `/auth/register` | createAccountUseCase |
+| POST | `/auth/login` | loginWithEmailUseCase |
+| POST | `/auth/logout` | logoutUseCase |
+| POST | `/auth/verify-email/request` | requestEmailVerificationUseCase |
+| POST | `/auth/verify-email/confirm` | confirmEmailVerificationUseCase |
+| POST | `/auth/password/reset/request` | requestPasswordResetUseCase |
+| POST | `/auth/password/reset/confirm` | confirmPasswordResetUseCase |
+| POST | `/auth/session/refresh` | refreshSessionUseCase |
+| POST | `/auth/oauth/:provider/callback` | oauthLoginUseCase |
+
+(실제 Route Handler는 Host 책임)
+
+---
+
+## Tests
 
 ```bash
-bash scripts/verify-industry-agnostic.sh
+pnpm test
 ```
 
----
+**현재**: 5 tests PASS (Sprint 2C-2)
 
-## 스프린트 계획
-
-```
-Sprint 1 — 설계 문서 (현재)
-  ✓ PRD
-  ✓ TRD
-  ✓ 도메인 모델
-  ✓ DB 스키마
-  ✓ API 명세
-  ✓ 이벤트 카탈로그
-  ✓ 아키텍처
-  ✓ 폴더 구조
-  ✓ 플러그인 아키텍처
-  ✓ 테스트 전략
-  ✓ Admin Console 명세
-  ✓ 설정 시스템
-  ✓ 보안 정책
-  ✓ 결정 문서 (Canonical)
-
-Sprint 2 — Identity Engine 구현 (사장님 결정 대기)
-  → 사장님 Level 1 결정 8개 확립 후 시작
-  → src/engine.ts 진입점
-  → usecase/auth/* (login, register, logout)
-  → usecase/password/* (reset, change)
-  → crypto/* (Argon2id, AES, JWT)
-  → repository/* (CRUD)
-  → provider/google (Reference)
-```
-
----
-
-## 다른 엔진과의 관계
-
-| 엔진 | 관계 |
+| Test | 대상 |
 |---|---|
-| **universal-core** (packages/) | Tenant, Event, Plugin 추상화 의존 |
-| **notification** | 인증 이벤트 → 알림 발송 (구독) |
-| **audit** | 모든 mutation → Audit Log (자동) |
-| **media** | 사용자 아바타 (Identity Engine은 저장 안 함, URL만) |
-| **booking** | User ID 참조 (FK), 인증 책임 없음 |
+| Sprint 2C-2-1 Email Verification | requestEmailVerification, confirmEmailVerification |
+| Sprint 2C-2-3 Account Lock | failedAttempts + lockedUntil + Account Lock error |
+| Sprint 2C-2-4 Session Refresh | refreshSessionUseCase |
+| Sprint 2C-2-5 Audit Log | recordAudit helper |
 
 ---
 
-## 라이선스
+## Integration with Core SDK
 
-Internal — Platform Core (사장님 확립)
+Identity Engine은 **Core SDK의 모든 것을 사용**:
+
+```typescript
+import { Result, Ok, Err, ... } from '@platform/core-sdk';
+import { PlatformError, ValidationError, ... } from '@platform/core-sdk';
+import { ILogger, createLogger, ... } from '@platform/core-sdk';
+import { EventEnvelope, createEnvelope } from '@platform/core-sdk';
+import { Email, Password, validate } from '@platform/core-sdk';
+```
+
+**Sprint 2B-2 Acceptance 결과**: Identity는 Core SDK 수정 없이 재사용 ✅
 
 ---
 
-**Status**: v1.0-draft — 사장님 결정 대기
-**Last Updated**: 2026-07-11
+## 다음 단계
+
+사장님 Platform Owner 확립 (2026-07-11):
+
+1. **Identity Engine v1.0 Stable 선언** (사장님 결정 시)
+2. **main Merge** (feature/identity-hardening + feature/identity-email-mvp → main)
+3. **Next Engine: Notification Engine** (Phase 2, Identity 의존)
+
+---
+
+## 사장님 확립 의존성
+
+```
+Phase 1:
+  Policy → Core SDK → Identity ← ✅ 완료
+
+Phase 2 (다음):
+  Notification ← Identity (login.success event 구독)
+  Event Bus (Universal Core)
+```
+
+---
+
+**End of Identity Engine README**
+
+> 사장님 Platform Owner: "속도보다 품질. 작은 범위를 끝까지."
