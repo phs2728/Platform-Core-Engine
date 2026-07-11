@@ -1,8 +1,9 @@
 {
   "id": "core-sdk",
   "name": "Core SDK",
-  "version": "1.0.0",
+  "version": "1.0.0-rc.1",
   "phase": 1,
+  "status": "RC1",
   "description": "Shared SDK for all engines (Logger, Config, Policy, Errors, Result, Event, Validation)",
   "depends_on": [
     "policy",

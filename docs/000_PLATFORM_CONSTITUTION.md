@@ -1104,6 +1104,45 @@ Identity ↔ Notification (CYCLE — C-18 위반)
 - ❌ "문서 개수"
 - ✅ "동작하는 Engine 개수 + PRG 통과율"
 
+### 12.17 C-21 — Platform Release Rule (사장님 Platform Owner 확립, 2026-07-11)
+
+> **모든 Engine의 Release는 5단계를 거친다: Draft → Alpha → Beta → RC → Stable.**
+> **Stable 선언은 절차의 완료가 아니라, Platform Core가 "실제 동작하는 기반"임을 증명하는 것.**
+
+```
+Draft
+  ↓ (PRD/TRD 작성 완료)
+Alpha
+  ↓ (Interface Frozen + 인터페이스 검증)
+Beta
+  ↓ (구현 완료 + Unit Test 작성)
+Release Candidate (RC)
+  ↓ (실환경 검증: pnpm install, lint, typecheck, test, build, CI Green, PRG, Certification)
+Stable
+```
+
+**Stable 선언 조건** (모두 PASS 필수):
+1. `pnpm install` PASS
+2. `pnpm lint` PASS
+3. `pnpm typecheck` PASS
+4. `pnpm test` PASS
+5. `pnpm build` PASS
+6. 다른 Engine에서 실제 Import + PASS
+7. Examples 실행 + PASS
+8. GitHub Actions Green
+9. PRG PASS
+10. Engine Certification PASS
+
+**현재 상태** (2026-07-11):
+- Core SDK → **v1.0 RC1** (Release Candidate)
+- Identity Engine → ⏸ Stable 이후 시작
+- Phase 1 (Policy) → Sprint 2A 완료, RC 검증 대기
+
+**Stable 선언 후 Identity Engine 시작** 의 이유:
+> "Identity는 Core SDK 위에 만들어집니다. Core SDK가 Stable이 아닌데 Identity를 만들면 나중에 SDK가 바뀔 수 있습니다."
+
+이 원칙은 **의존성 안전 + Breaking Change 방지**.
+
 ### 12.16 C-20 — SDK Stability Rule (사장님 Platform Owner 확립, 2026-07-11)
 
 > **Core SDK는 가장 많이 의존되는 엔진. Minor Release에서 100% 하위 호환 유지.**
