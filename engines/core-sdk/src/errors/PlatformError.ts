@@ -29,8 +29,12 @@ export abstract class PlatformError extends Error {
   ) {
     super(message);
     this.name = this.constructor.name;
-    this.details = options.details;
-    this.cause = options.cause;
+    if (options.details !== undefined) {
+      this.details = options.details;
+    }
+    if (options.cause !== undefined) {
+      this.cause = options.cause;
+    }
     // Error.cause 지원 (ES2022)
     if (options.cause && 'cause' in this === false) {
       Object.defineProperty(this, 'cause', { value: options.cause, enumerable: false });
@@ -45,6 +49,43 @@ export abstract class PlatformError extends Error {
       ...(this.safeToExpose && this.details ? { details: this.details } : {}),
     };
   }
+
+  /**
+   * 사장님 Platform Owner 확립 (2026-07-11) — Sprint 2B-2 #4 Error Compatibility
+   *
+   * Logger용 직렬화 (개발자/디버깅 환경용)
+   * - 항상 full details 노출 (LogContext에서만 사용)
+   * - stack trace 포함
+   */
+  toLog(): LogErrorShape {
+    return {
+      code: this.code,
+      name: this.name,
+      message: this.message,
+      details: this.details,
+      cause: this.cause
+        ? { name: this.cause.name, message: this.cause.message, stack: this.cause.stack }
+        : undefined,
+      safeToExpose: this.safeToExpose,
+      httpStatus: this.httpStatus,
+      stack: this.stack,
+    };
+  }
+
+  /**
+   * 사장님 Platform Owner 확립 (2026-07-11) — REST/GraphQL/gRPC/CLI/Worker 공용
+   *
+   * Public 직렬화 (클라이언트 응답용)
+   * - safeToExpose=false면 generic message
+   * - REST: status(httpStatus) + json(toPublic())
+   * - GraphQL: extensions.code = toPublic().code
+   * - gRPC: code + message(toPublic())
+   * - CLI: stdout + exit code(httpStatus)
+   * - Worker: job error payload(toPublic())
+   */
+  toPublic(): ErrorResponse {
+    return this.toJSON();
+  }
 }
 
 export interface PlatformErrorOptions {
@@ -56,4 +97,19 @@ export interface ErrorResponse {
   code: string;
   message: string;
   details?: Record<string, unknown>;
+}
+
+/**
+ * Logger용 에러 형태
+ * 헌법 §C-15: PII 마스킹은 Logger maskPII가 담당
+ */
+export interface LogErrorShape {
+  code: string;
+  name: string;
+  message: string;
+  details?: Record<string, unknown>;
+  cause?: { name: string; message: string; stack?: string };
+  safeToExpose: boolean;
+  httpStatus: number;
+  stack?: string;
 }

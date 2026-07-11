@@ -13,7 +13,12 @@
  */
 
 // Base
-export { PlatformError, type PlatformErrorOptions, type ErrorResponse } from './PlatformError.js';
+export {
+  PlatformError,
+  type PlatformErrorOptions,
+  type ErrorResponse,
+  type LogErrorShape,
+} from './PlatformError.js';
 
 // 6개 표준 Error
 export { ValidationError } from './ValidationError.js';

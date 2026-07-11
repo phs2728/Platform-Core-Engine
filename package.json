@@ -26,7 +26,10 @@
     "industry-agnostic": "bash tools/scripts/industry-agnostic-check.sh",
     "prg": "bash tools/scripts/prg-check.sh",
     "pac": "bash tools/scripts/pac-check.sh",
-    "dep": "tsx tools/scripts/dep-validator.ts"
+    "dep": "tsx tools/scripts/dep-validator.ts",
+    "import-boundary": "tsx tools/scripts/import-boundary-test.ts",
+    "public-api-snapshot": "bash tools/scripts/public-api-snapshot.sh",
+    "example-test": "bash tools/scripts/example-test.sh"
   },
   "devDependencies": {
     "@types/node": "^20.11.0",

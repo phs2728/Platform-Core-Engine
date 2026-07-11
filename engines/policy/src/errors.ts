@@ -1,63 +1,47 @@
 /**
  * Policy Engine — Domain Errors
  *
- * 헌법 §12.8 (C-15 Zero Business Logic in DB) 준수:
- * - error code, httpStatus, safeToExpose 명확화
- * - PII 평문 노출 금지
+ * 사장님 확립 (Sprint 2B-2 #4 Error Compatibility):
+ * PlatformError (from @platform/core-sdk) 상속.
+ * 모든 Engine이 동일한 Error 계층 사용 (헌법 §C-15 + §C-20).
+ *
+ * Sprint 2A의 자체 PolicyError → Sprint 2B-2에서 Core SDK PlatformError로 마이그레이션.
  */
+
+export {
+  PlatformError as PolicyErrorBase,
+  ValidationError as PolicySchemaErrorLegacy,
+  NotFoundError,
+  ConflictError,
+  InternalError,
+  type PlatformErrorOptions,
+} from '@platform/core-sdk/errors';
+
+// Re-export for backward compat
+import {
+  PlatformError,
+  ValidationError,
+  NotFoundError,
+  ConflictError,
+  InternalError,
+} from '@platform/core-sdk/errors';
 
 /**
- * Base Domain Error
+ * Policy Not Found — 3계층 + default 모두 없을 때
  *
- * 모든 Policy Engine Error는 이 클래스를 상속.
- * 헌법 §C-15 따라 safeToExpose: true면 클라이언트에 노출 가능.
+ * Sprint 2B-2 마이그레이션: PolicyNotFoundError는 NotFoundError의 별칭.
+ * 기존 PolicyNotFoundError 호출 사이트는 그대로 작동.
  */
-export abstract class PolicyError extends Error {
-  abstract readonly code: string;
-  abstract readonly httpStatus: number;
-  readonly safeToExpose: boolean;
-  readonly context?: Record<string, unknown>;
-
-  constructor(message: string, context?: Record<string, unknown>) {
-    super(message);
-    this.name = this.constructor.name;
-    this.context = context;
-  }
-
-  /** 직렬화 (응답용, safeToExpose=false인 경우 일반 메시지만) */
-  toJSON(): { code: string; message: string; context?: Record<string, unknown> } {
-    return {
-      code: this.code,
-      message: this.safeToExpose ? this.message : 'An internal error occurred',
-      context: this.safeToExpose ? this.context : undefined,
-    };
-  }
-}
+export { NotFoundError as PolicyNotFoundError };
 
 /**
- * Policy Not Found
+ * Policy Schema Invalid — zod 검증 실패
  *
- * Policy Key가 3계층 어디에도 없을 때.
+ * Sprint 2B-2: ValidationError 위임.
  */
-export class PolicyNotFoundError extends PolicyError {
-  readonly code = 'POLICY_NOT_FOUND';
-  readonly httpStatus = 404;
-  readonly safeToExpose = true;
-
-  constructor(public readonly key: string, context?: Record<string, unknown>) {
-    super(`Policy not found: ${key}`, context);
-  }
-}
-
-/**
- * Policy Schema Invalid
- *
- * Policy 값이 zod 스키마와 일치하지 않을 때.
- */
-export class PolicySchemaError extends PolicyError {
-  readonly code = 'POLICY_SCHEMA_INVALID';
+export class PolicySchemaError extends ValidationError {
+  override readonly code = 'POLICY_SCHEMA_INVALID'; // Policy-specific code
   readonly httpStatus = 422;
-  readonly safeToExpose = true;
 
   constructor(
     public readonly key: string,
@@ -69,14 +53,11 @@ export class PolicySchemaError extends PolicyError {
 }
 
 /**
- * Policy Conflict
- *
- * Policy 변경 시 충돌 (optimistic locking).
+ * Policy Conflict — Optimistic Locking 실패
  */
-export class PolicyConflictError extends PolicyError {
-  readonly code = 'POLICY_CONFLICT';
+export class PolicyConflictError extends ConflictError {
+  override readonly code = 'POLICY_CONFLICT';
   readonly httpStatus = 409;
-  readonly safeToExpose = true;
 
   constructor(
     public readonly key: string,
@@ -84,24 +65,24 @@ export class PolicyConflictError extends PolicyError {
     public readonly actualVersion: number,
     context?: Record<string, unknown>,
   ) {
-    super(
-      `Policy version conflict: ${key} (expected ${expectedVersion}, got ${actualVersion})`,
-      context,
-    );
+    super(`Policy version conflict: ${key} (expected ${expectedVersion}, got ${actualVersion})`, {
+      ...context,
+      key,
+    });
   }
 }
 
 /**
- * Policy Internal Error
- *
- * 알 수 없는 내부 오류. 클라이언트에 상세 노출 안 함.
+ * Policy Internal Error (legacy alias)
  */
-export class PolicyInternalError extends PolicyError {
-  readonly code = 'POLICY_INTERNAL_ERROR';
+export class PolicyInternalError extends InternalError {
+  override readonly code = 'POLICY_INTERNAL_ERROR';
   readonly httpStatus = 500;
-  readonly safeToExpose = false;
 
   constructor(message: string, context?: Record<string, unknown>) {
     super(message, context);
   }
 }
+
+// Core SDK 호환을 위해 re-export
+export { PlatformError, ValidationError };
