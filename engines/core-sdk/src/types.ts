@@ -17,10 +17,13 @@ export type EngineName =
   | 'cms'
   | 'booking'
   | 'payment'
+  | 'billing'
   | 'review'
   | 'analytics'
   | 'ai'
   | 'workflow'
   | 'universal-core'
   | 'policy'
-  | 'core-sdk';
+  | 'core-sdk'
+  | 'platform-compatibility'
+  | 'platform-guardian';

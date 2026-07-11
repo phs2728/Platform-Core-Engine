@@ -1,0 +1,37 @@
+{
+  "id": "billing",
+  "name": "Billing Engine",
+  "version": "0.1.0",
+  "phase": 5,
+  "status": "Draft",
+  "description": "[사장님 확립 2026-07-11] Platform SSoT for invoices, billing, adjustments, credit memos. Industry-Agnostic. 8-state machine. Organization ownership + CustomDataPolicy. NOT payment processing — manages billing documents only.",
+  "depends_on": ["core-sdk", "policy", "organization", "order", "pricing", "event-bus"],
+  "provides": [
+    "createInvoice", "updateInvoice", "cancelInvoice", "archiveInvoice", "restoreInvoice",
+    "issueInvoice", "voidInvoice", "getInvoice", "listInvoices", "searchInvoices",
+    "addInvoiceLine", "removeInvoiceLine", "updateInvoiceLine",
+    "generateBilling", "closeBilling",
+    "addAdjustment", "removeAdjustment",
+    "issueCreditMemo", "applyCredit",
+    "attachOrder", "attachPricing", "attachOrganization",
+    "appendTimeline", "getTimeline"
+  ],
+  "events_emitted": [
+    "billing.created", "billing.updated",
+    "invoice.issued", "invoice.cancelled", "invoice.voided", "invoice.closed",
+    "credit.issued", "adjustment.created",
+    "billing.audit.recorded"
+  ],
+  "events_subscribed": ["organization.archived", "organization.deleted"],
+  "strict_boundaries": {
+    "owns": ["Invoice", "InvoiceLine", "BillingAccount", "Adjustment", "CreditMemo", "TaxReference", "DiscountReference", "BillingTimeline", "BillingAudit"],
+    "forbidden": [
+      "Authentication", "Password", "Session", "OAuth", "MFA",
+      "Permission", "Role",
+      "TransactionCapture", "TransactionRefund", "CardProcessing",
+      "PGIntegration", "MoneyTransfer",
+      "CommerceProcessing", "ShipmentProcessing", "StockManagement",
+      "AddressRawField", "EmailRawField", "PhoneRawField", "IndustrySpecificField"
+    ]
+  }
+}

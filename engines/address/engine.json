@@ -1,0 +1,25 @@
+{
+  "id": "address",
+  "name": "Address Engine",
+  "version": "1.0.0",
+  "phase": 6,
+  "status": "Production",
+  "description": "Single Source of Truth for all location/address data. Multi-type, multi-owner, international, geo-enabled. Every Business Engine references this for addresses.",
+  "depends_on": ["core-sdk", "policy"],
+  "provides": [
+    "createAddress", "updateAddress", "archiveAddress", "restoreAddress",
+    "deleteAddress", "getAddress", "searchAddresses", "listAddresses",
+    "validateAddress", "normalizeAddress", "reverseGeocode", "forwardGeocode",
+    "setDefaultAddress", "changeAddressType", "formatAddress"
+  ],
+  "events_emitted": [
+    "address.created", "address.updated", "address.deleted",
+    "address.archived", "address.restored", "address.default.changed",
+    "address.validated", "address.normalized"
+  ],
+  "events_subscribed": [],
+  "strict_boundaries": {
+    "owns": ["Address", "Location", "Country", "Region", "Postal", "Geo", "Validation", "Formatter", "History"],
+    "forbidden": ["Payment", "Booking", "Shipping", "Authentication", "Tax", "Order", "Delivery"]
+  }
+}

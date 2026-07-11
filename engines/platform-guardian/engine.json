@@ -1,0 +1,31 @@
+{
+  "id": "platform-guardian",
+  "name": "Platform Guardian",
+  "version": "0.1.0",
+  "phase": 1,
+  "status": "Draft",
+  "description": "Platform CTO AI — Consumes Compatibility Suite results, produces architecture audit, risk analysis, technical debt, roadmap, and final merge decision. NO BUSINESS LOGIC. PLATFORM GOVERNANCE ONLY.",
+  "depends_on": ["core-sdk", "platform-compatibility"],
+  "provides": [
+    "runGuardianScan",
+    "runGuardianMerge",
+    "runGuardianRelease",
+    "runGuardianRoadmap",
+    "runGuardianHealth",
+    "calculateGuardianScore",
+    "makeGuardianDecision",
+    "analyzeArchitecture",
+    "analyzeRisk",
+    "analyzeTechnicalDebt",
+    "generateRoadmap"
+  ],
+  "events_emitted": [
+    "guardian.scan.completed",
+    "guardian.merge.approved",
+    "guardian.merge.rejected",
+    "guardian.risk.detected"
+  ],
+  "events_subscribed": [
+    "compatibility.scan.completed"
+  ]
+}

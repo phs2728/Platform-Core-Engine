@@ -1,0 +1,42 @@
+{
+  "name": "@platform/engine-platform-compatibility",
+  "version": "0.1.0",
+  "description": "Platform Compatibility Suite — QA Foundation. Validates contracts, events, references, APIs, dependencies across all engines. NO BUSINESS LOGIC. QA ONLY.",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "lint": "echo 'lint: deferred to monorepo root'",
+    "typecheck": "tsc --noEmit",
+    "platform:compat": "tsx cli/run-platform-scan.ts",
+    "contract:test": "tsx cli/run-contract-test.ts",
+    "dependency:test": "tsx cli/run-dependency-test.ts",
+    "event:test": "tsx cli/run-event-test.ts",
+    "api:test": "tsx cli/run-api-test.ts",
+    "reference:test": "tsx cli/run-reference-test.ts",
+    "release:test": "tsx cli/run-release-test.ts",
+    "health": "tsx cli/run-health.ts"
+  },
+  "dependencies": {
+    "@platform/core-sdk": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "typescript": "^5.4.0",
+    "vitest": "^1.6.0",
+    "tsx": "^4.7.0"
+  },
+  "engines": {
+    "node": ">=20.10.0"
+  }
+}
