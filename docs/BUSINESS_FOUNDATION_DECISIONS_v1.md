@@ -1,178 +1,130 @@
-# Business Foundation Phase — Decision Matrix v1.0
+# Business Foundation Phase — Decision Matrix v1.0 (Sprint 1: Catalog 단독)
 
-**사장님 확립 대기, 2026-07-11**
-
-3개 엔진(Catalog / Pricing / Media) 모두 동일한 8개 결정 패턴.
-사장님 확립 후 Sprint 1 RC1 진입 가능.
+**사장님 Platform Owner 확립 (2026-07-11)** — Sprint 1 = **Catalog 단독**.
+Pricing / Media는 **Catalog RC1 후** 시작 (순서 의존성).
 
 ---
 
-## Q1 — Authority: 결정 확립 주체
+## 0. Sprint 1 사장님 확립 상태 (2026-07-11)
 
-| 엔진 | 결정 |
-|---|---|
-| Catalog | 사장님이 직접 결정. AI 추측 ❌ |
-| Pricing | 사장님이 직접 결정. AI 추측 ❌ |
-| Media | 사장님이 직접 결정. AI 추측 ❌ |
+**Sprint 1 RC1 진행 엔진**: **Catalog 단독**
 
-> **"Identity Engine도 결정 8개를 먼저 확립한 후 Sprint 2 시작" 패턴** (헌장 `business-os-architecture` skill).
+**사장님 확립 결정 8개 (Catalog 적용)**:
 
----
+| # | 결정 | **사장님 확립** |
+|---|---|---|
+| 1 | **Phase 위치** | ✅ **Phase 4** (Business Foundation) |
+| 2 | **Organization Ownership** | ✅ **Org Required — 모든 Business Resource 예외 없이** |
+| 3 | **CustomDataPolicy 시점** | ✅ **Use Case 진입 시 1회 (Business Logic 중간 호출 ❌ — 복잡도 방지)** |
+| 4 | **attributes 스키마 강제** | ✅ **자유 JSON + Policy Validation** |
+| 5 | **Slug 전략** | ✅ **Tenant 내 유니크** |
+| 6 | **status 전이 모델** | ✅ **4-state (Draft/Active/Archived/Deleted)** |
+| 7 | **Bundle 깊이** | ✅ **무제한 + cycle detection** |
+| 8 | **Sprint 1 범위 / Event 수** | ✅ **~20 Use Cases / 18 Events 단위**. Sprint 2 = 36 Use Cases 확장 |
 
-## Q1 — 결정 8개 (3 엔진 공통)
+### Sprint 1 Use Cases 분포 (20개)
 
-각 엔진에 대해 다음 8개 결정이 사장님 확립 대기. **PRD §11 참조**.
+| 영역 | Use Cases | 개수 |
+|---|---|---|
+| Catalog Core (root entity) | createCatalog, updateCatalog, archiveCatalog, restoreCatalog, deleteCatalog, getCatalog, listCatalogs, searchCatalogs | **8** |
+| Category (계층 + cycle detection) | createCategory, updateCategory, moveCategory, deleteCategory | **4** |
+| Variant (Item 옵션) | createVariant, updateVariant, deleteVariant | **3** |
+| Bundle (Item/Collection 조합) | createBundle, updateBundle, deleteBundle | **3** |
+| Reference (Media / Pricing ID 연결) | assignMediaRef, assignPricingRef | **2** |
+| **Total** | | **20** |
 
----
+### Domain 단순화 (사장님 spec)
 
-### 결정 1 — Phase 위치
-
-| 엔진 | 사장님 옵션 (PRD §11.1) |
-|---|---|
-| **Catalog** | (a) **Phase 4** (Business Foundation — 사장님 패턴) / (b) Phase 5 (Business) |
-| **Pricing** | (a) **Phase 4** / (b) Phase 5 |
-| **Media** | (a) **Phase 4** / (b) Phase 5 |
-
-**사장님 확립 대기.**
-
-**제안(사장님 권한 內)**: Phase 4 (Business Foundation 명시 — `Catalog → Inventory → Pricing` 순서).
-
----
-
-### 결정 2 — Organization Ownership 강제 여부
-
-PRD §10 (`docs/BUSINESS_ENGINE_STANDARD.md` 참조).
-
-| 엔진 | 사장님 옵션 |
-|---|---|
-| **Catalog** | (a) **Org Required** / (b) Org Optional / (c) User도 가능 |
-| **Pricing** | (a) **Org Required** / (b) Org Optional / (c) User도 가능 |
-| **Media** | (a) **Org Required** / (b) Org Optional / (c) User도 가능 |
-
-**사장님 확립 대기.**
-
-**제안**: Org Required (모든 Business Engine Resource는 Organization을 Owner로 사용 — 사장님 확립).
-
----
-
-### 결정 3 — CustomDataPolicy 적용 시점
-
-| 엔진 | 사장님 옵션 |
-|---|---|
-| **Catalog** | (a) **Use Case 진입 시 매번** / (b) Host 캐시 / (c) 비동기 |
-| **Pricing** | (a) **Use Case 진입 시 동기 호출** / (b) 비동기 / (c) Hybrid |
-| **Media** | (a) **Use Case 진입 시 동기 호출** / (b) 비동기 / (c) Hybrid |
-
-**사장님 확립 대기.**
-
-**제안**: Use Case 진입 시 동기 호출 (Industry Custom Data 검증 의무화).
-
----
-
-### 결정 4 — attributes 스키마 강제 여부
-
-| 엔진 | 사장님 옵션 |
-|---|---|
-| **Catalog** | (a) **자유 형식 + Policy 검증** / (b) JSON Schema 강제 / (c) Hybrid |
-| **Pricing** | (a) **자유 형식 + Policy 검증** / (b) JSON Schema 강제 / (c) Hybrid |
-| **Media** | (a) **자유 형식 + Policy 검증** / (b) JSON Schema 강제 / (c) Hybrid |
-
-**사장님 확립 대기.**
-
-**제안**: 자유 형식 + Policy 검증 (사장님 확립 표준 — Industry 사장님이 결정).
-
----
-
-### 결정 5 — Engine 고유 결정
-
-| 엔진 | 사장님 옵션 |
-|---|---|
-| **Catalog** Slug 전략 | (a) Tenant-내 유니크 / (b) Global / (c) Hierarchy |
-| **Catalog** status 전이 | (a) **Active/Archived/Deleted** / (b) + Draft / (c) + Pending Review |
-| **Catalog** Bundle 깊이 | (a) **무제한 + cycle detection** / (b) 1-level / (c) 3-level |
-| **Pricing** Currency | (a) **Tenant 허용 화폐만** / (b) Global |
-| **Pricing** PricingPlan↔Catalog 관계 | (a) **PricingRef 직접 연결** / (b) 별도 매핑 테이블 |
-| **Media** Variant Tracks | (a) **original + thumbnail + optimized 표준** / (b) Industry 자유 |
-| **Media** Storage Adapter | (a) **Host 100% 책임 + Engine metadata** / (b) Engine 일부 |
-| **Media** AssetReference 보관 | (a) **Media Engine 자체** / (b) **Catalog Engine 내부** |
-
-**사장님 확립 대기.**
-
-**제안**:
-- Catalog slug: Tenant 내 유니크 / status: + Draft (4-state) / Bundle: 무제한 + cycle
-- Pricing Currency: Tenant 허용 화폐 / PricingRef: 직접 연결
-- Media Variants: 표준 (original/thumbnail/optimized_web/optimized_mobile) / Storage: Host / AssetReference: Catalog Engine 내부
-
----
-
-### 결정 6 — 이벤트 數
-
-사장님 Identity Engine 패턴: events_emitted 도 적은 단위부터 시작 (Identity 기본 12개).
-
-| 엔진 | 사장님 옵션 (PRD §6 참조) |
-|---|---|
-| **Catalog** | (a) **18개 단위** (Item/Collection/Variant 기본) / (b) 26개 전체 / (c) 36개 모두 |
-| **Pricing** | (a) **14개 단위** (Currency/Plan/Component/Tier 기본) / (b) 28개 전체 |
-| **Media** | (a) **16개 단위** (Asset/Variant/Collection 기본) / (b) 32개 전체 |
-
-**사장님 확립 대기.**
-
-**제안**: Sprint 1 = 단위 (18 / 14 / 16). Sprint 2 = 전체 확장.
-
----
-
-### 결정 7 — CustomDataPolicy 인터페이스 표준화 (모든 엔진 공통)
+PRD §0에서 **Catalog = Organization 단위 root entity**로 단순화:
 
 ```
-interface ICustomDataPolicyProvider {
-  validateAttributes(
-    tenantId: string,
-    type: string,
-    attributes: Record<string, unknown>,
-  ): Promise<Result<Record<string, unknown>, ValidationError>>;
-  
-  getAllowedTypes(tenantId: string): Promise<readonly string[]>;
-  getMaxXxxPerOwner(tenantId: string): Promise<number>;
-}
+Catalog (root)
+├── Category (계층 — cycle detection)
+│   └── Item(=Catalog.Subcatalog 또는 다른 표현)
+│        ├── Variant (옵션)
+│        └── Bundle (조합)
 ```
 
-**사장님 확립 대기.**
-
-**제안**: 모든 엔진이 동일한 ICustomDataPolicy 인터페이스 사용. 차이는 `validateXxx` 메서드 시그니처뿐.
+**Sprint 1 Domain 모델**:
+- **Catalog** (Organization 단위 root, slug 유니크)
+- **Category** (계층 depth unlimited, cycle detection)
+- **Item** (Catalog 내 entry, attributes 자유 JSON)
+- **Variant** (Item 옵션, sku 유니크 per Item)
+- **Bundle** (Item들의 정적 조합)
+- **Reference** (Item/Variant/Bundle에 Media/Pricing ID)
+- **Attribute / customFields / metadata** (자유 JSON + CustomDataPolicy)
 
 ---
 
-### 결정 8 — Sprint 1 범위
+## 1. 사장님 확립 Business Foundation Phase 순서 (2026-07-11)
 
-| 엔진 | 사장님 옵션 |
-|---|---|
-| **Catalog** | (a) 18/36 Use Case (MVP) / (b) 36개 전체 |
-| **Pricing** | (a) 14/28 Use Case (MVP) / (b) 28개 전체 |
-| **Media** | (a) 16/32 Use Case (MVP) / (b) 32개 전체 |
+```
+① Catalog (현재 Sprint 1)
+   ↓
+② Pricing (Catalog RC 후 시작)
+   ↓
+③ Media (Pricing 후 시작)
 
-**사장님 확립 대기.**
+↓ (Business Foundation 완료 후)
 
-**제안**: Sprint 1 = MVP (18/14/16 Use Cases) + InMemory Repo + CustomDataPolicy + 35+ tests per engine.
+④ Inventory → ⑤ Booking → ⑥ Order → ⑦ Payment → ⑧ Review
+   ↓ (Business Foundation 2차)
+⑨ Workflow
+
+↓
+
+Platform Services:
+   ⑩ Search → ⑪ Analytics → ⑫ AI
+```
+
+**Pricing은 반드시 Catalog를 참조해야 함** → Catalog 완성 후 시작.
+**Media는 Catalog + Organization + User 사용** → Catalog 이후 시작.
 
 ---
 
-## Acceptance (사장님 확립 후)
+## 2. Sprint 2+ 보류 (Catalog 완성 후 결정)
 
-각 엔진 8개 결정 모두 확립 후:
-
-```
-✅ Engine-NOT-Application (헌법 §C-15)
-✅ Industry-Agnostic (헌법 §C-1)
-✅ Multi-Tenant (헌법 §C-2)
-✅ Organization Ownership (사장님 표준)
-✅ CustomDataPolicy (사장님 표준)
-✅ 5-Step Use Case Pattern
-✅ Result<T,E> / EventEnvelope / Audit
-✅ Engine Cert 초안
-```
-
-YES → Sprint 1 RC1 가능.
+- Pricing Engine (Catalog RC 후 시작)
+- Media Engine (Pricing RC 후 시작)
+- Inventory Engine (Catalog + Pricing + Media 후)
+- 이후 Business Engines (Booking / Payment / Order / Review)
 
 ---
 
-**보고 완료. 사장님 확립 대기.**
+## 3. Sprint 1 RC1 Acceptance (Catalog)
+
+다음 질문에 모두 YES면 Merge 가능:
+
+> 1. **Industry-Agnostic** 검증 통과? (Catalog 자기 자신)
+> 2. Organization Ownership 모든 Entity? **YES**
+> 3. Multi-Tenant 격리 모든 Repo? **YES**
+> 4. 5-Step Use Case 패턴 일관 적용? **YES**
+> 5. CustomDataPolicy Use Case 진입 시 1회 호출? **YES**
+> 6. Pricing/Media Engine의 실제 데이터 ❌ (Reference ID만)? **YES**
+> 7. EventEnvelope 18+ 발행? **YES**
+> 8. Audit Trail? **YES**
+> 9. 20 Use Cases 구현 + 40+ tests? **YES**
+
+YES → RC1 Merge.
+
+Stable 조건 (사장님 확립 4조건):
+- GitHub Actions Green
+- PRG 최종 PASS
+- Engine Cert 최종 승인 (Sprint 2+)
+- 실제 다른 엔진에서 사용 검증
+
+---
+
+## 4. 헌법 준수
+
+- ✅ C-1 Industry-Agnostic (추상 모델만: Catalog/Category/Item/Variant/Bundle/Reference)
+- ✅ C-4 Boundary Discipline (Pricing/Media ❌ 실제 데이터, Reference ID만)
+- ✅ C-15 Engine-NOT-Application
+- ✅ C-17 Stop Designing (이번 Sprint 새 헌장/규칙 추가 ❌)
+- ✅ 사장님 확립 5가지 표준 (Spec → Engine → Use Case → Repo → Event)
+- ✅ 사장님 확립 Multi-Tenant SaaS 표준
+- ✅ 사장님 확립 Organization Ownership 표준
+
+---
+
+**보고 완료. 사장님 확립 + Catalog Sprint 1 RC1 진입 대기.**

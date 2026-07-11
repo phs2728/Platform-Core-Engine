@@ -318,85 +318,67 @@ interface ICustomDataPolicyProvider {
 
 ## 5. Use Cases (Public API)
 
-> 사장님 spec §Public API 표준 패턴.
+> 사장님 spec §Public API — Sprint 1 = ~20 Use Cases (Reference Business Engine).
+> Sprint 2+ 는 PRD §5.x 확장 영역.
 
-### 5.1 Item Lifecycle (10개)
-
-```
-createItemUseCase
-updateItemUseCase
-updateItemAttributesUseCase
-archiveItemUseCase
-restoreItemUseCase
-deleteItemUseCase
-getItemUseCase
-listItemsUseCase
-searchItemsUseCase
-changeItemStatusUseCase
-```
-
-### 5.2 Collection Lifecycle (8개)
+### 5.1 Catalog Core (8개) — 사장님 확립 Sprint 1
 
 ```
-createCollectionUseCase
-updateCollectionUseCase
-addItemToCollectionUseCase
-removeItemFromCollectionUseCase
-archiveCollectionUseCase
-deleteCollectionUseCase
-getCollectionUseCase
-listCollectionsUseCase
+createCatalogUseCase           // 새 Catalog 생성 (Organization 단위 root)
+updateCatalogUseCase
+archiveCatalogUseCase
+restoreCatalogUseCase
+deleteCatalogUseCase
+getCatalogUseCase
+listCatalogsUseCase
+searchCatalogsUseCase
 ```
 
-### 5.3 Variant Lifecycle (4개)
-
-```
-addVariantUseCase
-updateVariantUseCase
-removeVariantUseCase
-listVariantsUseCase
-```
-
-### 5.4 Bundle Lifecycle (4개)
-
-```
-createBundleUseCase
-updateBundleComponentsUseCase
-archiveBundleUseCase
-listBundlesUseCase
-```
-
-### 5.5 Taxonomy (4개)
+### 5.2 Category (4개) — 사장님 확립 Sprint 1
 
 ```
 createCategoryUseCase
-addItemTagUseCase
-removeItemTagUseCase
-listCategoriesUseCase
+updateCategoryUseCase
+moveCategoryUseCase             // Parent 재배치 + cycle detection
+deleteCategoryUseCase
 ```
 
-### 5.6 Pricing Reference (2개)
+### 5.3 Variant (3개) — 사장님 확립 Sprint 1
 
 ```
-attachPricingRefUseCase      // Item/Variant/Bundle에 Pricing ID 연결
-detachPricingRefUseCase
+createVariantUseCase
+updateVariantUseCase
+deleteVariantUseCase
 ```
 
-### 5.7 Media Reference (2개)
+### 5.4 Bundle (3개) — 사장님 확립 Sprint 1
 
 ```
-attachMediaRefUseCase
-detachMediaRefUseCase
+createBundleUseCase
+updateBundleUseCase
+deleteBundleUseCase
 ```
 
-### 5.8 Status Change (2개)
+### 5.5 Reference (2개) — 사장님 확립 Sprint 1
 
 ```
-changeItemStatusUseCase
-changeCollectionStatusUseCase
+assignMediaRefUseCase          // Catalog.Item/Variant/Bundle에 Media ID 연결
+assignPricingRefUseCase        // Catalog.Item/Variant/Bundle에 Pricing ID 연결
 ```
 
-**총 36개 Use Case.**
+**Sprint 1 = 20 Use Cases (사장님 확립).
+Sprint 2에서 PRD §5.6-5.8 (Status Change, Pricing Ref Detach, Media Ref Detach, Tag operations, 추가 lifecycle) 확장.**
+
+**Note**: 사장님 spec에 따라 "Catalog = Organization 단위 root entity"로 단순화. Item/Collection/Variant/Bundle/Catalog 모두 Catalog 도메인 Entity로 동일 패턴 (Item이 없고 Catalog 자체가 Entity). 이 구조는 Sprint 2에 다시 평가.
+
+### 5.6~5.8 (Sprint 2+ 보류)
+
+- Status Change (collection.status 등)
+- Pricing Ref Detach / Media Ref Detach
+- Tag operations
+- Full Text Search (Catalog.fields)
+
+사장님 권고: Sprint 1 = Reference Business Engine 마무리. Sprint 2 = 36 Use Case 전체 확장.
 
 ---
 
@@ -569,18 +551,42 @@ async function createItemUseCase(input, deps) {
 
 ---
 
-## 11. 결정 대기 항목 (사장님 확립)
+## 11. 결정 확립 (사장님 Platform Owner, 2026-07-11)
 
-| # | 결정 | 사장님 옵션 |
+| # | 결정 | **사장님 확립** |
 |---|---|---|
-| 1 | **Phase 위치** | (a) **Phase 4** (Business Foundation) / (b) Phase 5 (Business) |
-| 2 | **Organization Ownership** | (a) **Org Required** / (b) Org Optional / (c) User도 가능 |
-| 3 | **CustomDataPolicy 시점** | (a) **Use Case 진입 시 매번** / (b) Host 캐시 / (c) 비동기 |
-| 4 | **attributes 스키마 강제** | (a) **자유 형식 + Policy 검증** / (b) JSON Schema 강제 / (c) Hybrid |
-| 5 | **Slug 전략** | (a) **Tenant-내 유니크** / (b) Global 유니크 / (c) Hierarchy 포함 |
-| 6 | **status 전이 모델** | (a) **Active/Archived/Deleted** / (b) + Draft / (c) + Pending Review |
-| 7 | **Bundle 깊이** | (a) **무제한 + cycle detection** / (b) 1-level only / (c) 3-level |
-| 8 | **Event 수** | (a) **18개 단위** (Item/Collection/Variant 기본만) / (b) 26개 전체 / (c) 36개 (sprint 단위 분할) |
+| 1 | **Phase 위치** | ✅ **Phase 4** (Business Foundation) |
+| 2 | **Organization Ownership** | ✅ **Org Required — 모든 Business Resource 예외 없이** |
+| 3 | **CustomDataPolicy 시점** | ✅ **Use Case 진입 시 1회 (Business Logic 중간 호출 ❌ — 복잡도 방지)** |
+| 4 | **attributes 스키마 강제** | ✅ **자유 JSON + Policy Validation** (attributes/customFields/metadata) |
+| 5 | **Slug 전략** | ✅ **Tenant 내 유니크** |
+| 6 | **status 전이 모델** | ✅ **4-state (Draft/Active/Archived/Deleted)** |
+| 7 | **Bundle 깊이** | ✅ **무제한 + cycle detection** |
+| 8 | **Sprint 1 범위 / Event 수** | ✅ **Sprint 1 = ~20 Use Cases / 18 Events 단위**. Sprint 2 = 36 Use Cases 확장 |
+
+### 사장님 확립 Business Foundation Phase 순서 (2026-07-11)
+
+```
+① Catalog (현재 Sprint 1)
+   ↓
+② Pricing (Catalog RC 후 시작)
+   ↓
+③ Media (Pricing 후 시작)
+
+↓ (Business Foundation 완료 후)
+
+④ Inventory → ⑤ Booking → ⑥ Order → ⑦ Payment → ⑧ Review
+   ↓ (Business Foundation 2차)
+⑨ Workflow
+
+↓
+
+Platform Services:
+   ⑩ Search → ⑪ Analytics → ⑫ AI
+```
+
+**Pricing은 반드시 Catalog를 참조해야 함** → Catalog 완성 후 시작.
+**Media는 Catalog + Organization + User 사용** → Catalog 이후 시작.
 
 ---
 
