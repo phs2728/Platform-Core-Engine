@@ -1,0 +1,79 @@
+{
+  "id": "booking",
+  "name": "Booking Engine",
+  "version": "0.1.0",
+  "phase": 5,
+  "status": "Draft",
+  "description": "[사장님 확립 2026-07-11] Platform lifecycle manager for all reservable resources. Industry-Agnostic. 8-state machine. Organization ownership + CustomDataPolicy. NOT payment/inventory/pricing — manages booking lifecycle only, references others.",
+  "depends_on": [
+    "core-sdk",
+    "policy",
+    "organization",
+    "inventory",
+    "pricing",
+    "communication",
+    "event-bus"
+  ],
+  "provides": [
+    "createBooking", "updateBooking", "cancelBooking", "confirmBooking", "rejectBooking",
+    "expireBooking", "archiveBooking", "restoreBooking",
+    "attachResource", "detachResource", "changeResource",
+    "addParticipant", "removeParticipant", "updateParticipant",
+    "checkAvailability", "reserveInventory", "releaseInventory",
+    "getTimeline", "appendTimelineEvent",
+    "rescheduleBooking", "extendBooking", "shortenBooking",
+    "checkIn", "checkOut",
+    "validateBookingPolicy"
+  ],
+  "events_emitted": [
+    "booking.created",
+    "booking.updated",
+    "booking.confirmed",
+    "booking.cancelled",
+    "booking.expired",
+    "booking.rejected",
+    "booking.checkin",
+    "booking.checkout",
+    "booking.completed",
+    "booking.rescheduled",
+    "booking.resource.changed",
+    "booking.participant.added",
+    "booking.participant.removed",
+    "booking.audit.recorded"
+  ],
+  "events_subscribed": [
+    "organization.archived",
+    "organization.deleted",
+    "inventory.threshold.reached"
+  ],
+  "strict_boundaries": {
+    "owns": [
+      "Booking",
+      "BookingParticipant",
+      "BookingResource",
+      "BookingTimeline",
+      "BookingPolicyReference",
+      "BookingConfirmation",
+      "BookingAudit"
+    ],
+    "forbidden": [
+      "Authentication",
+      "Password",
+      "Session",
+      "OAuth",
+      "MFA",
+      "Permission",
+      "Role",
+      "TransactionCapture",
+      "TransactionRefund",
+      "FinancialDocuments",
+      "CommerceProcessing",
+      "ShipmentProcessing",
+      "StockManagement",
+      "AddressRawField",
+      "EmailRawField",
+      "PhoneRawField",
+      "IndustrySpecificField"
+    ]
+  }
+}

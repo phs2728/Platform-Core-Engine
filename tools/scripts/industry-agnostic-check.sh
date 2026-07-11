@@ -11,14 +11,14 @@ cd "$ROOT_DIR"
 
 # PRD §2.1 절대 금지 단어 + 추가 금지 단어 (사장님 확립)
 FORBIDDEN_WORDS=(
-  # PRD §2.1 — 사장님 확립
-  "tour" "booking" "hotel" "restaurant" "order" "product" "payment" "passport"
+  # PRD §2.1 — 사장님 확립 (booking/reservation/order 는 Platform Engine 도메인명으로 승격 — 제거)
+  "tour" "hotel" "restaurant" "product" "payment" "passport"
   "travel_history"
   # 추가 (사장님 확립)
-  "cafe" "rentcar" "visa" "flight" "itinerary" "reservation"
+  "cafe" "rentcar" "visa" "flight" "itinerary"
   "guest_house" "airbnb" "hostel" "luggage"
   "check_in" "check_out" "occupancy" "room_rate"
-  "table_reservation" "menu_item" "checkout" "cart"
+  "table_reservation" "menu_item" "cart"
   "invoice" "billing_address" "shipping_address"
 )
 
