@@ -50,6 +50,20 @@
 
 ---
 
+## Communication Engine — Stable 조건 (사장님 CTO 감사, 2026-07-11)
+
+> "Communication Engine v1.0 Stable은 Provider Failover, Multi Provider, Outbox Pattern 세 가지가 Production 수준으로 검증된 후 선언"
+
+| ID | Priority | 항목 | 사유 |
+|---|---|---|---|
+| **RFC-032** | **P1** | Provider Failover (Resend 장애 → SMTP 자동 전환) | Stable 조건 1/3 |
+| **RFC-033** | **P1** | Multi Provider 동시 발송 (OTP → SMS + Email) | Stable 조건 2/3 |
+| **RFC-034** | **P1** | Outbox Pattern (Event → Outbox → Worker → Communication) | Stable 조건 3/3 |
+| RFC-035 | P2 | Rate Limiting (OTP 1분 3회 제한) | Production hardening |
+| RFC-036 | P2 | Bounce Handling (Email bounce → 자동 disable) | Production hardening |
+| RFC-037 | P2 | Webhook Retry + DLQ 강화 | Production hardening |
+| RFC-038 | P3 | Campaign (100K batch + throttle) | Future |
+
 ## Sprint 2C-2 확립 (사장님 Audit, 2026-07-11)
 
 | ID | 항목 | 사유 |
