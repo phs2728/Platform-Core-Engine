@@ -1104,6 +1104,60 @@ Identity ↔ Notification (CYCLE — C-18 위반)
 - ❌ "문서 개수"
 - ✅ "동작하는 Engine 개수 + PRG 통과율"
 
+### 12.19 C-23 — Commit Message 규칙 (사장님 Platform Owner 확립, 2026-07-11)
+
+> **Conventional Commits 형식. Changelog 자동 생성 가능.**
+
+```
+<type>(<scope>): <subject>
+
+<body>
+
+<footer>
+```
+
+**Type** (필수):
+
+| Type | 용도 |
+|---|---|
+| `feat` | 새 기능 |
+| `fix` | 버그 수정 |
+| `refactor` | 리팩터링 (기능 변경 X) |
+| `test` | 테스트 추가/수정 |
+| `docs` | 문서만 변경 |
+| `chore` | 빌드/CI/설정 |
+| `perf` | 성능 개선 |
+| `style` | 코드 스타일 (의미 변경 X) |
+| `revert` | Revert |
+
+**Scope** (선택, 엔진/모듈명):
+- `identity`, `policy`, `core-sdk`, `platform`
+- `ci`, `docs`, `release`
+
+**Subject 규칙**:
+- 한 줄 요약 (50자 이내 권장)
+- 명령형 (add, fix, refactor)
+- 첫 글자 대문자 ❌
+- 마침표 ❌
+
+**예**:
+```
+feat(identity): add email login use case
+test(identity): add login failure cases
+refactor(core-sdk): simplify Result API
+fix(policy): preserve metadata
+docs(platform): add C-21 Release Rule
+chore(ci): update github actions
+```
+
+**Body** (선택):
+- 무엇을, 왜 변경했는지
+- 72자마다 줄바꿈
+
+**Footer** (선택):
+- `BREAKING CHANGE:` prefix → Major 변경
+- `Refs: #123` → Issue/PR 참조
+
 ### 12.18 C-22 — Merge Gate (사장님 Platform Owner 확립, 2026-07-11)
 
 > **보고서가 아니라 실행 결과만으로 Merge/Approval.**

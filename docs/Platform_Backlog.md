@@ -50,11 +50,24 @@
 
 ---
 
+## Sprint 2C-2 확립 (사장님 Audit, 2026-07-11)
+
+| ID | 항목 | 사유 |
+|---|---|---|
+| **RFC-026 (Sprint 2C-2-1)** | Email Verification | Token Hash만 DB 저장 (raw ❌) |
+| **RFC-027 (Sprint 2C-2-2)** | Password Reset | Token Hash만 DB 저장 |
+| **RFC-028 (Sprint 2C-2-3)** | Account Lock | 로그인 실패 N회 → 계정 잠금 |
+| **RFC-029 (Sprint 2C-2-4)** | Session Refresh (Rotation) | 주기적 Session ID 재발급 |
+| **RFC-030 (Sprint 2C-2-5)** | Audit Log | LOGIN_SUCCESS/FAILED, PASSWORD_*, EMAIL_*, SESSION_* |
+| **RFC-031 (Sprint 2C-2-6)** | OAuth (Google, Apple, Facebook) | OAuth는 가장 마지막 (실제 서비스 우선순위) |
+
+**사장님 확립**: 실제 서비스에서는 OAuth보다 이메일 인증/비밀번호 재설정/계정 잠금이 먼저 필요.
+
 ## 향후 RFC 후보 (장기) — **P3**
 
 | ID | Priority | 항목 | 사유 |
 |---|---|---|---|
-| RFC-008 | P3 | Notification Engine | Phase 2 예정 |
+| RFC-008 | P3 | Notification Engine | Phase 2 예정 (Identity 이후) |
 | RFC-009 | P3 | Media Engine | Phase 3 예정 |
 | RFC-010 | P3 | CMS Engine | Phase 3 예정 |
 | RFC-011 | P3 | Audit Engine | Phase 4 예정 |
