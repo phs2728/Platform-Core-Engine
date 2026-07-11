@@ -9,6 +9,7 @@ export type EngineName =
   | 'user'
   | 'address'
   | 'organization'
+  | 'catalog'
   | 'notification'
   | 'event-bus'
   | 'media'
