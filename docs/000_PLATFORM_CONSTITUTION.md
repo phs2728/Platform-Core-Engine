@@ -1072,6 +1072,38 @@ Identity ↔ Notification (CYCLE — C-18 위반)
 
 자세한 매트릭스: [Engine Dependency Graph](./Engine_Dependency_Graph.md)
 
+### 12.15 C-19 — Working Software Validates Design (사장님 Platform Owner 확립, 2026-07-11)
+
+> **문서는 설계를 정의한다. 구현은 설계를 검증한다. 구현 결과가 설계와 다르면 설계 또는 구현 중 하나를 수정해야 한다.**
+
+**C-13과 보완 관계**:
+- **C-13**: 설계가 먼저 (Canonical before Code)
+- **C-19**: 구현으로 설계를 검증 (Working Software Validates Design)
+
+```
+[1] PRD 작성 (설계 정의)
+[2] TRD 작성
+[3] Decision Catalog
+[4] AVR (PASS)
+[5] Frozen
+[6] Implementation ← 여기서 시작 (Working Software)
+[7] 구현 결과가 설계와 다르면?
+    ├─ 설계 오류 → PRD/TRD 업데이트 (ADR)
+    └─ 구현 오류 → 코드 수정
+[8] PRG (PASS)
+[9] Engine Certification
+[10] Release
+```
+
+**핵심**:
+- 구현 중 떠오른 아이디어는 **즉시 헌법/PRD 수정 ❌**
+- → **RFC 후보** 또는 **백로그**로 기록
+- 현재 Sprint의 구현 완료가 우선
+
+**플랫폼 품질의 측정**:
+- ❌ "문서 개수"
+- ✅ "동작하는 Engine 개수 + PRG 통과율"
+
 ### 12.14 Platform Core v1.0 Foundation Complete 선언 (사장님 CEO, 2026-07-11)
 
 > **사장님 CEO 확립**:
