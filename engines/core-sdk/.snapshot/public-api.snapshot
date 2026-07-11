@@ -1,5 +1,5 @@
 # Public API Snapshot
-# Generated: 2026-07-11T11:40:58.673Z
+# Generated: 2026-07-11T16:33:43.061Z
 # DO NOT EDIT MANUALLY — run 'pnpm public-api-snapshot --update'
 
 engines/core-sdk/src/errors/AuthenticationError.ts:20:export class AuthenticationError extends PlatformError {
