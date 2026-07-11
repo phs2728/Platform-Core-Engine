@@ -26,7 +26,7 @@ const description = descArg ? descArg.split('=')[1] : `${name} engine`;
 const title = name.split('-').map((w) => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
 
 const rootDir = process.cwd();
-const templateDir = join(rootDir, 'engines', '_template');
+const templateDir = join(rootDir, '.engine-template');
 const targetDir = join(rootDir, 'engines', name);
 
 if (existsSync(targetDir)) {
@@ -41,6 +41,10 @@ const vars = {
   TEMPLATE_DESCRIPTION: description,
   TEMPLATE_PHASE: String(phase),
   TEMPLATE_DATE: new Date().toISOString().split('T')[0],
+  '{{NAME}}': name,
+  '{{TITLE}}': title,
+  '{{DESCRIPTION}}': description,
+  '{{PHASE}}': String(phase),
 };
 
 function replaceVars(content) {
