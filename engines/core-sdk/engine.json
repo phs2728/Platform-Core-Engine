@@ -1,0 +1,31 @@
+{
+  "id": "core-sdk",
+  "name": "Core SDK",
+  "version": "1.0.0",
+  "phase": 1,
+  "description": "Shared SDK for all engines (Logger, Config, Policy, Errors, Result, Event, Validation)",
+  "depends_on": [
+    "policy",
+    "universal-core"
+  ],
+  "provides": [
+    "ILogger",
+    "IConfigProvider",
+    "IPolicy (wrapper around Policy Engine)",
+    "DomainError (base class)",
+    "Result<T, E> (type-safe success/failure)",
+    "IEventEmitter",
+    "IEventSubscriber",
+    "Validation (zod integration)"
+  ],
+  "events_emitted": [],
+  "events_subscribed": [],
+  "modules_count": 7,
+  "implements_pac": [
+    "PAC-006",
+    "PAC-007",
+    "PAC-008",
+    "PAC-009",
+    "PAC-010"
+  ]
+}

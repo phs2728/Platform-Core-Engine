@@ -1037,9 +1037,62 @@ Identity Engine (Sprint 2 구현 시작)
 ```
 
 **장기적 가치**:
-- Notification Engine / Booking Engine / Media Engine / AI Engine 모두
-- **같은 Core SDK 사용** → 일관된 logging, error handling, event emission
-- Platform의 **공통 기반 전체**를 재사용 → **SI 회사가 아닌 플랫폼 회사**
+- 모든 Engine이 **Policy Engine + Core SDK + Universal Core**만 의존
+- Engine끼리 **직접 import 금지** (헌법 §C-10)
+- 개발 순서: Policy → Core SDK → Identity (사장님 확립)
+
+### 12.13 C-18 — Circular Dependency 절대 금지 (사장님 CEO 확립, 2026-07-11)
+
+> **엔진은 항상 상위 → 하위만 참조한다. 절대 A ↔ B가 되면 안 된다.**
+
+```
+[허용] 상위 → 하위
+Identity → Notification (OK)
+Identity → Booking (OK)
+
+[금지] 순환 의존
+Identity ↔ Notification (CYCLE — C-18 위반)
+```
+
+**위반 시**:
+- CI 자동 차단 (`tools/scripts/dep-validator.ts`)
+- ADR 없이 해결 불가
+- 플랫폼 전체 재설계 위험
+
+**허용되는 의존성 방향**:
+- 엔진 → Universal Core (모든 엔진)
+- 엔진 → Policy (Policy Engine을 경유)
+- 엔진 → Core SDK (SDK 모듈 사용)
+- 엔진 → Event Bus (이벤트 발행/구독)
+
+**금지되는 의존성**:
+- A ↔ B (서로 직접 import)
+- A → B, B → A (간접 순환)
+- 엔진 자기 자신 의존
+
+자세한 매트릭스: [Engine Dependency Graph](./Engine_Dependency_Graph.md)
+
+### 12.14 Platform Core v1.0 Foundation Complete 선언 (사장님 CEO, 2026-07-11)
+
+> **사장님 CEO 확립**:
+> "이것이 제가 마지막으로 추가하는 플랫폼 기능입니다. 이제 정말로 구현 단계로 들어갑니다."
+
+Platform Core v1.0 Foundation은 다음을 포함합니다:
+
+| 구성 요소 | Status |
+|---|---|
+| 헌법 (Constitution) — C-1 ~ C-18 (18개 원칙) | 🔒 Frozen |
+| PAC (Platform Acceptance Criteria) — 10개 영구 기준 | 🔒 Frozen |
+| PRG (Platform Review Gate) — 19개 질문 | 🔒 Frozen |
+| Engine Certification — 7개 인증 항목 | 🔒 Frozen |
+| Policy Engine Architecture | 🔒 Frozen |
+| Core SDK Architecture | 🔒 Frozen |
+| Identity Engine Architecture | 🔒 Frozen |
+| Engine Dependency Rules (C-18) | 🔒 Frozen |
+
+**이제부터는 새로운 규칙을 만드는 단계가 아니라, 정해진 규칙으로 엔진을 만드는 단계.**
+
+플랫폼의 품질은 **새로운 문서**가 아니라 **구현 품질과 PRG 통과율**로 평가.
 
 ---
 
