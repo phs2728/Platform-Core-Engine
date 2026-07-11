@@ -61,14 +61,11 @@ Platform-Core-Engine/
 이 구조는 VS Code, TurboRepo, pnpm Workspace, Nx 같은 모노레포 도구에서 **자연스럽게 확장**됩니다.
 
 ---
-
-## 엔진 카탈로그
-
-### 🟢 Active
-
 | 엔진 | 책임 | README |
 |---|---|---|
-| **identity** | 인증, 보안, 세션, 자격증명, 감사 | [engines/identity/README.md](./engines/identity/README.md) |
+| **policy** | Configuration SSoT, 3계층 정책 해결 (Global/Engine/Tenant) | [engines/policy/README.md](./engines/policy/README.md) |
+| **core-sdk** | 공통 SDK (Logger, Config, Policy, Errors, Result, Event, Validation) | [engines/core-sdk/README.md](./engines/core-sdk/README.md) |
+| **identity** | 인증, 보안, 세션, 자격증명, 감사 (Policy + Core SDK 위에서 동작) | [engines/identity/README.md](./engines/identity/README.md) |
 
 ### 🟡 Planned
 

@@ -1,10 +1,15 @@
 # Platform Constitution
 
-**Version**: v0.1-draft (사장님 확립 대기)
-**Status**: 🟡 Draft — 사장님 최종 확립 후 Frozen
-**Effective Date**: 2026-07-11 (Sprint 1 동결)
+**Version**: **v1.0 — FROZEN** (사장님 Platform CTO + Product Owner 확립, 2026-07-11)
+**Status**: 🔒 **FROZEN** — 변경은 ADR 절차로만 가능
+**Effective Date**: 2026-07-11
 **Next Review**: 2027-07-11 (1년)
 **Owner**: 사장님 (박흥식 / Tim Park)
+
+> **사장님 명령 (2026-07-11)**:
+> **"Constitution v1.0 Frozen 선언. 단, 아래 조건: Platform Constitution v1.0 Frozen. Only by ADR. No direct editing."**
+>
+> 이 헌법은 **ADR로만 변경 가능**합니다. 직접 편집 금지.
 
 ---
 
@@ -18,6 +23,7 @@
 │  ★ AI가 추측하는 부분은 [TBD: 사장님 확립] 표시.                  │
 │  ★ 헌법 변경은 ADR-NNN 절차 필수.                                │
 │  ★ 이 문서 자체의 수정 권한은 사장님만.                           │
+│  ★ v1.0 Frozen: 직접 편집 금지. ADR로만 변경.                    │
 └────────────────────────────────────────────────────────────────┘
 ```
 
@@ -927,6 +933,113 @@ Engine A ─→ Event Bus ─→ Engine B
 - `auth.provider.config.changed` (Admin이 Provider 설정 변경)
 - `auth.credentials.created` (Admin이 Credential 생성)
 - `auth.credentials.deleted` (Admin이 Credential 삭제)
+
+### 12.10 C-17 — Stop Designing Rule (사장님 Product Owner 확립, 2026-07-11)
+
+> **같은 Engine은 두 번 이상 설계하지 않는다.**
+
+설계 사이클:
+
+```
+PRD
+  ↓
+TRD
+  ↓
+Decision (철학적 결정만)
+  ↓
+AVR (PASS)
+  ↓
+Frozen
+  ↓
+Implementation
+  ↓
+Test
+  ↓
+Review
+  ↓
+Release
+```
+
+**Frozen 이후에는 추가 설계 문서 작성 금지**. Implementation / Test / Review / Release만.
+
+**위반 예 (금지)**:
+- ❌ "PRD v2 작성" (PRD v1이 Frozen된 후)
+- ❌ "Decision Bible Level 3 추가" (Frozen 이후)
+- ❌ "TRD 보강 문서" (TRD v1이 Frozen된 후)
+- ❌ "Architecture 문서 보충" (Architecture가 Frozen된 후)
+
+**허용 예**:
+- ✅ ADR (변경 결정 기록)
+- ✅ Implementation (코드)
+- ✅ Test (검증)
+- ✅ Release (배포)
+- ✅ Frozen 후의 "Bug Report" / "Post-mortem"
+
+### 12.11 Decision ≠ Configuration (사장님 Product Owner 확립, 2026-07-11)
+
+> **Decision은 철학. Configuration은 값. 둘을 섞지 않는다.**
+
+| 구분 | Decision (철학) | Configuration (값) |
+|---|---|---|
+| 정의 | Platform의 **불변 결정** | 환경에 따라 **override 가능** |
+| 변경 빈도 | 한 번 결정되면 안 바뀜 | 자주 바뀜 |
+| 저장 위치 | Decision Bible (FROZEN) | Policy Engine (DB) |
+| 예 | "이메일 중복 허용? NO" | "Password Length = 12" |
+| 예 | "Link Account 허용? YES" | "Session Timeout = 60분" |
+| 예 | "Soft Delete? YES" | "Lock Duration = 30분" |
+| 책임 | 사장님 확립 | Tenant/Engine/Platform |
+
+**혼동 금지**:
+- ❌ Decision Bible에 "Password Length = 12" 같은 값 박기
+- ❌ Configuration Engine에 "이메일 중복 허용? YES" 같은 철학 박기
+
+**Configuration은 3계층 해결** (사장님 확립, 헌법 §C-14):
+```
+Tenant Policy (Restaurant = 8, Tour = 12, Bank = 16)
+  ↓ (없으면)
+Engine Policy
+  ↓ (없으면)
+Platform Policy (Global 기본값)
+```
+
+### 12.12 Core SDK (사장님 Product Owner 확립, 2026-07-11)
+
+> **Core SDK는 Platform Core의 세 번째 엔진이다.**
+
+```
+Policy Engine
+    ↓
+Core SDK
+    ↓
+Identity Engine (Sprint 2 구현 시작)
+```
+
+**Core SDK가 모든 엔진에 공통 제공**:
+
+- **Logger** — 구조화 로그
+- **Config** — 환경 변수 / Boot-time 설정
+- **Policy** — IPolicyProvider 래퍼 (Policy Engine 호출)
+- **Errors** — 도메인 에러 계층 (IdentityError, PolicyError 등)
+- **Result** — Type-safe Result<T, E> (성공/실패 타입)
+- **Event** — IEventBus 래퍼 (Universal Core 호출)
+- **Validation** — zod 스키마 통합
+
+**왜 SDK인가?**
+- Logger/Config/Errors/Result는 **Engine이 아님** (도메인 지식 없음)
+- 하지만 **모든 Engine이 사용**해야 함
+- 따라서 **공통 SDK**로 제공 (각 Engine이 재구현 방지)
+
+**개발 순서 (사장님 확립)**:
+```
+[1] Policy Engine (인터페이스 Frozen 완료)
+[2] Core SDK    (Policy Engine + Universal Core 활용)
+[3] Identity Engine (Policy + Core SDK 활용)
+```
+
+**장기적 가치**:
+- Notification Engine / Booking Engine / Media Engine / AI Engine 모두
+- **같은 Core SDK 사용** → 일관된 logging, error handling, event emission
+- Platform의 **공통 기반 전체**를 재사용 → **SI 회사가 아닌 플랫폼 회사**
 
 ---
 
