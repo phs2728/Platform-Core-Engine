@@ -1,0 +1,1255 @@
+openapi: 3.1.0
+
+info:
+  title: Identity Engine API
+  version: 1.0.0
+  description: |
+    # Identity Engine — Industry-Agnostic Platform Core
+
+    This is NOT an application.
+    This is NOT a demo.
+    This is a reusable Platform Core Engine.
+
+    Every design decision maximizes extensibility, configurability and long-term maintainability.
+
+    ## Stability
+
+    - **Major version**: Breaking changes (v1 → v2)
+    - **Minor version**: Backwards-compatible additions (v1.0 → v1.1)
+    - **Patch version**: Backwards-compatible bug fixes
+
+    ## Multi-Tenancy
+
+    All endpoints require `X-Tenant-Id` header (or tenant resolved from subdomain).
+    Engine enforces `tenant_id` in every query (Defense in Depth) + Postgres RLS.
+
+    ## Error Format
+
+    All errors follow the standard format:
+    ```json
+    {
+      "code": "IDENTITY_AUTH_FAILED",
+      "messageId": "auth.failed.invalid_credentials",
+      "details": { ... },
+      "traceId": "..."
+    }
+    ```
+
+  contact:
+    name: Platform Core Team
+  license:
+    name: Internal — Platform Core
+
+servers:
+  - url: https://api.example.com
+    description: Production
+  - url: https://staging-api.example.com
+    description: Staging
+
+tags:
+  - name: Authentication
+    description: Login / Logout / Session management
+  - name: Registration
+    description: New account creation
+  - name: Verification
+    description: Email/SMS code verification
+  - name: Password
+    description: Password reset / change
+  - name: Two-Factor
+    description: 2FA setup / verify / disable
+  - name: OAuth
+    description: Social login providers
+  - name: Sessions
+    description: Active session management
+  - name: Identity
+    description: Current authenticated identity
+  - name: Admin - Providers
+    description: Manage authentication providers
+  - name: Admin - Policy
+    description: Manage security policies
+  - name: Admin - Credentials
+    description: Manage tenant credentials
+  - name: Admin - Users
+    description: User account administration
+  - name: Admin - Audit
+    description: Audit log query
+  - name: JWKS
+    description: JWT public keys
+
+# =====================================================================
+# Security Schemes
+# =====================================================================
+components:
+  securitySchemes:
+    SessionToken:
+      type: apiKey
+      in: header
+      name: X-Session-Token
+      description: |
+        Opaque session token returned by login/register.
+        Format: `sts_<256-bit-base64url>` (prefix helps with scanning).
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: JWT access token (alternative to session token)
+    AdminAuth:
+      type: apiKey
+      in: header
+      name: X-Admin-Token
+      description: Admin console authentication (separate from user auth)
+
+  # =====================================================================
+  # Common Schemas
+  # =====================================================================
+  schemas:
+
+    # ----- Common -----
+    TenantId:
+      type: string
+      format: uuid
+      description: Tenant UUID
+      example: 00000000-0000-0000-0000-000000000000
+
+    UserId:
+      type: string
+      format: uuid
+      description: User UUID
+      example: 018f0e5c-7b9a-7891-bcd0-1234567890ab
+
+    SessionId:
+      type: string
+      format: uuid
+
+    Timestamp:
+      type: string
+      format: date-time
+      example: 2026-07-11T08:00:00Z
+
+    # ----- Error -----
+    Error:
+      type: object
+      required: [code, messageId]
+      properties:
+        code:
+          type: string
+          enum:
+            - IDENTITY_VALIDATION_FAILED
+            - IDENTITY_AUTH_FAILED
+            - IDENTITY_ACCOUNT_LOCKED
+            - IDENTITY_ACCOUNT_DISABLED
+            - IDENTITY_VERIFICATION_REQUIRED
+            - IDENTITY_RATE_LIMITED
+            - IDENTITY_CAPTCHA_FAILED
+            - IDENTITY_PROVIDER_ERROR
+            - IDENTITY_TWO_FACTOR_REQUIRED
+            - IDENTITY_SESSION_INVALID
+            - IDENTITY_SESSION_EXPIRED
+            - IDENTITY_PASSWORD_POLICY_VIOLATION
+            - IDENTITY_PASSWORD_REUSED
+            - IDENTITY_PASSWORD_HISTORY_EXISTS
+            - IDENTITY_INTERNAL_ERROR
+            - IDENTITY_NOT_FOUND
+            - IDENTITY_CONFLICT
+            - IDENTITY_FORBIDDEN
+        messageId:
+          type: string
+          description: Locale-independent message ID for host i18n
+          example: auth.failed.invalid_credentials
+        details:
+          type: object
+          additionalProperties: true
+        traceId:
+          type: string
+          description: Distributed trace ID
+          example: 0af7651916cd43dd8448eb211c80319c
+
+    # ----- User -----
+    User:
+      type: object
+      required: [id, tenantId, status, createdAt]
+      properties:
+        id: { $ref: '#/components/schemas/UserId' }
+        tenantId: { $ref: '#/components/schemas/TenantId' }
+        status:
+          type: string
+          enum: [pending_verification, active, locked, disabled]
+        lastLoginAt:
+          oneOf:
+            - { $ref: '#/components/schemas/Timestamp' }
+            - { type: 'null' }
+        createdAt: { $ref: '#/components/schemas/Timestamp' }
+        updatedAt: { $ref: '#/components/schemas/Timestamp' }
+
+    Session:
+      type: object
+      required: [id, userId, expiresAt, createdAt]
+      properties:
+        id: { $ref: '#/components/schemas/SessionId' }
+        userId: { $ref: '#/components/schemas/UserId' }
+        deviceFingerprint:
+          type: string
+          nullable: true
+        ipAddress:
+          type: string
+          format: ipv4
+          nullable: true
+        userAgent:
+          type: string
+          nullable: true
+        country:
+          type: string
+          nullable: true
+          description: ISO 3166-1 alpha-2
+        isSuspicious:
+          type: boolean
+        rememberMe:
+          type: boolean
+        createdAt: { $ref: '#/components/schemas/Timestamp' }
+        lastActiveAt: { $ref: '#/components/schemas/Timestamp' }
+        expiresAt: { $ref: '#/components/schemas/Timestamp' }
+
+# =====================================================================
+# Reusable Parameters
+# =====================================================================
+  parameters:
+    TenantIdHeader:
+      name: X-Tenant-Id
+      in: header
+      required: false
+      description: |
+        Tenant identifier. If omitted, resolved from subdomain (e.g., `acme.example.com`).
+      schema:
+        $ref: '#/components/schemas/TenantId'
+    IdempotencyKey:
+      name: Idempotency-Key
+      in: header
+      required: false
+      description: Idempotency key for safe retries
+      schema:
+        type: string
+        maxLength: 255
+
+  responses:
+    Unauthorized:
+      description: Authentication required or failed
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/Error' }
+          examples:
+            authFailed:
+              value:
+                code: IDENTITY_AUTH_FAILED
+                messageId: auth.failed.invalid_credentials
+    Forbidden:
+      description: Authenticated but not authorized
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/Error' }
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/Error' }
+    RateLimited:
+      description: Rate limit exceeded
+      headers:
+        Retry-After:
+          schema: { type: integer }
+          description: Seconds until retry allowed
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/Error' }
+    ValidationError:
+      description: Input validation failed
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/Error' }
+    ServerError:
+      description: Internal server error
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/Error' }
+
+# =====================================================================
+# Paths — Authentication
+# =====================================================================
+paths:
+
+  /auth/login:
+    post:
+      tags: [Authentication]
+      summary: Login with email/phone/username + password
+      description: |
+        Authenticates a user with their identifier (email, phone, or username) and password.
+        Returns a session token on success.
+
+        ## Multi-Factor Response
+
+        - If `200`: full session created
+        - If `403 IDENTITY_VERIFICATION_REQUIRED`: email/phone verification pending
+        - If `403 IDENTITY_TWO_FACTOR_REQUIRED`: 2FA challenge required, response includes `twoFactorToken`
+        - If `423 IDENTITY_ACCOUNT_LOCKED`: account temporarily locked
+      operationId: login
+      parameters:
+        - $ref: '#/components/parameters/TenantIdHeader'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [identifier, password]
+              properties:
+                identifier:
+                  type: string
+                  minLength: 3
+                  maxLength: 254
+                  description: Email, phone (E.164), or username
+                  example: tim@example.com
+                password:
+                  type: string
+                  minLength: 1
+                  maxLength: 1024
+                  format: password
+                rememberMe:
+                  type: boolean
+                  default: false
+                captchaToken:
+                  type: string
+                  description: Required if Tenant policy triggers CAPTCHA
+                deviceFingerprint:
+                  type: string
+                  maxLength: 256
+      responses:
+        '200':
+          description: Login successful
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [sessionToken, user, session]
+                properties:
+                  sessionToken:
+                    type: string
+                    description: Opaque session token. Store securely.
+                    example: sts_vRKZJ1nJlV8...
+                  user: { $ref: '#/components/schemas/User' }
+                  session: { $ref: '#/components/schemas/Session' }
+                  accessToken:
+                    type: string
+                    description: JWT access token (if enabled)
+        '400': { $ref: '#/components/responses/ValidationError' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403':
+          description: Verification or 2FA required
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+        '423':
+          description: Account locked
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+        '429': { $ref: '#/components/responses/RateLimited' }
+
+  /auth/logout:
+    post:
+      tags: [Authentication]
+      summary: Logout current session
+      operationId: logout
+      security:
+        - SessionToken: []
+        - BearerAuth: []
+      responses:
+        '204':
+          description: Logout successful
+        '401': { $ref: '#/components/responses/Unauthorized' }
+
+  /auth/logout-all:
+    post:
+      tags: [Authentication]
+      summary: Logout all sessions for current user
+      operationId: logoutAll
+      security:
+        - SessionToken: []
+        - BearerAuth: []
+      responses:
+        '204':
+          description: All sessions revoked
+        '401': { $ref: '#/components/responses/Unauthorized' }
+
+  # =====================================================================
+  # Registration
+  # =====================================================================
+  /auth/register:
+    post:
+      tags: [Registration]
+      summary: Register a new account
+      operationId: register
+      parameters:
+        - $ref: '#/components/parameters/TenantIdHeader'
+        - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [identifier]
+              properties:
+                identifier:
+                  type: object
+                  required: [type, value]
+                  properties:
+                    type:
+                      type: string
+                      enum: [email, phone, username]
+                    value:
+                      type: string
+                password:
+                  type: string
+                  format: password
+                  description: Required if email/phone/username auth enabled
+                additionalIdentities:
+                  type: array
+                  description: Optional secondary identities to attach
+                  items:
+                    type: object
+                    required: [type, value]
+                    properties:
+                      type:
+                        type: string
+                        enum: [email, phone, username]
+                      value:
+                        type: string
+                metadata:
+                  type: object
+                  additionalProperties: true
+      responses:
+        '201':
+          description: Account created
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [user, session]
+                properties:
+                  user: { $ref: '#/components/schemas/User' }
+                  session: { $ref: '#/components/schemas/Session' }
+                  sessionToken:
+                    type: string
+                  requiresVerification:
+                    type: array
+                    description: List of identity types that need verification
+                    items: { type: string, enum: [email, phone] }
+        '400': { $ref: '#/components/responses/ValidationError' }
+        '409':
+          description: Identifier already in use
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+        '429': { $ref: '#/components/responses/RateLimited' }
+
+  # =====================================================================
+  # Verification
+  # =====================================================================
+  /auth/verify/email/request:
+    post:
+      tags: [Verification]
+      summary: Request email verification code
+      operationId: requestEmailVerification
+      parameters:
+        - $ref: '#/components/parameters/TenantIdHeader'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email]
+              properties:
+                email:
+                  type: string
+                  format: email
+                userId:
+                  type: string
+                  format: uuid
+                  description: Required if user is already logged in; otherwise derived from email
+      responses:
+        '202':
+          description: Verification code sent (if email exists)
+        '400': { $ref: '#/components/responses/ValidationError' }
+        '429': { $ref: '#/components/responses/RateLimited' }
+
+  /auth/verify/email:
+    post:
+      tags: [Verification]
+      summary: Verify email with code
+      operationId: verifyEmail
+      parameters:
+        - $ref: '#/components/parameters/TenantIdHeader'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email, code]
+              properties:
+                email:
+                  type: string
+                  format: email
+                code:
+                  type: string
+                  minLength: 4
+                  maxLength: 10
+      responses:
+        '200':
+          description: Email verified
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  identityId: { type: string, format: uuid }
+        '400': { $ref: '#/components/responses/ValidationError' }
+        '401':
+          description: Invalid or expired code
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+
+  /auth/verify/sms/request:
+    post:
+      tags: [Verification]
+      summary: Request SMS verification code
+      operationId: requestSmsVerification
+      parameters:
+        - $ref: '#/components/parameters/TenantIdHeader'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [phone]
+              properties:
+                phone:
+                  type: string
+                  description: E.164 format
+                userId:
+                  type: string
+                  format: uuid
+      responses:
+        '202':
+          description: SMS code sent
+        '400': { $ref: '#/components/responses/ValidationError' }
+        '429': { $ref: '#/components/responses/RateLimited' }
+
+  /auth/verify/sms:
+    post:
+      tags: [Verification]
+      summary: Verify phone with SMS code
+      operationId: verifySms
+      parameters:
+        - $ref: '#/components/parameters/TenantIdHeader'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [phone, code]
+              properties:
+                phone:
+                  type: string
+                code:
+                  type: string
+      responses:
+        '200':
+          description: Phone verified
+        '401':
+          description: Invalid or expired code
+
+  # =====================================================================
+  # Password
+  # =====================================================================
+  /auth/password/reset:
+    post:
+      tags: [Password]
+      summary: Request password reset
+      description: |
+        Sends a password reset link/code to the user's email or phone.
+        Response is always 202 regardless of whether the email/phone exists (to prevent account enumeration).
+      operationId: requestPasswordReset
+      parameters:
+        - $ref: '#/components/parameters/TenantIdHeader'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [identifier]
+              properties:
+                identifier:
+                  type: object
+                  required: [type, value]
+                  properties:
+                    type:
+                      type: string
+                      enum: [email, phone, username]
+                    value:
+                      type: string
+                redirectUrl:
+                  type: string
+                  format: uri
+                  description: Optional custom redirect URL after reset
+      responses:
+        '202':
+          description: Reset request received (always returned, even if user doesn't exist)
+        '400': { $ref: '#/components/responses/ValidationError' }
+        '429': { $ref: '#/components/responses/RateLimited' }
+
+  /auth/password/reset/confirm:
+    post:
+      tags: [Password]
+      summary: Confirm password reset with token
+      operationId: confirmPasswordReset
+      parameters:
+        - $ref: '#/components/parameters/TenantIdHeader'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [token, newPassword]
+              properties:
+                token:
+                  type: string
+                  description: Token from reset email/SMS
+                newPassword:
+                  type: string
+                  format: password
+      responses:
+        '200':
+          description: Password reset successful
+        '400':
+          description: Password policy violation
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+        '401':
+          description: Invalid or expired token
+
+  /auth/password/change:
+    post:
+      tags: [Password]
+      summary: Change password (logged in)
+      description: |
+        Changes the current user's password. **All other sessions are revoked** for security.
+        Old password hash is moved to password_history.
+      operationId: changePassword
+      security:
+        - SessionToken: []
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [currentPassword, newPassword]
+              properties:
+                currentPassword:
+                  type: string
+                  format: password
+                newPassword:
+                  type: string
+                  format: password
+                revokeOtherSessions:
+                  type: boolean
+                  default: true
+      responses:
+        '204':
+          description: Password changed
+        '400':
+          description: Password policy violation or reuse detected
+        '401': { $ref: '#/components/responses/Unauthorized' }
+
+  # =====================================================================
+  # Two-Factor Authentication
+  # =====================================================================
+  /auth/2fa/setup:
+    post:
+      tags: [Two-Factor]
+      summary: Begin 2FA setup
+      description: |
+        Returns a TOTP secret + QR code for Authenticator App setup.
+        Also accepts email/SMS method selection.
+      operationId: setup2fa
+      security:
+        - SessionToken: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [method]
+              properties:
+                method:
+                  type: string
+                  enum: [totp, email_otp, sms_otp]
+                phone:
+                  type: string
+                  description: Required if method=sms_otp
+      responses:
+        '200':
+          description: 2FA setup initiated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  method:
+                    type: string
+                    enum: [totp, email_otp, sms_otp]
+                  totp:
+                    type: object
+                    properties:
+                      secret:
+                        type: string
+                        description: Base32 encoded TOTP secret (only shown once)
+                      qrCodeUri:
+                        type: string
+                        description: otpauth:// URI for QR code
+                      period: { type: integer }
+                      digits: { type: integer }
+                      algorithm: { type: string }
+                  challengeToken:
+                    type: string
+                    description: Required to confirm 2FA setup
+        '401': { $ref: '#/components/responses/Unauthorized' }
+
+  /auth/2fa/verify:
+    post:
+      tags: [Two-Factor]
+      summary: Verify 2FA code (during login or setup)
+      operationId: verify2fa
+      parameters:
+        - $ref: '#/components/parameters/TenantIdHeader'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [challengeToken, code]
+              properties:
+                challengeToken:
+                  type: string
+                code:
+                  type: string
+                isSetupConfirmation:
+                  type: boolean
+                  default: false
+      responses:
+        '200':
+          description: 2FA verified
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  sessionToken: { type: string }
+                  user: { $ref: '#/components/schemas/User' }
+        '401':
+          description: Invalid 2FA code
+
+  /auth/2fa/disable:
+    post:
+      tags: [Two-Factor]
+      summary: Disable 2FA
+      operationId: disable2fa
+      security:
+        - SessionToken: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [currentCode]
+              properties:
+                currentCode:
+                  type: string
+                  description: Current TOTP code or SMS/Email OTP
+      responses:
+        '204':
+          description: 2FA disabled
+        '401': { $ref: '#/components/responses/Unauthorized' }
+
+  # =====================================================================
+  # OAuth
+  # =====================================================================
+  /auth/oauth/{provider}/initiate:
+    get:
+      tags: [OAuth]
+      summary: Initiate OAuth flow
+      operationId: initiateOAuth
+      parameters:
+        - name: provider
+          in: path
+          required: true
+          schema:
+            type: string
+            enum: [google, apple, facebook, kakao, naver, line, microsoft]
+        - $ref: '#/components/parameters/TenantIdHeader'
+        - name: link_mode
+          in: query
+          schema:
+            type: boolean
+            description: If true, link to existing user instead of creating new
+        - name: redirect_uri
+          in: query
+          schema:
+            type: string
+            format: uri
+      responses:
+        '302':
+          description: Redirect to OAuth provider
+          headers:
+            Location:
+              schema: { type: string, format: uri }
+        '400': { $ref: '#/components/responses/ValidationError' }
+        '404':
+          description: Provider not configured for this tenant
+
+  /auth/oauth/{provider}/callback:
+    get:
+      tags: [OAuth]
+      summary: OAuth callback endpoint
+      operationId: oauthCallback
+      parameters:
+        - name: provider
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: code
+          in: query
+          schema: { type: string }
+        - name: state
+          in: query
+          schema: { type: string }
+        - name: error
+          in: query
+          schema: { type: string }
+      responses:
+        '302':
+          description: Redirect to host app with session token
+        '400': { $ref: '#/components/responses/ValidationError' }
+
+  /auth/oauth/link:
+    post:
+      tags: [OAuth]
+      summary: Link OAuth provider to current user
+      operationId: linkOAuth
+      security:
+        - SessionToken: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [provider, code, state]
+              properties:
+                provider: { type: string }
+                code: { type: string }
+                state: { type: string }
+      responses:
+        '200':
+          description: OAuth provider linked
+        '409':
+          description: OAuth account already linked to another user
+        '401': { $ref: '#/components/responses/Unauthorized' }
+
+  /auth/oauth/unlink:
+    post:
+      tags: [OAuth]
+      summary: Unlink OAuth provider from current user
+      operationId: unlinkOAuth
+      security:
+        - SessionToken: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [provider]
+              properties:
+                provider: { type: string }
+      responses:
+        '204':
+          description: OAuth provider unlinked
+        '400':
+          description: Cannot unlink last authentication method
+        '401': { $ref: '#/components/responses/Unauthorized' }
+
+  # =====================================================================
+  # Sessions
+  # =====================================================================
+  /auth/sessions:
+    get:
+      tags: [Sessions]
+      summary: List active sessions for current user
+      operationId: listSessions
+      security:
+        - SessionToken: []
+      responses:
+        '200':
+          description: List of active sessions
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/Session' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+
+  /auth/sessions/{id}:
+    delete:
+      tags: [Sessions]
+      summary: Revoke a specific session
+      operationId: revokeSession
+      security:
+        - SessionToken: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        '204':
+          description: Session revoked
+        '404': { $ref: '#/components/responses/NotFound' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+
+  # =====================================================================
+  # Identity (current)
+  # =====================================================================
+  /auth/me:
+    get:
+      tags: [Identity]
+      summary: Get current authenticated identity
+      description: |
+        Returns minimal identity info (id, status, last login). NO profile fields.
+        Profile data (name, avatar, etc.) is the responsibility of other engines/apps.
+      operationId: getCurrentIdentity
+      security:
+        - SessionToken: []
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Current identity
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/User' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+
+  # =====================================================================
+  # JWKS (for JWT verification)
+  # =====================================================================
+  /.well-known/jwks.json:
+    get:
+      tags: [JWKS]
+      summary: JSON Web Key Set
+      operationId: getJwks
+      responses:
+        '200':
+          description: Public keys for JWT verification
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  keys:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        kty: { type: string }
+                        kid: { type: string }
+                        alg: { type: string }
+                        use: { type: string }
+                        n: { type: string }
+                        e: { type: string }
+
+  # =====================================================================
+  # Admin - Auth Providers
+  # =====================================================================
+  /admin/auth/providers:
+    get:
+      tags: [Admin - Providers]
+      summary: List authentication providers
+      operationId: adminListProviders
+      security:
+        - AdminAuth: []
+      responses:
+        '200':
+          description: List of providers
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/AuthProvider' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+
+  /admin/auth/providers/{id}:
+    patch:
+      tags: [Admin - Providers]
+      summary: Update provider configuration
+      operationId: adminUpdateProvider
+      security:
+        - AdminAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/AuthProvider' }
+      responses:
+        '200':
+          description: Provider updated
+        '404': { $ref: '#/components/responses/NotFound' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+
+  # =====================================================================
+  # Admin - Security Policy
+  # =====================================================================
+  /admin/auth/policy:
+    get:
+      tags: [Admin - Policy]
+      summary: Get current security policy
+      operationId: adminGetPolicy
+      security:
+        - AdminAuth: []
+      responses:
+        '200':
+          description: Security policy
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/SecurityPolicy' }
+    patch:
+      tags: [Admin - Policy]
+      summary: Update security policy
+      operationId: adminUpdatePolicy
+      security:
+        - AdminAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/SecurityPolicy' }
+      responses:
+        '200':
+          description: Policy updated
+        '400':
+          description: Policy validation failed (e.g., minLength < 8)
+
+  # =====================================================================
+  # Admin - Tenant Credentials
+  # =====================================================================
+  /admin/auth/credentials:
+    get:
+      tags: [Admin - Credentials]
+      summary: List tenant credentials (metadata only)
+      description: |
+        Returns metadata (purpose, name, expiresAt) but NEVER the decrypted payload.
+      operationId: adminListCredentials
+      security:
+        - AdminAuth: []
+      responses:
+        '200':
+          description: List of credentials (metadata)
+    post:
+      tags: [Admin - Credentials]
+      summary: Create new tenant credential
+      operationId: adminCreateCredential
+      security:
+        - AdminAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [purpose, name, payload]
+              properties:
+                purpose:
+                  type: string
+                  enum: [oauth_google, oauth_apple, oauth_facebook, oauth_kakao, oauth_naver, oauth_line, oauth_microsoft, smtp_credentials, sms_credentials, openai_api_key, anthropic_api_key, custom_webhook]
+                name: { type: string }
+                payload:
+                  type: object
+                  description: Purpose-specific payload (will be encrypted before storage)
+                expiresAt:
+                  type: string
+                  format: date-time
+      responses:
+        '201':
+          description: Credential created
+        '400': { $ref: '#/components/responses/ValidationError' }
+
+  /admin/auth/credentials/{id}:
+    delete:
+      tags: [Admin - Credentials]
+      summary: Delete tenant credential
+      operationId: adminDeleteCredential
+      security:
+        - AdminAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        '204':
+          description: Credential deleted
+
+  # =====================================================================
+  # Admin - User Management
+  # =====================================================================
+  /admin/auth/users/{userId}/lock:
+    post:
+      tags: [Admin - Users]
+      summary: Lock a user account
+      operationId: adminLockUser
+      security:
+        - AdminAuth: []
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [reason]
+              properties:
+                reason: { type: string }
+                durationMinutes: { type: integer }
+                revokeSessions: { type: boolean, default: true }
+      responses:
+        '204':
+          description: User locked
+
+  /admin/auth/users/{userId}/unlock:
+    post:
+      tags: [Admin - Users]
+      summary: Unlock a user account
+      operationId: adminUnlockUser
+      security:
+        - AdminAuth: []
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        '204':
+          description: User unlocked
+
+  /admin/auth/users/{userId}/sessions:
+    delete:
+      tags: [Admin - Users]
+      summary: Force logout all sessions for a user
+      operationId: adminRevokeAllUserSessions
+      security:
+        - AdminAuth: []
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                reason: { type: string }
+      responses:
+        '204':
+          description: All sessions revoked
+
+  # =====================================================================
+  # Admin - Audit Log Query
+  # =====================================================================
+  /admin/auth/audit-logs:
+    get:
+      tags: [Admin - Audit]
+      summary: Query audit logs
+      operationId: adminQueryAuditLogs
+      security:
+        - AdminAuth: []
+      parameters:
+        - name: userId
+          in: query
+          schema: { type: string, format: uuid }
+        - name: eventType
+          in: query
+          schema: { type: string }
+        - name: result
+          in: query
+          schema: { type: string, enum: [success, failure] }
+        - name: from
+          in: query
+          schema: { type: string, format: date-time }
+        - name: to
+          in: query
+          schema: { type: string, format: date-time }
+        - name: cursor
+          in: query
+          schema: { type: string }
+        - name: limit
+          in: query
+          schema: { type: integer, default: 50, maximum: 500 }
+      responses:
+        '200':
+          description: Audit logs
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items: { $ref: '#/components/schemas/AuditLog' }
+                  nextCursor: { type: string }
+        '403': { $ref: '#/components/responses/Forbidden' }
+
+  # =====================================================================
+  # Health
+  # =====================================================================
+  /health:
+    get:
+      tags: [Health]
+      summary: Health check
+      operationId: healthCheck
+      responses:
+        '200':
+          description: Healthy
+        '503':
+          description: Unhealthy
