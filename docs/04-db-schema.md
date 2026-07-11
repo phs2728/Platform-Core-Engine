@@ -662,7 +662,7 @@ CREATE POLICY tenant_credentials_select ON tenant_credentials
 
 ### 4.2 인덱스 목록
 
-위 DDL에 모두 포함됨. 추가로 성능 위해 [TBD]:
+위 DDL에 모두 포함됨. 추가로 성능 인덱스는 [D-CONFIG Scalability](./15-identity-decisions.md#11-configuration-policy) 참조.
 
 | 인덱스 | 용도 |
 |---|---|
@@ -783,19 +783,10 @@ PRD §2.1의 절대 금지 단어가 **이 스키마에 한 번도 등장하지 
 
 ---
 
-## 10. [TBD: 사장님 확립 필요]
+## 10. 미결정 사항
 
-| 항목 | 기본 제안 |
-|---|---|
-| UUID v7 vs v4 | UUID v7 (시간 정렬 가능) |
-| Postgres 최소 버전 | 15 |
-| RLS 강제 vs 선택 | 강제 (Defense in depth) |
-| Soft delete vs Hard delete | Soft (audit은 hard-only) |
-| metadata jsonb 사용 여부 | 사용 (인증 책임 외 작은 데이터) |
-| Country 컬럼 (GeoIP) | text (2글자 ISO 코드, 비정규화) |
-| IP 저장 (GDPR) | inet (masking 옵션 제공) |
-| PII 마스킹 (email/phone 표시) | 표시 시 `t***@example.com` |
+**모든 미결정 사항은 [`15-identity-decisions.md`](./15-identity-decisions.md)에 canonical로 정리되어 있습니다.**
+
+이 문서에서는 더 이상 미결정 항목을 다루지 않습니다.
 
 ---
-
-**End of DB Schema v1.0**

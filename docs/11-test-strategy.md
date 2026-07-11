@@ -395,7 +395,7 @@ it('password reset does not leak user existence via timing', async () => {
   await engine.password.reset.request({ tenantId, identifier: { type: 'email', value: 'notfound@example.com' } });
   const notFoundTime = Date.now() - t2;
 
-  // 시간 차이 50ms 이내 (사장님 확립 필요)
+  // 시간 차이 100ms 이내 ([D-CONFIG Scalability](./15-identity-decisions.md#11-configuration-policy) 참조)
   expect(Math.abs(existsTime - notFoundTime)).toBeLessThan(100);
 });
 ```
@@ -633,16 +633,10 @@ test('evaluatePassword with empty minLength rejects all short', () => {
 
 ---
 
-## 14. [TBD: 사장님 확립 필요]
+## 14. 미결정 사항
 
-| 항목 | 기본 제안 |
-|---|---|
-| 커버리지 목표 | 라인 90%+, 브랜치 85%+ |
-| 테스트 DB 정책 | Testcontainers (격리) |
-| Mock OAuth 정책 | nock + 자체 mock server |
-| Property-based testing 적용 범위 | crypto + domain (선택) |
-| Mutation testing | [TBD: 적용 여부] |
+**모든 미결정 사항은 [`15-identity-decisions.md`](./15-identity-decisions.md)에 canonical로 정리되어 있습니다.**
+
+이 문서에서는 더 이상 미결정 항목을 다루지 않습니다.
 
 ---
-
-**End of Test Strategy v1.0**

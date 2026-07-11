@@ -241,7 +241,7 @@ interface AuthProviderConfig {
 ```
 I-9:  Tenant는 한 type에 대해 enabled인 provider를 최대 1개 가질 수 있다. (중복 비활성화)
 I-10: OAuth provider는 enabled=true일 때 clientIdRef와 clientSecretRef가 존재해야 한다.
-I-11: 'email'/'phone' provider의 enabled를 false로 바꿀 수 없다 (최소 1개는 항상 활성화 — 단, 다른 인증 수단이 있으면 OK [TBD: 사장님 확립]).
+I-11: 'email'/'phone' provider의 enabled를 false로 바꿀 수 없다 (최소 1개는 항상 활성화 — 단, 다른 인증 수단이 있으면 OK, [D-TENANT-003](./15-identity-decisions.md#d-tenant-003)).
 ```
 
 ### 5.3 확장 (Plugin 추가 시)
@@ -262,7 +262,7 @@ enum AuthProviderType {
   OAuthMicrosoft = 'oauth_microsoft',
   Totp = 'totp',
   // 확장 가능 — 플러그인이 추가
-  CustomSaml = 'custom_saml',               // [TBD: 사장님 확립 필요]
+  CustomSaml = 'custom_saml',               // [D-OAUTH-005](./15-identity-decisions.md#d-oauth-005) 참조
 }
 ```
 
@@ -812,20 +812,11 @@ Tenant (Universal Core)
 
 ---
 
-## 18. [TBD: 사장님 확립 필요]
+## 18. 미결정 사항
 
-| 항목 | 기본 제안 |
-|---|---|
-| ID 형식 (UUID v4 vs v7) | UUID v7 (시간 정렬 가능) |
-| Phone 정규화 (libphonenumber 강제?) | 강제 |
-| Email 정규화 (Gmail + suffix 제거?) | Tenant 정책으로 |
-| Username 정책 | 3-20자, [a-z0-9_-], 예약어 목록 |
-| Password 기본 정책 | 12자 + 대소문자 + 숫자 + 특수문자 |
-| Session Timeout 기본 | 60분 |
-| Remember Me 기본 | 30일 |
-| 동시 세션 제한 (기본) | 무제한 |
-| Audit Log 보존 | 무기한 |
-| Argon2id 파라미터 | m=64MiB, t=3, p=1 |
+**모든 미결정 사항은 [`15-identity-decisions.md`](./15-identity-decisions.md)에 canonical로 정리되어 있습니다.**
+
+이 문서에서는 더 이상 미결정 항목을 다루지 않습니다.
 
 ---
 

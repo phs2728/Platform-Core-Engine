@@ -536,14 +536,10 @@ flowchart LR
 
 ---
 
-## 8. [TBD: 사장님 확립 필요]
+## 8. 미결정 사항
 
-| 항목 | 기본 제안 |
-|---|---|
-| ERD 도구 | Mermaid (GitHub/문서 호환) |
-| PlantUML 등 추가 도구 | 불필요 (Mermaid로 충분) |
-| 시각화 깊이 (상세/축약) | 본 문서는 Master + 상세 시퀀스 + 정책 흐름 모두 포함 |
+**모든 미결정 사항은 [`15-identity-decisions.md`](./15-identity-decisions.md)에 canonical로 정리되어 있습니다.**
+
+이 문서에서는 더 이상 미결정 항목을 다루지 않습니다.
 
 ---
-
-**End of ERD v1.0**

@@ -84,6 +84,18 @@ This is a reusable Platform Core Engine.
 |---|---|
 | [db/schema.sql](./db/schema.sql) | 11개 테이블 + 트리거 + RLS |
 
+### 7. 결정 사항 (Canonical Source of Truth)
+
+| 문서 | 내용 |
+|---|---|
+| [**15-identity-decisions.md**](./docs/15-identity-decisions.md) | **모든 미결정 사항의 단일 진실 공급원 (Canonical)** |
+
+> **다른 문서의 [TBD] 항목들은 모두 [`15-identity-decisions.md`](./docs/15-identity-decisions.md)로 redirect되었습니다.**
+>
+> 사장님이 결정할 항목, Status, Recommended Value는 15번 문서 참조.
+>
+> `00-sajangnim-review.md`는 **DEPRECATED** — 새 결정은 15번에 추가.
+
 ---
 
 ## 빠른 시작 (호스트 통합 예시)

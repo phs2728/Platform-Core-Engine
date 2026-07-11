@@ -490,7 +490,7 @@ ALTER TABLE auth_providers ADD CONSTRAINT auth_providers_type_chk
 
 **장점**: DB 마이그레이션 불필요.
 
-**권장 (사장님 확립 필요)**:
+**권장 (Phase 1 → Phase 2)**: [D-OAUTH-005](./15-identity-decisions.md#d-oauth-005) 참조
 - Phase 1 (현재): Option A (명시적, 안전)
 - Phase 2: Option B로 마이그레이션 (자동 발견)
 
@@ -638,15 +638,10 @@ describe('Instagram OAuth Flow', () => {
 
 ---
 
-## 11. [TBD: 사장님 확립 필요]
+## 11. 미결정 사항
 
-| 항목 | 기본 제안 |
-|---|---|
-| Schema 진화 (Option A vs B) | Phase 1: A, Phase 2: B |
-| Custom Provider 위치 | 호스트 코드 또는 별도 패키지 |
-| Registry 자동 발견 (Phase 2) | `import.meta.glob` 또는 동적 import |
-| Plugin 버전 정책 | SemVer |
+**모든 미결정 사항은 [`15-identity-decisions.md`](./15-identity-decisions.md)에 canonical로 정리되어 있습니다.**
+
+이 문서에서는 더 이상 미결정 항목을 다루지 않습니다.
 
 ---
-
-**End of Plugin Architecture v1.0**
