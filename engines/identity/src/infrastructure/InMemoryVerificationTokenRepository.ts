@@ -1,72 +1,77 @@
 /**
- * In-Memory Verification Token Repository
- *
- * 사장님 확립 (Sprint 2C-2):
- * - Email Verification Token: SHA256 Hash만 DB 저장
- * - Password Reset Token: SHA256 Hash만 DB 저장
- *
- * 원본 Token은 이메일로만 발송. DB에는 Hash만.
+ * In-Memory Verification Token Repository (Epic 1 — Verification)
+ * 사장님 확립: Token Hash만 저장 (raw Token ❌)
  */
 
 import { createHash } from 'node:crypto';
+import type {
+  IVerificationTokenRepository,
+  VerificationTokenRecord,
+  VerificationPurpose,
+} from '../interfaces/index.js';
 
-export type VerificationTokenType = 'email_verification' | 'password_reset';
-
-export interface VerificationTokenRecord {
-  /** Token Hash (SHA256) */
-  tokenHash: string;
-  accountId: string;
-  tenantId: string;
-  type: VerificationTokenType;
-  expiresAt: string;
-  usedAt: string | null;
-  createdAt: string;
-}
-
-/**
- * Hash Function: SHA256
- *
- * Sprint 2C-2: Token은 무작위 생성 후 Hash 저장.
- * 원본 Token은 URL/Email로만 전송.
- */
 export function hashToken(token: string): string {
   return createHash('sha256').update(token).digest('hex');
 }
 
-export interface IVerificationTokenRepository {
-  /** Token Hash + Record 저장 (Hash된 값만) */
-  insert(record: Omit<VerificationTokenRecord, 'tokenHash'> & { rawToken: string }): Promise<{ tokenHash: string }>;
-  /** Hash로 조회 (검증 시) */
-  findByHash(tokenHash: string, type: VerificationTokenType): Promise<VerificationTokenRecord | null>;
-  /** 사용 완료 표시 */
-  markUsed(tokenHash: string): Promise<void>;
-  /** 특정 account의 모든 토큰 무효화 */
-  invalidateForAccount(accountId: string, type: VerificationTokenType): Promise<void>;
-}
-
 export class InMemoryVerificationTokenRepository implements IVerificationTokenRepository {
-  private readonly records = new Map<string, VerificationTokenRecord>(); // key: tokenHash
+  private readonly records = new Map<string, VerificationTokenRecord>();
+  private readonly otpIndex = new Map<string, string>(); // "target:purpose" -> tokenHash
 
-  async insert(
-    record: Omit<VerificationTokenRecord, 'tokenHash'> & { rawToken: string },
-  ): Promise<{ tokenHash: string }> {
+  async insert(record: Omit<VerificationTokenRecord, 'tokenHash'> & { rawToken: string }): Promise<{ tokenHash: string }> {
     const tokenHash = hashToken(record.rawToken);
-    this.records.set(tokenHash, {
+    const full: VerificationTokenRecord = {
       tokenHash,
       accountId: record.accountId,
       tenantId: record.tenantId,
-      type: record.type,
+      channel: record.channel,
+      purpose: record.purpose,
+      code: null,
+      target: record.target,
       expiresAt: record.expiresAt,
+      attempts: record.attempts,
+      maxAttempts: record.maxAttempts,
       usedAt: record.usedAt,
       createdAt: record.createdAt,
-    });
+    };
+    this.records.set(tokenHash, full);
     return { tokenHash };
   }
 
-  async findByHash(tokenHash: string, type: VerificationTokenType): Promise<VerificationTokenRecord | null> {
+  async insertOtp(record: Omit<VerificationTokenRecord, 'tokenHash' | 'code'> & { code: string }): Promise<void> {
+    const otpKey = `${record.target}:${record.purpose}`;
+    const tokenHash = hashToken(record.code + ':' + record.target);
+    const full: VerificationTokenRecord = {
+      tokenHash,
+      accountId: record.accountId,
+      tenantId: record.tenantId,
+      channel: record.channel,
+      purpose: record.purpose,
+      code: record.code,
+      target: record.target,
+      expiresAt: record.expiresAt,
+      attempts: record.attempts,
+      maxAttempts: record.maxAttempts,
+      usedAt: record.usedAt,
+      createdAt: record.createdAt,
+    };
+    this.records.set(tokenHash, full);
+    this.otpIndex.set(otpKey, tokenHash);
+  }
+
+  async findByHash(tokenHash: string): Promise<VerificationTokenRecord | null> {
     const record = this.records.get(tokenHash);
-    if (!record || record.type !== type) return null;
-    if (record.usedAt) return null;
+    if (!record || record.usedAt) return null;
+    if (new Date(record.expiresAt) < new Date()) return null;
+    return record;
+  }
+
+  async findByOtp(target: string, purpose: VerificationPurpose): Promise<VerificationTokenRecord | null> {
+    const otpKey = `${target}:${purpose}`;
+    const tokenHash = this.otpIndex.get(otpKey);
+    if (!tokenHash) return null;
+    const record = this.records.get(tokenHash);
+    if (!record || record.usedAt) return null;
     if (new Date(record.expiresAt) < new Date()) return null;
     return record;
   }
@@ -75,15 +80,40 @@ export class InMemoryVerificationTokenRepository implements IVerificationTokenRe
     const record = this.records.get(tokenHash);
     if (record) {
       record.usedAt = new Date().toISOString();
+      if (record.code) {
+        this.otpIndex.delete(`${record.target}:${record.purpose}`);
+      }
     }
   }
 
-  async invalidateForAccount(accountId: string, type: VerificationTokenType): Promise<void> {
+  async incrementAttempts(tokenHash: string): Promise<number> {
+    const record = this.records.get(tokenHash);
+    if (!record) return 0;
+    record.attempts += 1;
+    return record.attempts;
+  }
+
+  async invalidateForAccount(accountId: string, purpose: VerificationPurpose): Promise<void> {
     for (const [hash, record] of this.records) {
-      if (record.accountId === accountId && record.type === type && !record.usedAt) {
-        this.records.delete(hash);
+      if (record.accountId === accountId && record.purpose === purpose && !record.usedAt) {
+        record.usedAt = new Date().toISOString();
       }
     }
+  }
+
+  async deleteExpired(): Promise<number> {
+    let count = 0;
+    const now = new Date();
+    for (const [hash, record] of this.records) {
+      if (new Date(record.expiresAt) < now) {
+        this.records.delete(hash);
+        if (record.code) {
+          this.otpIndex.delete(`${record.target}:${record.purpose}`);
+        }
+        count++;
+      }
+    }
+    return count;
   }
 
   async all(): Promise<VerificationTokenRecord[]> {

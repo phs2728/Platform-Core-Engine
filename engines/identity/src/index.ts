@@ -1,16 +1,18 @@
 /**
- * Identity Engine — Public API (Sprint 2C-2 COMPLETE)
+ * Identity Engine — Public API (Sprint 2C-3 Enterprise Grade)
  *
- * 사장님 Platform Owner 확립 (2026-07-11) Sprint 2C-2:
- * - RFC-026 Email Verification
- * - RFC-027 Password Reset
- * - RFC-028 Account Lock
- * - RFC-029 Session Refresh (Rotation)
- * - RFC-030 Audit Log
- * - RFC-031 OAuth
+ * 사장님 Engineering Manager 확립 (2026-07-11):
+ * 10 Epics: Verification / Password / OAuth / MFA / Session / Security / Audit / Linking / Device / Risk
+ *
+ * 모든 Use Case는 Result<T,E> 반환
+ * 모든 오류는 PlatformError 계층
+ * 모든 상태 변경은 EventEnvelope 발행
  */
 
-// Core SDK re-export
+// ═══════════════════════════════════════════
+// Core SDK Re-exports
+// ═══════════════════════════════════════════
+
 export {
   type Result,
   Ok,
@@ -19,6 +21,7 @@ export {
   AuthenticationError,
   NotFoundError,
   ConflictError,
+  InternalError,
   type EventEnvelope,
   createEnvelope,
   Email,
@@ -27,110 +30,105 @@ export {
   z,
 } from '@platform/core-sdk';
 
-// Interfaces (Host 주입)
-export type {
-  IClock,
-  IIdGenerator,
-  IPasswordHasher,
-  ISessionSigner,
-  SessionPayload,
-  AccountRecord,
-  IAccountRepository,
-  SessionRecord,
-  ISessionRepository,
-  IEventBus,
-  IAuditLogRepository,
-  AuditEventType,
-  AuditLogRecord,
-  IVerificationTokenRepository,
-  VerificationTokenType,
-  VerificationTokenRecord,
-  IEmailSender,
-  EmailMessage,
-} from './interfaces/index.js';
+// ═══════════════════════════════════════════
+// Interfaces
+// ═══════════════════════════════════════════
 
-// Sprint 2C-1 Use Cases
+export type * from './interfaces/index.js';
+
+// ═══════════════════════════════════════════
+// Account Use Cases
+// ═══════════════════════════════════════════
+
 export {
   createAccountUseCase,
   type CreateAccountInput,
   type CreateAccountOutput,
   type CreateAccountDeps,
-  type AccountCreatedPayload,
-} from './use-cases/CreateAccountUseCase.js';
+} from './use-cases/account/CreateAccountUseCase.js';
+
+// ═══════════════════════════════════════════
+// Login (Epic 5+6+9+10 Enterprise)
+// ═══════════════════════════════════════════
 
 export {
-  loginWithEmailUseCase,
+  loginUseCase,
   type LoginInput,
   type LoginOutput,
   type LoginDeps,
-  type LoginSuccessPayload,
-  type LoginFailurePayload,
-} from './use-cases/LoginWithEmailUseCase.js';
+} from './use-cases/LoginUseCase.js';
+
+// ═══════════════════════════════════════════
+// Session Management (Epic 5)
+// ═══════════════════════════════════════════
 
 export {
-  logoutUseCase,
-  type LogoutInput,
-  type LogoutDeps,
-  type LoggedOutPayload,
-} from './use-cases/LogoutUseCase.js';
-
-// Sprint 2C-2 Use Cases
-export {
-  requestEmailVerificationUseCase,
-  confirmEmailVerificationUseCase,
-  type RequestEmailVerificationInput,
-  type RequestEmailVerificationOutput,
-  type RequestEmailVerificationDeps,
-  type ConfirmEmailVerificationInput,
-  type ConfirmEmailVerificationOutput,
-  type ConfirmEmailVerificationDeps,
-} from './use-cases/VerifyEmailUseCase.js';
-
-export {
-  requestPasswordResetUseCase,
-  confirmPasswordResetUseCase,
-  type PasswordResetRequestInput,
-  type PasswordResetRequestOutput,
-  type PasswordResetRequestDeps,
-  type PasswordResetConfirmInput,
-  type PasswordResetConfirmOutput,
-  type PasswordResetConfirmDeps,
-} from './use-cases/PasswordResetUseCase.js';
-
-export {
+  logoutAllUseCase,
+  revokeSessionUseCase,
   refreshSessionUseCase,
-  type SessionRefreshInput,
-  type SessionRefreshOutput,
-  type SessionRefreshDeps,
-} from './use-cases/RefreshSessionUseCase.js';
+  type LogoutAllInput,
+  type LogoutAllDeps,
+  type RevokeSessionInput,
+  type RevokeSessionDeps,
+  type RefreshSessionInput,
+  type RefreshSessionOutput,
+  type RefreshSessionDeps,
+} from './use-cases/session/SessionManagementUseCases.js';
+
+// ═══════════════════════════════════════════
+// MFA (Epic 4)
+// ═══════════════════════════════════════════
 
 export {
-  oauthLoginUseCase,
-  GoogleOAuthProvider,
-  type OAuthLoginInput,
-  type OAuthLoginOutput,
-  type OAuthLoginDeps,
-  type IOAuthProvider,
-  type OAuthTokenResponse,
-  type OAuthUserProfile,
-} from './use-cases/OAuthLoginUseCase.js';
+  enrollTotpUseCase,
+  type EnrollTotpInput,
+  type EnrollTotpOutput,
+  type EnrollTotpDeps,
+} from './use-cases/mfa/EnrollTotpUseCase.js';
 
-// In-Memory Implementations (테스트 + 개발용)
 export {
-  InMemoryAccountRepository,
-  type AccountRecordExtended,
-} from './infrastructure/InMemoryAccountRepository.js';
+  verifyMfaUseCase,
+  type VerifyMfaInput,
+  type VerifyMfaDeps,
+} from './use-cases/mfa/VerifyMfaUseCase.js';
+
+// ═══════════════════════════════════════════
+// Device Trust (Epic 9)
+// ═══════════════════════════════════════════
+
+export {
+  trustDeviceUseCase,
+  revokeDeviceUseCase,
+  listDevicesUseCase,
+  type TrustDeviceInput,
+  type TrustDeviceDeps,
+  type RevokeDeviceInput,
+} from './use-cases/device/DeviceTrustUseCases.js';
+
+// ═══════════════════════════════════════════
+// In-Memory Repositories
+// ═══════════════════════════════════════════
+
+export { InMemoryAccountRepository } from './infrastructure/InMemoryAccountRepository.js';
 export { InMemorySessionRepository } from './infrastructure/InMemorySessionRepository.js';
+export { InMemoryAuditLogRepository } from './infrastructure/InMemoryAuditLogRepository.js';
 export {
   InMemoryVerificationTokenRepository,
   hashToken,
-  type VerificationTokenType as _VerificationTokenType,
 } from './infrastructure/InMemoryVerificationTokenRepository.js';
-export {
-  InMemoryAuditLogRepository,
-  type IAuditLogRepository as _IAuditLogRepositoryImpl,
-} from './infrastructure/InMemoryAuditLogRepository.js';
-export { InMemoryEmailSender } from './interfaces/IEmailSender.js';
+export { InMemoryPasswordHistoryRepository } from './infrastructure/InMemoryPasswordHistoryRepository.js';
+export { InMemoryOAuthAccountRepository } from './infrastructure/InMemoryOAuthAccountRepository.js';
+export { InMemoryMfaRepository } from './infrastructure/InMemoryMfaRepository.js';
+export { InMemoryDeviceRepository } from './infrastructure/InMemoryDeviceRepository.js';
+export { InMemoryRateLimitRepository } from './infrastructure/InMemoryRateLimitRepository.js';
+export { TotpImpl } from './infrastructure/TotpImpl.js';
 
-// Audit helper
+// ═══════════════════════════════════════════
+// Audit
+// ═══════════════════════════════════════════
+
 export { recordAudit, type AuditLogInput } from './domain/audit.js';
+
+// ═══════════════════════════════════════════
+// OAuth (subagent가 작성 중 — 완료 시 export)
+// ═══════════════════════════════════════════

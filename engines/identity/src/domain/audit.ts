@@ -1,13 +1,13 @@
 /**
- * Audit Helper (Sprint 2C-2-5)
- * 사장님 확립 — Audit Trail 필수
+ * Audit Helper (Epic 7 Foundation)
+ * 사장님 확립 — Audit Trail 필수. 모든 Epic에서 사용.
  */
 
 import type {
   IAuditLogRepository,
   AuditEventType,
   AuditLogRecord,
-} from '../infrastructure/InMemoryAuditLogRepository.js';
+} from '../interfaces/index.js';
 
 export interface AuditLogInput {
   accountId: string | null;
