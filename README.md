@@ -119,6 +119,20 @@ API Stability (SemVer)
 
 ---
 
+## 검증 도구 (Quality Gates) — 사장님 Product Owner 확립 (2026-07-11)
+
+| 도구 | 시점 | 내용 | Status |
+|---|---|---|---|
+| [헌법](./docs/000_PLATFORM_CONSTITUTION.md) | 상시 | C-1 ~ C-17 (17개 원칙) | 🔒 Frozen |
+| [PAC](./docs/Platform_Acceptance_Criteria.md) | 플랫폼 단위 | 10개 영구 기준 (PAC-001~010) | 🔒 Frozen |
+| [Engine Certification](./docs/Engine_Certification.md) | Release 직전 | 7개 인증 항목 | 🔒 Frozen |
+| [**Platform Review Gate (PRG)**](./docs/Platform_Review_Gate.md) | **PR / Sprint 종료** | **19개 질문 (Architecture/Platform/Security/Performance/Maintainability)** | 🔒 Frozen |
+| [AVR-001 (Identity)](./docs/AVR/AVR-001-identity-engine.md) | Frozen 전 | Architecture Validation | 🟢 PASS |
+
+**모든 PR은 [`.github/PULL_REQUEST_TEMPLATE.md`](./.github/PULL_REQUEST_TEMPLATE.md) 따라야 함.** 6개 체크리스트 + 19개 PRG 질문 자동/수동 검사.
+
+---
+
 ## 모노레포 도구
 
 | 도구 | 사용처 | 비고 |
