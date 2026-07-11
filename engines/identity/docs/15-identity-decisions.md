@@ -34,79 +34,110 @@
 
 | ID | 결정 | Status | 사장님 확립 |
 |---|---|---|---|
-| **D-IDN-001** | 이메일 중복 허용 여부 (Tenant 내 / Platform 전체) | 🟥 Draft | ❓ |
-| **D-IDN-002** | 전화번호 중복 허용 여부 (Tenant 내 / Platform 전체) | 🟥 Draft | ❓ |
-| **D-IDN-003** | Link Account 정책 (Email + Google 동시 연결 허용) | 🟥 Draft | ❓ |
-| **D-IDN-004** | 이메일 변경 정책 | 🟥 Draft | ❓ |
-| **D-IDN-005** | 전화번호 변경 정책 | 🟥 Draft | ❓ |
-| **D-IDN-006** | 계정 삭제 정책 (Self-Service / Admin Only / 불가) | 🟥 Draft | ❓ |
-| **D-IDN-007** | Soft Delete / Hard Delete | 🟥 Draft | ❓ |
-| **D-IDN-008** | Tenant 간 동일 이메일 처리 방식 | 🟥 Draft | ❓ |
+| **D-IDN-001** | 이메일 중복 허용 여부 (Tenant 내 / Platform 전체) | ✅ Approved | **(a) Unique Platform-Wide (허용 안 함)** |
+| **D-IDN-002** | 전화번호 중복 허용 여부 (Tenant 내 / Platform 전체) | ✅ Approved | **(a) Unique Platform-Wide, NULL 허용** |
+| **D-IDN-003** | Link Account 정책 (Email + Google 동시 연결 허용) | ✅ Approved | **허용 — Multi-Credential Per User** |
+| **D-IDN-004** | 이메일 변경 정책 | ✅ Approved | **허용 — 새 이메일 재인증 후 변경** |
+| **D-IDN-005** | 전화번호 변경 정책 | ✅ Approved | **허용 — 새 번호 OTP 인증 후 변경** |
+| **D-IDN-006** | 계정 삭제 정책 (Self-Service / Admin Only / 불가) | ✅ Approved | **사용자 요청 + 관리자 정책에 따라 처리** |
+| **D-IDN-007** | Soft Delete / Hard Delete | ✅ Approved | **기본 Soft, Hard는 관리자/법적 요구 시만** |
+| **D-IDN-008** | Tenant 간 동일 이메일 처리 방식 | ✅ Approved | **허용 (Policy 결정) — SSO 또는 독립 계정 선택 가능** |
 
 ### 1.1 D-IDN-001 — 이메일 중복 허용 여부
 
 | 필드 | 값 |
 |---|---|
 | **Description** | 같은 이메일 주소를 여러 User가 가질 수 있는가? |
+| **Current Value** | **(a) Unique Platform-Wide (허용 안 함)** |
 | **Allowed Values** | (a) Unique per Tenant / (b) Unique Platform-Wide / (c) Unique with Verified / (d) Always Allow |
-| **Reason** | 이 결정은 `user_identities.identifier_hash`의 unique 정책에 직접 영향. |
-| **Status** | 🟥 Draft (사장님 확립 대기) |
+| **Recommended Value** | (b) Unique Platform-Wide |
+| **Reason** | 사장님 Product Owner 확립 (2026-07-11): 이메일은 사용자 본인의 핵심 식별자. 중복 시 enumeration 위험, SSO 통합 시 일관성 깨짐. |
+| **Impact** | `user_identities.identifier_hash`에 Platform-wide unique 인덱스 추가. Google OAuth subject 충돌 시 명시적 해결 필요. |
+| **Status** | ✅ Approved (사장님 확립) |
 
 ### 1.2 D-IDN-002 — 전화번호 중복 허용 여부
 
 | 필드 | 값 |
 |---|---|
 | **Description** | 같은 전화번호를 여러 User가 가질 수 있는가? |
-| **Allowed Values** | D-IDN-001과 동일 |
-| **Status** | 🟥 Draft |
+| **Current Value** | **(a) Unique Platform-Wide, NULL 허용** |
+| **Allowed Values** | D-IDN-001과 동일 옵션 |
+| **Recommended Value** | (b) Unique Platform-Wide, NULL 허용 |
+| **Reason** | 사장님 Product Owner 확립 (2026-07-11): NULL 허용 = 전화번호 없는 User 가능 (OAuth-only 가입자). 유효한 전화번호는 Platform-wide unique. |
+| **Impact** | `user_identities.identifier_hash`에 partial unique index (WHERE identifier IS NOT NULL). |
+| **Status** | ✅ Approved (사장님 확립) |
 
 ### 1.3 D-IDN-003 — Link Account 정책
 
 | 필드 | 값 |
 |---|---|
 | **Description** | 하나의 User가 Email/Password + Google OAuth를 동시에 가질 수 있는가? |
-| **Allowed Values** | (a) Multi-Credential / (b) One Credential / (c) Multi-OAuth + One Password / (d) Multi-OAuth + Optional Password |
-| **Status** | 🟥 Draft |
+| **Current Value** | **허용 — Multi-Credential Per User** |
+| **Allowed Values** | (a) Multi-Credential Per User / (b) One Credential Per User / (c) Multi-OAuth + One Password / (d) Multi-OAuth + Optional Password |
+| **Recommended Value** | (a) Multi-Credential Per User |
+| **Reason** | 사장님 Product Owner 확립 (2026-07-11): 사용자가 Google로 가입 후 Password를 추가하는 흐름. 한 명당 인증 수단 N개 허용. |
+| **Impact** | 한 User가 여러 `credentials` 보유 가능. **마지막 인증 수단 삭제 불가** (Account Recovery). |
+| **Status** | ✅ Approved (사장님 확립) |
 
 ### 1.4 D-IDN-004 — 이메일 변경 정책
 
 | 필드 | 값 |
 |---|---|
 | **Description** | 사용자가 본인 이메일을 변경할 때 검증/알림/세션 처리 |
+| **Current Value** | **허용 — 새 이메일 재인증 후 변경** |
 | **Allowed Values** | (a) Verify New + Notify Old / (b) Verify New Only / (c) Verify Old + Verify New / (d) Admin Approval / (e) Email Immutable |
-| **Status** | 🟥 Draft |
+| **Recommended Value** | (a) Verify New + Notify Old |
+| **Reason** | 사장님 Product Owner 확립 (2026-07-11): 새 이메일 재인증으로 변경. 옛 이메일로 알림. 계정 탈취 공격 시 옛 이메일이 마지막 방어선. |
+| **Impact** | 새 이메일 링크 발송 → 클릭 시 변경 완료. 옛 이메일로 "email changed" 알림. 다른 세션 revoke. |
+| **Status** | ✅ Approved (사장님 확립) |
 
 ### 1.5 D-IDN-005 — 전화번호 변경 정책
 
 | 필드 | 값 |
 |---|---|
 | **Description** | 전화번호 변경 시 검증/알림 처리 |
-| **Allowed Values** | D-IDN-004와 동일 |
-| **Status** | 🟥 Draft |
+| **Current Value** | **허용 — 새 번호 OTP 인증 후 변경** |
+| **Allowed Values** | D-IDN-004와 동일 옵션 |
+| **Recommended Value** | (a) Verify New + Notify Old |
+| **Reason** | 사장님 Product Owner 확립 (2026-07-11): 새 번호 OTP 인증으로 변경. SMS MFA 사용자 보호. |
+| **Impact** | 새 번호로 SMS OTP 발송 → 인증 시 변경 완료. 옛 번호로 알림 (있으면). 2FA 재확인 가능. |
+| **Status** | ✅ Approved (사장님 확립) |
 
 ### 1.6 D-IDN-006 — 계정 삭제 정책
 
 | 필드 | 값 |
 |---|---|
 | **Description** | 사용자가 자기 계정을 삭제할 수 있는가? |
-| **Allowed Values** | (a) Self-Service Soft / (b) Self-Service Hard / (c) Grace Period / (d) Admin Only / (e) Not Allowed |
-| **Status** | 🟥 Draft |
+| **Current Value** | **사용자 요청 + 관리자 정책에 따라 처리** |
+| **Allowed Values** | (a) Self-Service Soft Delete / (b) Self-Service Hard Delete / (c) Grace Period + Self-Service / (d) Admin Only / (e) Not Allowed |
+| **Recommended Value** | (c) Grace Period + Self-Service |
+| **Reason** | 사장님 Product Owner 확립 (2026-07-11): 사용자 요청은 받되, 관리자 정책이 최종 결정. 단순 자기-삭제는 아니지만, 거부도 아님. |
+| **Impact** | 사용자 요청 → Soft Delete (`status='disabled'`) → 관리자 검토 → 정책에 따라 Hard Delete or Restore. |
+| **Status** | ✅ Approved (사장님 확립) |
 
 ### 1.7 D-IDN-007 — Soft Delete / Hard Delete
 
 | 필드 | 값 |
 |---|---|
 | **Description** | User 삭제 시 row 자체를 지우는가? 아니면 `deleted_at`만 설정? |
+| **Current Value** | **기본 Soft, Hard는 관리자/법적 요구 시만** |
 | **Allowed Values** | (a) Soft Only / (b) Soft by Default, Hard on Request / (c) Hard Always / (d) Anonymize |
-| **Status** | 🟥 Draft |
+| **Recommended Value** | (b) Soft by Default, Hard on Request |
+| **Reason** | 사장님 Product Owner 확립 (2026-07-11): 기본은 Soft (`deleted_at` + `status='disabled'`). Hard는 관리자 결정 또는 GDPR Right-to-be-Forgotten 등 법적 요구 시. |
+| **Impact** | 모든 unique index가 `WHERE deleted_at IS NULL` partial. Audit Log hash chain은 user_id를 NULL로 anonymize. |
+| **Status** | ✅ Approved (사장님 확립) |
 
 ### 1.8 D-IDN-008 — Tenant 간 동일 이메일 처리 방식
 
 | 필드 | 값 |
 |---|---|
 | **Description** | 사장님(같은 사람)이 회사 A와 회사 B에서 같은 이메일로 가입 가능? |
+| **Current Value** | **허용 (Policy 결정) — SSO 또는 독립 계정 선택 가능** |
 | **Allowed Values** | (a) Independent per Tenant / (b) Cross-Tenant Link / (c) Cross-Tenant Block / (d) Cross-Tenant Verify-Then-Link |
-| **Status** | 🟥 Draft |
+| **Recommended Value** | (d) Cross-Tenant Verify-Then-Link |
+| **Reason** | 사장님 Product Owner 확립 (2026-07-11): **D-IDN-008은 철학이지만 실제 동작은 Policy로 결정**. 어떤 고객은 SSO 원하고, 어떤 고객은 분리 원함. 양쪽 지원. |
+| **Impact** | **(헌법 §12.11 Decision ≠ Configuration 적용)**: 철학 = "허용 (Policy 결정)". 실제 모드 (SSO vs Independent)는 Configuration Engine에서. |
+| **Status** | ✅ Approved (사장님 확립) |
 
 ---
 
