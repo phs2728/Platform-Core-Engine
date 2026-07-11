@@ -1104,6 +1104,46 @@ Identity ↔ Notification (CYCLE — C-18 위반)
 - ❌ "문서 개수"
 - ✅ "동작하는 Engine 개수 + PRG 통과율"
 
+### 12.18 C-22 — Merge Gate (사장님 Platform Owner 확립, 2026-07-11)
+
+> **보고서가 아니라 실행 결과만으로 Merge/Approval.**
+> **Stable 선언은 절차가 아니라, 검증 결과를 사람이 확인한 뒤 선언하는 상태.**
+
+**승인 기준** (6개 모두 PASS 필수):
+
+```
+pnpm install   PASS
+pnpm lint      PASS
+pnpm typecheck PASS
+pnpm test      PASS
+pnpm build     PASS
+GitHub Actions Green
+```
+
+**보고 방식** (간결):
+
+```
+Sprint: [Name]
+
+Build                  ✅ PASS
+Lint                   ✅ PASS
+Typecheck              ✅ PASS
+Tests                  ✅ PASS (N/N)
+Examples               ✅ PASS
+Import Boundary        ✅ PASS
+Public API Snapshot    ✅ PASS
+GitHub Actions         ✅ PASS
+PRG                    ✅ PASS
+Engine Certification   ✅ PASS
+```
+
+**원칙**:
+- "구현했습니다"보다 "PASS/PASS/PASS"가 더 중요
+- Platform 회사는 **재현 가능한 검증 결과**가 자산
+- **Stable 선언**: "사람이 선언하는 것이 아니라, 검증 결과를 사람이 확인한 뒤 선언하는 상태"
+
+자세한 내용: [docs/PROJECT_OPERATIONS.md](./PROJECT_OPERATIONS.md)
+
 ### 12.17 C-21 — Platform Release Rule (사장님 Platform Owner 확립, 2026-07-11)
 
 > **모든 Engine의 Release는 5단계를 거친다: Draft → Alpha → Beta → RC → Stable.**

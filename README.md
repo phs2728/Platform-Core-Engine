@@ -27,6 +27,50 @@
 
 ---
 
+## Merge Gate (사장님 Platform Owner 확립, 2026-07-11)
+
+> **보고서가 아니라 실행 결과만으로 Merge/Approval.**
+
+**승인 기준**:
+
+```
+pnpm install   PASS
+pnpm lint      PASS
+pnpm typecheck PASS
+pnpm test      PASS
+pnpm build     PASS
+GitHub Actions Green
+```
+
+이 두 가지가 있어야 합니다.
+
+**보고 방식**:
+
+```
+Sprint: 2B RC Validation
+
+Build              ✅ PASS
+Lint               ✅ PASS
+Typecheck          ✅ PASS
+Tests              ✅ PASS (48/48)
+Examples           ✅ PASS
+Import Boundary    ✅ PASS
+Public API Snapshot ✅ PASS
+GitHub Actions     ✅ PASS
+PRG                ✅ PASS
+Engine Certification ✅ PASS
+```
+
+**원칙**:
+
+- "구현했습니다"보다 "PASS/PASS/PASS"가 더 중요합니다.
+- Platform 회사는 **재현 가능한 검증 결과**가 자산입니다.
+- **Stable 선언**: "사람이 선언하는 것이 아니라, 검증 결과를 사람이 확인한 뒤 선언하는 상태".
+
+자세한 내용: [docs/PROJECT_OPERATIONS.md](./docs/PROJECT_OPERATIONS.md), [헌법 §C-21/C-22](./docs/000_PLATFORM_CONSTITUTION.md)
+
+---
+
 ## 이게 뭔가요?
 
 **Platform Core Engine**은 AI Bridge Georgia Platform의 **공통 엔진 모음**입니다.
