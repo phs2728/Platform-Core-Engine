@@ -336,16 +336,10 @@ verificationMaxAttempts >= 1 && <= 10
 
 ---
 
-## 11. [TBD: 사장님 확립 필요]
+## 11. 미결정 사항
 
-| 항목 | 기본 제안 |
-|---|---|
-| Compile-time defaults 위치 | `src/config/defaults.ts` |
-| Cache TTL (Policy) | 300초 |
-| Hot Reload 지원 범위 | DB 설정만 |
-| Feature Flag 위치 | Compile-time + DB (Phase 2) |
-| Multi-region 설정 동기화 | Phase 2+ |
+**모든 미결정 사항은 [`15-identity-decisions.md`](./15-identity-decisions.md)에 canonical로 정리되어 있습니다.**
+
+이 문서에서는 더 이상 미결정 항목을 다루지 않습니다.
 
 ---
-
-**End of Configuration System v1.0**

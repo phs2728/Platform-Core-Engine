@@ -489,18 +489,10 @@ aibg-monorepo/
 
 ---
 
-## 11. [TBD: 사장님 확립 필요]
+## 11. 미결정 사항
 
-| 항목 | 기본 제안 |
-|---|---|
-| 패키지 매니저 | pnpm (호스트 표준 따름) |
-| 빌드 도구 | tsc (단순함) — 번들러 필요 시 rollup |
-| 테스트 러너 | vitest |
-| Linter | eslint + @typescript-eslint |
-| Formatter | prettier |
-| TypeDoc | 자동 생성 (public API만) |
-| Husky / lint-staged | CI 전 pre-commit 검증 |
+**모든 미결정 사항은 [`15-identity-decisions.md`](./15-identity-decisions.md)에 canonical로 정리되어 있습니다.**
+
+이 문서에서는 더 이상 미결정 항목을 다루지 않습니다.
 
 ---
-
-**End of Folder Structure v1.0**

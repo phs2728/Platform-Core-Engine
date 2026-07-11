@@ -1,319 +1,151 @@
-# Identity Engine
+# Platform Core Engine
 
-> **Industry-Agnostic Platform Core Engine**
+> **AI Bridge Georgia Platform Core**
 >
-> Authentication · Security · Session · Credential · Audit
+> 인증 · 알림 · 미디어 · CMS · 예약 · 리뷰 · AI
+>
+> **Industry-Agnostic Reusable Engines**
 
 ---
 
 ## 이게 뭔가요?
 
-**Identity Engine**은 AI Bridge Georgia Platform Core의 최상위 공통 엔진입니다.
+**Platform Core Engine**은 AI Bridge Georgia Platform의 **공통 엔진 모음**입니다.
 
-이 엔진은 **특정 산업을 전혀 알지 못합니다** — 여행, 호텔, 식당, 카페, 렌트카 등 어떤 도메인에도 종속되지 않습니다.
+각 엔진은 **특정 산업을 전혀 알지 못합니다** — 여행, 호텔, 식당, 카페, 렌트카 등 어떤 도메인에도 종속되지 않습니다.
 
-오직 **계정(Account)과 신원(Identity)만** 관리합니다.
+각 엔진은 **독립적인 제품**입니다. 독립 폴더, 독립 README, 독립 PRD, 독립 TRD.
 
-이 엔진은 앞으로 10년 이상 모든 제품(Tour OS, Hospitality OS, Restaurant OS, Cafe OS, RentCar OS 등)이 공통으로 사용합니다.
+```
+One Engine = One Folder = One README = One PRD = One TRD
+```
+
+이 엔진들은 앞으로 10년 이상 모든 제품(Tour OS, Hospitality OS, Restaurant OS, Cafe OS, RentCar OS 등)이 공통으로 사용합니다.
 
 ```
 This is NOT an application.
 This is NOT a demo.
 This is NOT an MVP.
-This is a reusable Platform Core Engine.
+These are reusable Platform Core Engines.
+
+Every design decision maximizes extensibility, configurability and long-term maintainability.
 ```
 
 ---
 
-## 설계 원칙
+## 왜 engines/ 폴더인가?
 
-1. **Industry Agnostic** — 여행/호텔/식당/예약/결제 등 산업 키워드 일절 사용 안 함
-2. **Multi-Tenant** — 모든 데이터는 Tenant 단위, RLS로 격리
-3. **Plugin-Ready** — OAuth Provider는 코드 수정 없이 추가 가능
-4. **Configuration Over Code** — 관리자 UI로 모든 정책 변경
-5. **Encrypt Everything Sensitive** — 비밀번호, 토큰, PII 모두 암호화
-6. **Audit Everything** — 모든 인증 이벤트는 hash chain으로 변조 방지
-7. **API Stability** — 하위 호환 보장 (SemVer)
+엔진이 5개일 때는 루트에 직접 두어도 됩니다.
+
+엔진이 20개, 30개가 되면 루트가 지저분해집니다.
+
+그래서 **지금이 마지막 기회** — 처음부터 분리합니다.
+
+```
+Platform-Core-Engine/
+├── README.md            ← 이 파일 (플랫폼 소개)
+├── engines/             ← 모든 엔진이 사는 곳
+│   ├── identity/        ← (현재 작업 중)
+│   ├── notification/    ← (예정)
+│   ├── media/           ← (예정)
+│   ├── cms/             ← (예정)
+│   ├── booking/         ← (예정)
+│   ├── review/          ← (예정)
+│   └── ai/              ← (예정)
+├── packages/            ← 공유 패키지 (universal-core, primitives 등)
+├── shared/              ← 호스트 통합용 어댑터, 예시, 도구
+└── docs/                ← 플랫폼 차원의 문서 (헌장, ADR, KPI)
+```
+
+이 구조는 VS Code, TurboRepo, pnpm Workspace, Nx 같은 모노레포 도구에서 **자연스럽게 확장**됩니다.
 
 ---
 
-## 문서 색인
+## 엔진 카탈로그
 
-### 1. PRD & TRD (무엇을, 어떻게)
+### 🟢 Active
 
-| 문서 | 내용 |
-|---|---|
-| [01-prd.md](./docs/01-prd.md) | Product Requirements Document |
-| [02-trd.md](./docs/02-trd.md) | Technical Requirements Document |
+| 엔진 | 책임 | README |
+|---|---|---|
+| **identity** | 인증, 보안, 세션, 자격증명, 감사 | [engines/identity/README.md](./engines/identity/README.md) |
 
-### 2. 도메인 모델
+### 🟡 Planned
 
-| 문서 | 내용 |
-|---|---|
-| [03-domain-model.md](./docs/03-domain-model.md) | 9개 엔티티 + Value Objects + Invariants |
-| [04-db-schema.md](./docs/04-db-schema.md) | DDL 명세 + RLS 정책 |
-| [05-erd.md](./docs/05-erd.md) | Mermaid ERD + 시퀀스 다이어그램 |
-
-### 3. API & 이벤트
-
-| 문서 | 내용 |
-|---|---|
-| [06-api-spec.yaml](./docs/06-api-spec.yaml) | OpenAPI 3.1 명세 |
-| [07-events.md](./docs/07-events.md) | 도메인 이벤트 카탈로그 |
-
-### 4. 아키텍처
-
-| 문서 | 내용 |
-|---|---|
-| [08-architecture.md](./docs/08-architecture.md) | 레이어드 아키텍처 + 모듈 책임 |
-| [09-folder-structure.md](./docs/09-folder-structure.md) | 디렉토리 레이아웃 |
-| [10-plugin-architecture.md](./docs/10-plugin-architecture.md) | OAuth Provider 플러그인 추가 절차 |
-
-### 5. 운영 & 보안
-
-| 문서 | 내용 |
-|---|---|
-| [11-test-strategy.md](./docs/11-test-strategy.md) | 단위/통합/E2E/보안 테스트 |
-| [12-admin-console.md](./docs/12-admin-console.md) | 관리자 콘솔 UI 명세 |
-| [13-configuration.md](./docs/13-configuration.md) | 설정 시스템 |
-| [14-security.md](./docs/14-security.md) | 보안 정책 (암호화, Rate Limit, Audit) |
-
-### 6. DDL
-
-| 파일 | 내용 |
-|---|---|
-| [db/schema.sql](./db/schema.sql) | 11개 테이블 + 트리거 + RLS |
-
-### 7. 결정 사항 (Canonical Source of Truth)
-
-| 문서 | 내용 |
-|---|---|
-| [**15-identity-decisions.md**](./docs/15-identity-decisions.md) | **모든 미결정 사항의 단일 진실 공급원 (Canonical)** |
-
-> **다른 문서의 [TBD] 항목들은 모두 [`15-identity-decisions.md`](./docs/15-identity-decisions.md)로 redirect되었습니다.**
->
-> 사장님이 결정할 항목, Status, Recommended Value는 15번 문서 참조.
->
-> `00-sajangnim-review.md`는 **DEPRECATED** — 새 결정은 15번에 추가.
+| 엔진 | 책임 | 상태 |
+|---|---|---|
+| **notification** | 이메일, SMS, Push 발송 | 예정 |
+| **media** | 이미지, 비디오, OCR | 예정 |
+| **cms** | 콘텐츠 관리 (블로그, 페이지) | 예정 |
+| **booking** | 예약/주문 도메인 엔진 | 예정 (Universal Core 별도 검토 필요) |
+| **review** | 리뷰, 평점, 신뢰 표시 | 예정 |
+| **ai** | AI 통합, 캐시, 추천 | 예정 |
 
 ---
 
-## 빠른 시작 (호스트 통합 예시)
-
-### 설치
-
-```bash
-pnpm add @aibg/engine-identity
-```
-
-### 엔진 인스턴스 생성
-
-```typescript
-import { createIdentityEngine } from '@aibg/engine-identity';
-
-const engine = createIdentityEngine({
-  // Universal Core에서 가져온 추상화들
-  store: postgresStore,         // IEntityStore 구현
-  events: eventBus,              // IEventBus
-  policy: policyProvider,        // IPolicyProvider
-  tenantResolver,                // ITenantResolver
-
-  // 호스트가 제공
-  cache: redisCache,             // ICache
-  crypto: kmsCrypto,             // ICryptoProvider
-  audit: auditWriter,            // IAuditWriter
-  notify: notifier,              // INotificationSender
-  logger: pinoLogger,            // ILogger
-  clock: systemClock,            // IClock
-  random: cryptoRandom,          // IRandom
-});
-```
-
-### Login 사용
-
-```typescript
-const result = await engine.login({
-  tenantId: '...',
-  identifier: 'tim@example.com',
-  password: 'Valid1!Passwd',
-});
-
-// result.sessionToken — 클라이언트에 반환
-// result.user — { id, tenantId, status, ... } (프로필 필드 없음)
-// result.session — 세션 메타데이터
-```
-
-### Admin Console
-
-```typescript
-// Provider 동적 추가 (Plugin)
-providerRegistry.register(CorpSsoProvider);
-
-// 새 OAuth Provider "Instagram" 추가 시:
-// 1. src/provider/instagram/index.ts (~100 LOC)
-// 2. registry.ts에 1줄 추가
-// 3. 스키마 마이그레이션 1개
-// 끝.
-```
-
----
-
-## 스프린트 계획
-
-```
-Sprint 1 — 설계 문서 (현재)
-  ✓ PRD
-  ✓ TRD
-  ✓ 도메인 모델
-  ✓ DB 스키마
-  ✓ API 명세
-  ✓ 이벤트 카탈로그
-  ✓ 아키텍처
-  ✓ 폴더 구조
-  ✓ 플러그인 아키텍처
-  ✓ 테스트 전략
-  ✓ Admin Console 명세
-  ✓ 설정 시스템
-  ✓ 보안 정책
-
-Sprint 2 — Identity Engine 구현 (다음)
-  → src/engine.ts 진입점
-  → usecase/auth/* (login, register, logout)
-  → usecase/password/* (reset, change)
-  → usecase/verification/* (email, sms)
-  → crypto/* (Argon2id, AES, JWT)
-  → repository/* (CRUD)
-  → provider/google (Reference)
-
-Sprint 3 — Admin Console
-  → /admin/auth/* UI
-
-Sprint 4 — OAuth Providers (Google, Kakao, Apple, ...)
-  Sprint 5 — MFA (TOTP, Email/SMS OTP)
-  Sprint 6 — Advanced (Passkey, SAML, ...)
-```
-
----
-
-## Industry Agnostic 검증
-
-엔진은 다음 단어를 **절대 사용하지 않습니다**:
-
-```
-❌ tour / travel / booking / hotel / restaurant / order / product
-❌ payment / passport / travel_history / booking_history
-```
-
-자동 검증 스크립트: `scripts/verify-industry-agnostic.sh` (예정)
-
----
-
-## 데이터 도메인 (11개 테이블)
-
-```
-users               인증된 신원의 인덱스
-user_identities     User가 가진 신원 (이메일/전화/사용자명/OAuth)
-auth_providers      Tenant가 활성화한 인증 제공자
-credentials         비밀번호 해시 / OAuth 토큰 / TOTP
-password_history    비밀번호 재사용 방지
-sessions            활성 세션
-verification_tokens 이메일/SMS 인증 코드
-password_resets     비밀번호 재설정 토큰
-security_policies   Tenant별 보안 정책 (SSoT)
-audit_logs          Append-Only 감사 로그 (hash chain)
-tenant_credentials  외부 서비스 자격증명 (AES-256-GCM)
-```
-
-**저장하지 않는 것**: 프로필(이름, 아바타), 주소, 여권, 결제 수단, 업종별 데이터.
-
----
-
-## 기술 스택
-
-| 영역 | 선택 |
-|---|---|
-| 언어 | TypeScript 5.4+ (strict) |
-| 런타임 | Node 20+ / Bun 1.x / Deno 1.40+ |
-| 패키지 | ESM only |
-| 암호화 | @noble/hashes, @noble/ciphers, jose |
-| 입력 검증 | zod |
-| DB | PostgreSQL 15+ |
-| 캐시 | Redis 7+ |
-| KMS | AWS KMS / GCP KMS / Vault (호스트) |
-
-> 엔진은 특정 SaaS나 DB 드라이버에 종속되지 않습니다. 모든 인프라 의존성은 호스트가 주입합니다.
-
----
-
-## 기여 (Contribution)
-
-### 새 OAuth Provider 추가
-
-```
-1. src/provider/<name>/index.ts 작성 (AuthProvider 인터페이스)
-2. provider/_shared/registry.ts에 import + register
-3. db/schema.sql의 CHECK 제약 확장 (마이그레이션 1개)
-4. PR 제출
-```
-
-### 새 보안 정책 추가
-
-```
-1. docs/14-security.md 업데이트
-2. src/domain/policy/ 또는 src/usecase/ 구현
-3. db/schema.sql의 security_policies 컬럼 추가 (마이그레이션)
-4. docs/06-api-spec.yaml 업데이트
-5. PR 제출
-```
-
-### 모든 PR은 통과해야 함
-
-- [ ] TypeScript lint + typecheck
-- [ ] 단위 테스트 (커버리지 90%+)
-- [ ] 통합 테스트 (해당 영역)
-- [ ] 보안 테스트 (해당 영역)
-- [ ] Industry Agnostic 검증
-- [ ] 사장님 리뷰
-
----
-
-## 사장님 확립 헌법
-
-이 엔진은 다음 헌법을 따릅니다:
+## 설계 원칙 (모든 엔진 공통)
 
 ```
 80% Universal / 20% Domain
 Business modules must never modify the Core
 Event First — 모든 중요 액션은 도메인 이벤트를 발생시킨다
 TypeScript Everywhere
-사장님이 직접 정한 것만 canonical, AI 추측은 draft-superseded 표시
-ADR Process — 모든 변경은 ADR-NNN 기록
+Plugin-Ready — 새 Provider는 코드 수정 없이 추가 가능
+Configuration Over Code — 관리자 UI로 모든 정책 변경
+Encrypt Everything Sensitive
+Audit Everything — append-only + hash chain
+API Stability (SemVer)
 ```
 
----
+### Industry-Agnostic 보장
 
-## 라이선스
+모든 엔진은 다음 단어를 **절대 사용하지 않습니다**:
 
-Internal — Platform Core (사장님 확립)
+```
+❌ tour / travel / booking / hotel / restaurant
+❌ order / product / payment / passport
+❌ travel_history / cafe / rentcar / visa / flight / itinerary
+```
 
----
-
-## Status
-
-**Version**: v1.0 — Frozen (사장님 확립, 2026-07-11)
-
-**Effective Date**: 2026-07-11
-
-**Next Review**: 2027-07-11 (1년)
+자동 검증 도구: 각 엔진 폴더의 `scripts/verify-industry-agnostic.sh` (PR마다 자동 실행).
 
 ---
 
-## 변경 이력
+## 헌법
 
-| 버전 | 날짜 | 변경 |
+이 모노레포는 사장님 확립 헌법을 따릅니다:
+
+1. **사람이 직접 정한 것만 canonical** — AI 추측은 `draft-superseded` 표시
+2. **모든 결정은 ADR-NNN**으로 기록
+3. **Schema Freeze** — 변경 시 ADR + v2.0 마이그레이션
+4. **모노레포 단일 CI** — 모든 엔진이 같은 lint/typecheck/test 게이트 통과
+
+---
+
+## 모노레포 도구
+
+| 도구 | 사용처 | 비고 |
 |---|---|---|
-| v1.0 | 2026-07-11 | Initial Frozen (PRD 작성) |
+| **pnpm Workspace** | 패키지 매니저 | 사장님 확립 (성능 + 디스크 효율) |
+| **Turborepo** | 빌드 캐시 | (예정) |
+| **TypeScript** | 언어 | strict mode, ESM only |
+| **Vitest** | 테스트 | 단위 + 통합 |
+| **ESLint + Prettier** | lint + format | |
 
 ---
 
-> 사장님 확립: "이 엔진은 단순한 로그인 기능이 아니라 Platform Core의 표준 인증 및 보안 엔진으로 설계한다."
+## 다음 단계
+
+1. **identity 엔진 완성**: 사장님 Level 1 결정 8개 확립 (engines/identity/docs/15-identity-decisions.md)
+2. **Universal Core 패키지**: `packages/core/` 작성 (Tenant, Event, Plugin 인터페이스)
+3. **notification 엔진**: identity 다음 우선순위
+4. **CI/CD**: 모노레포 단일 파이프라인
+
+---
+
+**Owner**: 사장님 (박흥식 / Tim Park)
+**Version**: v0.1 (모노레포 초기 구조)
+**Date**: 2026-07-11
+
+---
+
+> 사장님 확립: "한 엔진을 만들 때 한 폴더에 README 하나, PRD 하나, TRD 하나."

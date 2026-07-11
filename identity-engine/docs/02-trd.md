@@ -49,7 +49,7 @@ TypeScript Everywhere
 |---|---|---|
 | 언어 | **TypeScript 5.4+** | strict mode, `noUncheckedIndexedAccess: true` |
 | 모듈 시스템 | ESM (ES2022) | CJS 미지원 |
-| 런타임 | **Node.js 20 LTS / Bun 1.x / Deno 1.40+** 모두 호환 | [TBD: 사장님 확립 필요 — 주 런타임] |
+| 런타임 | **Node.js 20 LTS / Bun 1.x / Deno 1.40+** 모두 호환 | [D-CONFIG-001](./15-identity-decisions.md#d-config-001) |
 | 테스트 | Vitest | 단위 + 통합 |
 | E2E | Playwright | 호스트 통합 시 |
 
@@ -380,7 +380,7 @@ async function getSecurityPolicy(tenantId: string): Promise<SecurityPolicy> {
 
 ## 10. 성능 (Performance)
 
-### 10.1 목표 (사장님 확립 필요 — 기본 제안)
+### 10.1 목표 ([D-CONFIG Scalability](./15-identity-decisions.md#11-configuration-policy) 참조)
 
 | 항목 | p50 | p95 | p99 |
 |---|---|---|---|
@@ -474,20 +474,11 @@ async function getSecurityPolicy(tenantId: string): Promise<SecurityPolicy> {
 
 ---
 
-## 14. [TBD: 사장님 확립 필요]
+## 14. 미결정 사항
 
-| 항목 | 기본 제안 |
-|---|---|
-| 주 런타임 (Node vs Bun vs Deno) | Node 20 LTS |
-| 기본 Password 정책 | 12자 + 대문자 + 소문자 + 숫자 + 특수문자 |
-| 기본 Session Timeout | 1시간 |
-| 기본 Remember Me | 30일 |
-| 기본 Lock Duration | 30분 |
-| 기본 Rate Limit (Login) | 5회/15분/IP, 10회/15분/identifier |
-| Session 저장소 | Redis |
-| JWT 서명 알고리즘 | RS256 (Phase 1), EdDSA 고려 (Phase 2) |
-| Audit Log 보존 기간 | 무기한 (법적 우선) |
-| 다국어 기본 지원 | EN (필수), KO/JA/ZH (옵션) |
+**모든 미결정 사항은 [`15-identity-decisions.md`](./15-identity-decisions.md)에 canonical로 정리되어 있습니다.**
+
+이 문서에서는 더 이상 미결정 항목을 다루지 않습니다. Performance 목표치, Scalability 목표치, 기본 정책값 등은 `15-identity-decisions.md`의 Configuration Policy 섹션 (D-CONFIG-*) 참조.
 
 ---
 

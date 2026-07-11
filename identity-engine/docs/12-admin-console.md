@@ -589,16 +589,10 @@ if (body.sessionTimeoutMinutes < 5 || body.sessionTimeoutMinutes > 10080) {
 
 ---
 
-## 10. [TBD: 사장님 확립 필요]
+## 10. 미결정 사항
 
-| 항목 | 기본 제안 |
-|---|---|
-| Admin Console 위치 | 호스트 Admin 또는 별도 앱 |
-| Multi-Tenant Super Admin | Phase 2 (Platform Owner용) |
-| 실시간 업데이트 | SSE (Phase 2) |
-| Mobile 우선 vs Desktop 우선 | Desktop 우선, 모바일 호환 |
-| Audit Log 검색 깊이 | 무제한 (성능은 호스트 책임) |
+**모든 미결정 사항은 [`15-identity-decisions.md`](./15-identity-decisions.md)에 canonical로 정리되어 있습니다.**
+
+이 문서에서는 더 이상 미결정 항목을 다루지 않습니다.
 
 ---
-
-**End of Admin Console Spec v1.0**

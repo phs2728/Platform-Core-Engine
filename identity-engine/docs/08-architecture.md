@@ -634,16 +634,10 @@ Redis Lua script (atomic):
 
 ---
 
-## 11. [TBD: 사장님 확립 필요]
+## 11. 미결정 사항
 
-| 항목 | 기본 제안 |
-|---|---|
-| Worker Thread 정책 (Node) | 호스트가 결정, 엔진은 추상화만 |
-| Audit 재시도 정책 | 호스트가 retry queue 제공 |
-| 캐시 TTL 기본값 | Policy 5분, Session 만료까지 |
-| 캐시 eviction 정책 | 호스트가 결정 (LRU 권장) |
-| 트랜잭션 격리 수준 | Read Committed (Postgres 기본) |
+**모든 미결정 사항은 [`15-identity-decisions.md`](./15-identity-decisions.md)에 canonical로 정리되어 있습니다.**
+
+이 문서에서는 더 이상 미결정 항목을 다루지 않습니다.
 
 ---
-
-**End of Module Architecture v1.0**

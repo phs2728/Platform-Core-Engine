@@ -221,7 +221,7 @@ Password Policy (Tenant별 설정):
 
 | 정책 | 기본값 | 비고 |
 |---|---|---|
-| Minimum Length | 12 | [TBD: 사장님 확립 필요] |
+| Minimum Length | 12 | [D-PWD-001](./15-identity-decisions.md#d-pwd-001) |
 | Require Uppercase | true | |
 | Require Lowercase | true | |
 | Require Number | true | |
@@ -355,7 +355,7 @@ interface AuthProvider {
 
 | 항목 | 목표 | 비고 |
 |---|---|---|
-| Login API 응답시간 | p95 < 300ms | [TBD: 사장님 확립 필요] |
+| Login API 응답시간 | p95 < 300ms | [Performance 목표](./15-identity-decisions.md#11-configuration-policy) |
 | Session 검증 시간 | p95 < 50ms | JWT 서명 검증 |
 | Rate Limit 검사 | p95 < 5ms | Redis Lookup |
 | Audit Log 기록 | 비동기 (응답 지연 없음) | Event Bus 후처리 |
@@ -369,9 +369,9 @@ interface AuthProvider {
 
 ### 4.3 Scalability
 
-- 1 Tenant당 사용자 수: [TBD: 사장님 확립 필요]
-- 동시 로그인 가능 사용자 수: [TBD: 사장님 확립 필요]
-- 초당 인증 요청: [TBD: 사장님 확립 필요]
+- 1 Tenant당 사용자 수: [D-CONFIG Scalability](./15-identity-decisions.md#11-configuration-policy)
+- 동시 로그인 가능 사용자 수: [D-CONFIG Scalability](./15-identity-decisions.md#11-configuration-policy)
+- 초당 인증 요청: [D-CONFIG Scalability](./15-identity-decisions.md#11-configuration-policy)
 
 ### 4.4 Security
 
@@ -565,23 +565,28 @@ PRD 자체가 다음 결정을 **사장님이 확립**했습니다:
 
 ---
 
-## 10. [TBD: 사장님 확립 필요]
+## 10. 미결정 사항
 
-다음은 **PRD에 명시되지 않은 항목**으로, 사장님이 직접 정해주셔야 합니다:
+**모든 미결정 사항은 [`15-identity-decisions.md`](./15-identity-decisions.md)에 canonical로 정리되어 있습니다.**
 
-| 항목 | 현재 상태 | 비고 |
-|---|---|---|
-| Performance 목표치 (p95 응답시간) | [TBD] | 기본 제안: Login p95 < 300ms |
-| Scalability 목표치 (사용자/요청 수) | [TBD] | |
-| Password 정책 기본값 | [TBD] | 기본 제안: 12자 + 대소문자+숫자+특수문자 |
-| 기본 Session Timeout | [TBD] | 기본 제안: 1시간 |
-| 기본 Remember Me 기간 | [TBD] | 기본 제안: 30일 |
-| Lock Duration 기본값 | [TBD] | 기본 제안: 30분 |
-| Rate Limit 정책 | [TBD] | 기본 제안: 5회/15분/IP |
-| Session 저장소 | [TBD] | 기본 제안: Redis Cluster |
-| Audit Log 보존 기간 | [TBD] | 기본 제안: 무기한 (법적 요구 우선) |
-| GDPR Right-to-be-Forgotten 처리 | [TBD] | 기본 제안: User 행 삭제, Audit는 해시된 ID만 보존 |
-| 다국어 지원 범위 | [TBD] | 기본 제안: EN 필수, KO/JA/ZH 옵션 |
+이 문서에서 더 이상 미결정 항목을 직접 다루지 않습니다. 새로운 미결정 사항이 발생하면 `15-identity-decisions.md`에 Decision을 추가하고, 사장님 확립 후 Approved로 표시합니다.
+
+### 사장님 우선 지정 (Level 1)
+
+다음 8개 결정은 **Password 정책보다 우선**되며, Sprint 2 시작 전 반드시 확정되어야 합니다:
+
+| ID | 결정 |
+|---|---|
+| [D-AUTH-001](./15-identity-decisions.md#d-auth-001) | 이메일 중복 허용 여부 |
+| [D-AUTH-002](./15-identity-decisions.md#d-auth-002) | 전화번호 중복 허용 여부 |
+| [D-AUTH-003](./15-identity-decisions.md#d-auth-003) | Link Account 정책 |
+| [D-REG-001](./15-identity-decisions.md#d-reg-001) | 이메일 변경 정책 |
+| [D-REG-002](./15-identity-decisions.md#d-reg-002) | 전화번호 변경 정책 |
+| [D-REG-003](./15-identity-decisions.md#d-reg-003) | 계정 삭제 정책 |
+| [D-REG-004](./15-identity-decisions.md#d-reg-004) | Soft / Hard Delete |
+| [D-TENANT-001](./15-identity-decisions.md#d-tenant-001) | Tenant 간 동일 이메일 |
+
+전체 결정 목록과 진행 상황은 [`15-identity-decisions.md`](./15-identity-decisions.md)의 Decision Checklist 참조.
 
 ---
 

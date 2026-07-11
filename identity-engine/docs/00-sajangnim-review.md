@@ -1,12 +1,14 @@
-# Identity Engine v1.0 — 사장님 검토 항목
+# Identity Engine v1.0 — 사장님 검토 항목 (DEPRECATED)
 
-> **사장님 헌법**: "사람이 직접 정하지 않은 것은 박지 않는다."
+> **이 문서는 더 이상 canonical이 아닙니다.**
 >
-> 이 문서는 Identity Engine PRD v1.0 + 설계 문서들에서 **사장님이 직접 결정해주셔야 하는 항목**을 모은 것입니다.
+> 모든 미결정 사항은 [`15-identity-decisions.md`](./15-identity-decisions.md)로 이동했습니다.
+> 사장님 확립 진행 상황은 15번 문서의 Decision Checklist를 확인하세요.
 >
-> 각 항목 옆의 **[TBD: 사장님 확립 필요]** 표시가 있는 곳입니다.
+> 이 문서는 v1.0 초기 검토용으로 작성되었으며, **새로운 결정은 15번 문서에 추가**됩니다.
 
 ---
+
 
 ## 검토 방법
 
@@ -217,5 +219,5 @@
 ---
 
 **작성일**: 2026-07-11
-**상태**: 사장님 검토 대기
+**상태**: DEPRECATED — [`15-identity-decisions.md`](./15-identity-decisions.md) 참조
 **버전**: v1.0-draft (사장님 확립 후 v1.1-Frozen)

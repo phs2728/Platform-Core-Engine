@@ -543,17 +543,10 @@ X-Tenant-Id: <uuid>
 
 ---
 
-## 16. [TBD: 사장님 확립 필요]
+## 16. 미결정 사항
 
-| 항목 | 기본 제안 |
-|---|---|
-| Argon2id 파라미터 | m=64MiB, t=3, p=1 |
-| JWT 서명 알고리즘 | RS256 |
-| JWT 만료 | 15분 |
-| Refresh Token 만료 | 30일 |
-| Audit Log 보존 | 무기한 |
-| 침투 테스트 주기 | 연 1회 (외부) |
+**모든 미결정 사항은 [`15-identity-decisions.md`](./15-identity-decisions.md)에 canonical로 정리되어 있습니다.**
+
+이 문서에서는 더 이상 미결정 항목을 다루지 않습니다.
 
 ---
-
-**End of Security Policy v1.0**
