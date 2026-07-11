@@ -1,0 +1,36 @@
+{
+  "id": "order",
+  "name": "Order Engine",
+  "version": "0.1.0",
+  "phase": 5,
+  "status": "Draft",
+  "description": "[사장님 확립 2026-07-11] Platform lifecycle manager for all transactions. Industry-Agnostic. 10-state machine. Organization ownership + CustomDataPolicy. NOT payment/inventory/pricing — manages order lifecycle only.",
+  "depends_on": ["core-sdk", "policy", "organization", "booking", "inventory", "pricing", "event-bus"],
+  "provides": [
+    "createOrder", "updateOrder", "cancelOrder", "approveOrder", "rejectOrder",
+    "archiveOrder", "restoreOrder", "getOrder", "listOrders", "searchOrders",
+    "addItem", "removeItem", "updateItem",
+    "submitOrder", "confirmOrder", "completeOrder", "closeOrder",
+    "requestApproval", "approve", "reject",
+    "attachBooking", "attachInventory", "attachCatalog", "attachPricing",
+    "appendTimeline", "getTimeline"
+  ],
+  "events_emitted": [
+    "order.created", "order.updated", "order.submitted", "order.approved",
+    "order.rejected", "order.confirmed", "order.completed", "order.closed",
+    "order.cancelled", "order.expired",
+    "order.item.added", "order.item.removed",
+    "order.audit.recorded"
+  ],
+  "events_subscribed": ["organization.archived", "organization.deleted"],
+  "strict_boundaries": {
+    "owns": ["Order", "OrderItem", "OrderLine", "OrderReference", "OrderTimeline", "OrderApproval", "OrderAudit"],
+    "forbidden": [
+      "Authentication", "Password", "Session", "OAuth", "MFA",
+      "Permission", "Role",
+      "TransactionCapture", "TransactionRefund", "FinancialDocuments",
+      "CommerceProcessing", "ShipmentProcessing", "StockManagement",
+      "AddressRawField", "EmailRawField", "PhoneRawField", "IndustrySpecificField"
+    ]
+  }
+}

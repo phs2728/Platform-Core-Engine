@@ -12,6 +12,7 @@ export type EngineName =
   | 'catalog'
   | 'pricing'
   | 'notification'
+  | 'order'
   | 'event-bus'
   | 'media'
   | 'cms'
