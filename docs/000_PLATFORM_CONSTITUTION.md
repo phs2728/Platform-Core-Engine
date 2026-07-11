@@ -848,6 +848,88 @@ Code → 문서    ❌
 
 ---
 
+### 12.7 C-14 — Policy Injection (사장님 Platform CTO 확립, 2026-07-11)
+
+> **엔진은 Configuration을 직접 조회하지 않는다. 모든 Policy는 Policy Provider를 통해 주입받는다.**
+
+```
+Identity ─→ Policy.getPasswordLength() ─→ 12
+                    ↓
+                Tenant
+                    ↓
+                Platform Default
+                    ↓
+                Engine Override
+```
+
+- 엔진 코드에 `await db.query("SELECT password_min_length FROM ...") 같은 **직접 조회 금지**
+- 모든 정책은 `IPolicyProvider`, `IConfigurationProvider`, `ITenantPolicyResolver`를 통해 주입
+- Policy Engine이 **Platform Core의 두 번째 엔진**이 됨
+- Identity Engine도 Policy Engine 위에서 동작
+
+**왜 중요한가**: 나중에
+```
+Restaurant  → Password = 8
+Tour        → Password = 12
+Bank        → Password = 16
+```
+이 되어도 Identity Engine은 **코드를 안 고친다**. Policy Engine만 설정 변경.
+
+### 12.8 C-15 — Zero Business Logic in Database (사장님 Platform CTO 확립, 2026-07-11)
+
+> **DB는 데이터 저장만 한다. Business Rule, Security Rule, Policy, Workflow를 가지지 않는다.**
+
+**DB DEFAULT를 허용하는 것**: **기술적 필드만**
+
+```sql
+-- ✅ 허용
+created_at        TIMESTAMPTZ DEFAULT clock_timestamp()
+updated_at        TIMESTAMPTZ DEFAULT clock_timestamp()
+version           BIGINT DEFAULT 1
+is_deleted        BOOLEAN DEFAULT false
+created_by        UUID
+uuid              UUID DEFAULT uuid_v7()
+```
+
+```sql
+-- ❌ 금지 (정책)
+password_min_length = 12        -- 정책 = Configuration Engine
+login_max_failures = 5          -- 정책 = Configuration Engine
+lock_duration_minutes = 30      -- 정책 = Configuration Engine
+session_timeout_minutes = 60    -- 정책 = Configuration Engine
+require_email_verification = ... -- 정책 = Configuration Engine
+two_factor_required = ...       -- 정책 = Configuration Engine
+```
+
+- 모든 비즈니스/보안 정책은 **Configuration Engine** 경유
+- DB는 단순 저장소
+- 정책 변경 시 DB 스키마 변경 불필요
+
+### 12.9 C-16 — Event First Architecture (사장님 Platform CTO 확립, 2026-07-11)
+
+> **모든 중요한 상태 변경은 Event를 발생시킨다. 직접 다른 Engine을 호출하지 않는다.**
+
+```
+Engine A ─→ Event Bus ─→ Engine B
+       (직접 호출 금지 ❌)
+```
+
+- Engine A가 Engine B의 메서드를 직접 호출 ❌
+- Engine A는 Event 발행 → Event Bus → Engine B가 구독
+- Event는 **많아도 괜찮다. 부족하면 안 된다**
+- 미래 Audit / Notification / Analytics / AI / Workflow 가 이 Event를 소비
+
+**Identity Engine 추가 Event (사장님 확립, 2026-07-11)**:
+- `auth.verification.requested` (이메일/SMS 인증 코드 요청)
+- `auth.2fa.challenge.completed` (2FA challenge 응답)
+- `auth.oauth.initiated` (OAuth 시작)
+- `auth.session.revoked.user` (사용자가 세션 종료)
+- `auth.provider.config.changed` (Admin이 Provider 설정 변경)
+- `auth.credentials.created` (Admin이 Credential 생성)
+- `auth.credentials.deleted` (Admin이 Credential 삭제)
+
+---
+
 ## 13. Standard Development Gate (모든 엔진 공통)
 
 > **사장님 Platform CTO 확립 (2026-07-11)** — 모든 엔진이 동일한 품질 기준을 통과하도록 표준화된 게이트.

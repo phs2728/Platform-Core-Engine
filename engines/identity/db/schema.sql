@@ -360,55 +360,62 @@ CREATE POLICY tenant_isolation_password_resets ON password_resets
 -- Tenant당 1개. 모든 보안 정책의 SSoT.
 -- ---------------------------------------------------------------------
 
+-- ---------------------------------------------------------------------
+-- 사장님 헌법 §C-15 (Zero Business Logic in Database) 적용
+-- 보안 정책의 DEFAULT 값은 DB에 두지 않는다.
+-- 모든 정책 값은 Policy Engine (engines/policy/) 경유로 application이 명시.
+-- 기술 필드 (id, version, updated_at)만 DEFAULT.
+-- ---------------------------------------------------------------------
+
 CREATE TABLE security_policies (
   tenant_id                              uuid PRIMARY KEY
                                               REFERENCES tenants(id) ON DELETE CASCADE,
 
-  -- Password
-  password_min_length                    integer NOT NULL DEFAULT 12 CHECK (password_min_length >= 8),
-  password_require_uppercase             boolean NOT NULL DEFAULT true,
-  password_require_lowercase             boolean NOT NULL DEFAULT true,
-  password_require_number                boolean NOT NULL DEFAULT true,
-  password_require_special               boolean NOT NULL DEFAULT true,
+  -- Password (정책 값 — DEFAULT 없음, C-15)
+  password_min_length                    integer NOT NULL CHECK (password_min_length >= 8),
+  password_require_uppercase             boolean NOT NULL,
+  password_require_lowercase             boolean NOT NULL,
+  password_require_number                boolean NOT NULL,
+  password_require_special               boolean NOT NULL,
   password_expiration_days               integer CHECK (password_expiration_days IS NULL OR password_expiration_days > 0),
-  password_history_count                 integer NOT NULL DEFAULT 5 CHECK (password_history_count >= 0),
+  password_history_count                 integer NOT NULL CHECK (password_history_count >= 0),
 
-  -- Lock & Failure
-  login_max_failures                     integer NOT NULL DEFAULT 5 CHECK (login_max_failures > 0),
-  lock_duration_minutes                  integer NOT NULL DEFAULT 30 CHECK (lock_duration_minutes > 0),
-  rate_limit_per_ip_max                  integer NOT NULL DEFAULT 5,
-  rate_limit_per_ip_window_seconds       integer NOT NULL DEFAULT 900,
-  rate_limit_per_identifier_max          integer NOT NULL DEFAULT 10,
-  rate_limit_per_identifier_window_seconds integer NOT NULL DEFAULT 900,
+  -- Lock & Failure (정책 값 — DEFAULT 없음, C-15)
+  login_max_failures                     integer NOT NULL CHECK (login_max_failures > 0),
+  lock_duration_minutes                  integer NOT NULL CHECK (lock_duration_minutes > 0),
+  rate_limit_per_ip_max                  integer NOT NULL,
+  rate_limit_per_ip_window_seconds       integer NOT NULL,
+  rate_limit_per_identifier_max          integer NOT NULL,
+  rate_limit_per_identifier_window_seconds integer NOT NULL,
 
-  -- Session
-  session_timeout_minutes                integer NOT NULL DEFAULT 60
+  -- Session (정책 값 — DEFAULT 없음, C-15)
+  session_timeout_minutes                integer NOT NULL
                                               CHECK (session_timeout_minutes BETWEEN 5 AND 10080),
-  remember_me_days                       integer NOT NULL DEFAULT 30 CHECK (remember_me_days > 0),
+  remember_me_days                       integer NOT NULL CHECK (remember_me_days > 0),
   max_concurrent_sessions                integer CHECK (max_concurrent_sessions IS NULL OR max_concurrent_sessions > 0),
 
-  -- Verification
-  require_email_verification             boolean NOT NULL DEFAULT false,
-  require_phone_verification             boolean NOT NULL DEFAULT false,
-  verification_expiration_minutes        integer NOT NULL DEFAULT 15 CHECK (verification_expiration_minutes > 0),
-  verification_max_attempts              integer NOT NULL DEFAULT 5 CHECK (verification_max_attempts > 0),
+  -- Verification (정책 값 — DEFAULT 없음, C-15)
+  require_email_verification             boolean NOT NULL,
+  require_phone_verification             boolean NOT NULL,
+  verification_expiration_minutes        integer NOT NULL CHECK (verification_expiration_minutes > 0),
+  verification_max_attempts              integer NOT NULL CHECK (verification_max_attempts > 0),
 
-  -- 2FA
-  two_factor_required                    boolean NOT NULL DEFAULT false,
-  two_factor_methods                     jsonb NOT NULL DEFAULT '["totp"]'::jsonb
+  -- 2FA (정책 값 — DEFAULT 없음, C-15)
+  two_factor_required                    boolean NOT NULL,
+  two_factor_methods                     jsonb NOT NULL
                                               CHECK (jsonb_typeof(two_factor_methods) = 'array'),
 
-  -- CAPTCHA
-  captcha_enabled                        boolean NOT NULL DEFAULT false,
+  -- CAPTCHA (정책 값 — DEFAULT 없음, C-15)
+  captcha_enabled                        boolean NOT NULL,
   captcha_provider                       text CHECK (captcha_provider IS NULL OR captcha_provider IN
                                               ('hcaptcha', 'recaptcha', 'turnstile')),
-  captcha_trigger_after_failures         integer NOT NULL DEFAULT 3 CHECK (captcha_trigger_after_failures > 0),
+  captcha_trigger_after_failures         integer NOT NULL CHECK (captcha_trigger_after_failures > 0),
 
-  -- Audit
+  -- Audit (정책 값 — DEFAULT 없음, C-15)
   audit_retention_days                   integer CHECK (audit_retention_days IS NULL OR audit_retention_days > 0),
 
-  -- Verification Flow
-  require_admin_approval                 boolean NOT NULL DEFAULT false,
+  -- Verification Flow (정책 값 — DEFAULT 없음, C-15)
+  require_admin_approval                 boolean NOT NULL,
 
   updated_at                             timestamptz NOT NULL DEFAULT clock_timestamp()
 );

@@ -477,6 +477,163 @@ interface IdentityDomainEvent {
 
 ---
 
+### 2.11 확장 Events (사장님 Platform CTO 확립, 2026-07-11)
+
+> **사장님 확립**: "Event는 많아도 괜찮습니다. 부족하면 안 됩니다. 미래 Audit / Notification / Analytics / AI / Workflow가 이 Event를 사용합니다."
+
+이 섹션의 Event는 Identity Engine이 직접 발생시키지 않을 수 있지만, **플랫폼이 통합적으로 알아야 할 이벤트**입니다. 다른 엔진이 발생시키거나, Identity Engine이 발생시킬 수도 있습니다.
+
+#### `auth.verification.requested` (v1.0.0)
+
+**트리거**: 이메일/SMS 인증 코드 발송 요청 시
+
+**Entity**: `user` (또는 null — 가입 전)
+
+**Payload**:
+```json
+{
+  "userId": "018f0e5c-...",
+  "identityId": "018f0e5c-...",
+  "channel": "email",                      // 'email' | 'sms'
+  "type": "email_verification",            // 'email_verification' | 'sms_verification' | 'passwordless_login'
+  "target": "t***@example.com",            // 마스킹
+  "ipAddress": "203.0.113.42",
+  "userAgent": "Mozilla/5.0..."
+}
+```
+
+**구독 권장**: Notification (실제 발송 확인), Analytics (인증 코드 요청 빈도), Audit
+
+---
+
+#### `auth.2fa.challenge.completed` (v1.0.0)
+
+**트리거**: 2FA challenge에 사용자가 응답했을 때 (성공/실패 모두)
+
+**Entity**: `user`
+
+**Payload**:
+```json
+{
+  "userId": "018f0e5c-...",
+  "method": "totp",                        // 'totp' | 'email_otp' | 'sms_otp'
+  "result": "success",                     // 'success' | 'failure'
+  "reason": "invalid_code",                // failure 시
+  "ipAddress": "203.0.113.42"
+}
+```
+
+**구독 권장**: Audit (2FA 실패 추적), AI (이상 행동 감지)
+
+---
+
+#### `auth.oauth.initiated` (v1.0.0)
+
+**트리거**: OAuth 인증 흐름 시작 시
+
+**Entity**: `user` (또는 null — 가입 전)
+
+**Payload**:
+```json
+{
+  "userId": "018f0e5c-...",
+  "provider": "oauth_google",
+  "state": "csrf-protection-token",
+  "redirectUri": "https://app.example.com/auth/callback/google",
+  "ipAddress": "203.0.113.42"
+}
+```
+
+**구독 권장**: Analytics (OAuth 사용 통계), AI (이상 행동)
+
+---
+
+#### `auth.session.revoked.user` (v1.0.0)
+
+**트리거**: 사용자가 특정 세션을 명시적으로 종료했을 때 (user logout / revoke session)
+
+**Entity**: `session`
+
+**Payload**:
+```json
+{
+  "userId": "018f0e5c-...",
+  "sessionId": "018f0e5c-...",
+  "reason": "user_initiated",              // 'user_initiated' | 'concurrent_session_limit'
+  "ipAddress": "203.0.113.42"
+}
+```
+
+**구독 권장**: Audit, Notification (다른 디바이스에서 알림)
+
+---
+
+#### `auth.provider.config.changed` (v1.0.0)
+
+**트리거**: Admin이 OAuth Provider 설정을 변경했을 때
+
+**Entity**: `auth_provider`
+
+**Payload**:
+```json
+{
+  "providerId": "oauth_google",
+  "providerType": "oauth_google",
+  "adminId": "018f0e5c-...",
+  "changes": [
+    { "field": "enabled", "from": false, "to": true },
+    { "field": "scopes", "from": ["openid"], "to": ["openid", "email", "profile"] }
+  ]
+}
+```
+
+**구독 권장**: Audit (필수), Notification (관리자 변경 알림)
+
+---
+
+#### `auth.credentials.created` (v1.0.0)
+
+**트리거**: Admin이 Tenant Credential (OAuth Client Secret, SMTP Password 등)을 새로 생성했을 때
+
+**Entity**: `tenant_credential`
+
+**Payload**:
+```json
+{
+  "credentialId": "018f0e5c-...",
+  "purpose": "oauth_google",               // CredentialPurpose
+  "name": "Production Google OAuth",
+  "adminId": "018f0e5c-..."
+}
+```
+
+> **보안**: `encrypted_payload`는 Event payload에 포함 금지 (사장님 헌법 §C-15 준수).
+
+**구독 권장**: Audit (필수), Notification (보안 알림)
+
+---
+
+#### `auth.credentials.deleted` (v1.0.0)
+
+**트리거**: Admin이 Tenant Credential을 삭제했을 때
+
+**Entity**: `tenant_credential`
+
+**Payload**:
+```json
+{
+  "credentialId": "018f0e5c-...",
+  "purpose": "oauth_google",
+  "name": "Production Google OAuth",
+  "adminId": "018f0e5c-...",
+  "reason": "rotation"                     // 'rotation' | 'compromised' | 'unused'
+}
+```
+
+**구독 권장**: Audit (필수), Notification (보안 알림)
+
+---
+
 ## 3. Event Schema Versioning
 
 ### 3.1 정책
