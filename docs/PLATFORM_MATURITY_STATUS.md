@@ -19,8 +19,34 @@
 | Authorization | 4 | 🟡 RC | v0.2.0 | — |
 | Event Bus | 1 | 🟡 Beta | v0.1.0 | Phase 0 |
 | Communication | 2 | 🟡 RC | v0.1.0 | — |
-| **Catalog** | **4** | **🟡 RC1** | **v0.1.0** | **Sprint 1** |
-| **Pricing** | **4** | **🟡 RC1** | **v0.1.0** | **Sprint 1** |
+| Catalog | 4 | 🟡 RC1 | v0.1.0 | Sprint 1 |
+| Pricing | 4 | 🟡 RC1 | v0.1.0 | Sprint 1 |
+| **Media** | **4** | **🟡 RC1** | **v0.1.0** | **Sprint 1** |
+
+---
+
+## Business Foundation Phase — 완료 ✅
+
+```
+① Catalog (RC1) ✅
+② Pricing (RC1) ✅
+③ Media (RC1) ✅
+   ─────────────────────
+   Business Foundation 3/3 완료
+```
+
+### 다음 Phase: Business Engines (Phase 5)
+
+```
+④ Inventory
+   ↓
+⑤ Booking
+   ↓
+⑥ Order
+   ↓
+⑦ Payment
+   ↓
+⑧ Review
 
 ---
 
