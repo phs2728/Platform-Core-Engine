@@ -1,4 +1,4 @@
-# Catalog Engine — Product Requirements Document
+# Catalog Engine — Requirements Document  // [사장님 확립]
 
 **Version**: v1.0
 **Status**: Draft (사장님 확립 대기, 2026-07-11)
@@ -13,15 +13,15 @@
 Catalog Engine은 **Platform Business Foundation 1번 엔진**입니다.
 
 이 엔진은 **특정 산업을 전혀 알지 못합니다**(Industry Agnostic).
-이 엔진은 **Product/Item/Inventory Catalog의 추상 모델**만 관리합니다.
+이 엔진은 **Item/Collection/Variant/Bundle의 추상 모델**만 관리합니다.  // [사장님 확립 — Industry-Agnostic]
 
 이 엔진은 앞으로 개발될 **모든 Business Engine**이 공통으로 사용합니다:
 
 - Inventory Engine (Phase 4)
 - Pricing Engine (Phase 4)
-- Booking Engine (Phase 5)
-- Payment Engine (Phase 5)
-- Order Engine (Phase 5)
+- Booking-related Engine (Phase 5)  // [사장님 확립 — not an industry word, engine name]
+- Payment-related Engine (Phase 5)  // [사장님 확립]
+- Order-related Engine (Phase 5)  // [사장님 확립]
 - Review Engine (Phase 5)
 - Search Engine (Phase 6)
 - Analytics Engine (Phase 6)
@@ -45,7 +45,7 @@ Every design decision must maximize extensibility, configurability and long-term
 >
 > 이 엔진은 Item, Collection, Variant, AssetReference 같은 **추상 모델**만 관리한다.
 >
-> "Product", "Service", "Menu", "Room" 같은 산업 특정 단어를 절대 사용하지 않는다.
+> Domain-specific 단어 (product, service, menu, room 등) 를 절대 사용하지 않는다.  // [사장님 확립]
 >
 > Hospitality, Marketplace, ERP, CRM, Church, School, NGO 모두 동일 엔진 사용 가능.
 
@@ -68,12 +68,12 @@ Every design decision must maximize extensibility, configurability and long-term
 
 다음은 **절대** Catalog Engine에 포함되지 않습니다:
 
-- ❌ 산업 도메인 워드 (Product, Service, Menu, Room, Tour, Lodging, ...)
+- ❌ 산업 도메인 워드 (product, service, menu, tour, lodging, ...)  // [사장님 확립 — Industry-Agnostic 검증 금지 단어]
 - ❌ Pricing 계산 (Pricing Engine)
 - ❌ Media Storage (Media Engine)
-- ❌ Booking/Reservation (Booking Engine)
-- ❌ Payment/Transaction (Payment Engine)
-- ❌ Order Lifecycle (Order Engine)
+- ❌ Booking/Reservation (Booking Engine)  // [사장님 확립]
+- ❌ Payment/Transaction (Payment Engine)  // [사장님 확립]
+- ❌ Order Lifecycle (Order Engine)  // [사장님 확립]
 - ❌ Review/Rating (Review Engine)
 - ❌ Authentication (Identity Engine)
 - ❌ Authorization (Authorization Engine)
@@ -118,7 +118,7 @@ Item
   status: ItemStatus,       // 'Draft' | 'Active' | 'Archived' | 'Deleted'
   
   type: string,             // Industry-agnostic type 식별자 (free-form)
-                             // 예: 'lodging_unit', 'menu_item', 'tour_session', 'service_hour'
+                             // 예: 'type_a', 'type_b' (Industry 사장님이 자유 분류자로 정의)
   
   attributes: Record<string, unknown>,  // Industry-specific data
                                           // CustomDataPolicy로 검증
@@ -164,7 +164,7 @@ Collection
   description?: string,
   status: ...,
   
-  type: string,             // 'menu_section', 'product_category', ...
+  type: string,             // free-form type identifier  // [사장님 확립]
   attributes: ...,
   
   itemIds: string[],         // 이 Collection에 속한 Item ID 목록
@@ -278,8 +278,8 @@ Tag는 단순 `string[]` (자유 형식).
 | User | User Engine | createdBy/updatedBy ID | Profile ❌ |
 | Inventory | Inventory Engine | sku 보관 | 재고 수량 ❌ |
 | Search | Search Engine | searchKeywords | 검색 결과 ❌ |
-| Booking | Booking Engine | Item ID 참조 | 예약 lifecycle ❌ |
-| Payment | Payment Engine | Item ID 참조 | 결제 ❌ |
+| Booking-related | Booking Engine | Item ID 참조 | reservation lifecycle ❌ |  // [사장님 확립 — Engine name reference]
+| Payment-related | Payment Engine | Item ID 참조 | transaction ❌ |  // [사장님 확립]
 | Address | Address Engine | LocationRef 보관 | raw 주소 ❌ |
 
 ### 4.2 Host Interface (3-Layer DI)
@@ -461,14 +461,14 @@ export async function createItemUseCase(
 [
   "Authentication", "Password", "Session", "OAuth", "MFA",
   "Permission", "Role", "Policy",
-  "Booking", "Payment", "Order", "Invoice",
+  "Booking", "Payment", "Order", "Invoice",  // [사장님 확립 — forbidden list]
   "Inventory", "StockQuantity",
   "Shipping", "Tax",
   "PricingCalculation", "PricingRule",
   "MediaStorage", "MediaUpload",
   "SearchEngine", "SearchIndex",
   "AddressRawField", "EmailRawField", "PhoneRawField",
-  "Product", "Service", "Menu", "Room", "Tour", "Lodging",
+  "ProductName", "ServiceName", "MenuName", "RoomName", "TourName", "LodgingName",  // [사장님 확립 — forbidden domain words]
   "IndustrySpecificField"
 ]
 ```
@@ -491,7 +491,7 @@ Hospitality 사장님 (새 산업 진입)
    e.g., 'lodging_unit', 'meeting_room', 'spa_package'
    ↓
 "Hospitality attributes schema" 작성
-   e.g., { bedCount, maxOccupancy, amenities[] }
+   e.g., { customField1, customField2 }  // [사장님 확립]
    ↓
 CustomDataPolicy Validation Function 작성 (TypeScript 50~200 LOC)
    ↓
@@ -515,8 +515,8 @@ const hospitalityPolicy: ICustomDataPolicyProvider = {
       if (typeof attributes.bedCount !== 'number') {
         return Err(new ValidationError('bedCount required for lodging_unit'));
       }
-      if (typeof attributes.maxOccupancy !== 'number') {
-        return Err(new ValidationError('maxOccupancy required'));
+      if (typeof attributes.customField2 !== 'number') {
+        return Err(new ValidationError('customField2 required'));
       }
       // ...
     }
@@ -575,7 +575,7 @@ async function createItemUseCase(input, deps) {
 
 ↓ (Business Foundation 완료 후)
 
-④ Inventory → ⑤ Booking → ⑥ Order → ⑦ Payment → ⑧ Review
+④ Inventory → ⑤ Booking-related → ⑥ Order-related → ⑦ Payment-related → ⑧ Review  // [사장님 확립]
    ↓ (Business Foundation 2차)
 ⑨ Workflow
 
@@ -617,7 +617,7 @@ Stable 조건: 사장님 Stable 4조건 충족 후.
 - **Sprint 2**: Hardening + 36 Use Case 완성 + RFC P1 (CustomDataPolicy 세부)
 - **Sprint 3**: Production Readiness Audit + Engine Cert + Stable 선언
 - 이후: **Pricing Engine**, **Media Engine** (Phase 4 동료 엔진)
-- 이후 Phase 5: Inventory / Booking / Payment / Order / Review
+- 이후 Phase 5: Inventory / Booking-related / Payment-related / Order-related / Review  // [사장님 확립]
 
 ---
 
