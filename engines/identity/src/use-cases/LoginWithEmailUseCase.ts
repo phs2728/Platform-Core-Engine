@@ -1,23 +1,12 @@
-/**
- * Email Login Use Case (Sprint 2C-1 MVP)
- *
- * - Email/Password 검증
- * - Password verify
- * - Session 생성
- * - Event: auth.login.success / auth.login.failure
- */
-
-import { z } from 'zod';
 import {
   Ok,
   Err,
   type Result,
-  Email,
   AuthenticationError,
-  NotFoundError,
   type EventEnvelope,
   createEnvelope,
 } from '@platform/core-sdk';
+import { recordAudit } from '../domain/audit.js';
 import type {
   IClock,
   IIdGenerator,
@@ -26,14 +15,29 @@ import type {
   IAccountRepository,
   ISessionRepository,
   IEventBus,
+  IAuditLogRepository,
   SessionRecord,
 } from '../interfaces/index.js';
+
+/**
+ * LoginUseCase With Account Lock (Sprint 2C-2-3)
+ *
+ * 사장님 확립: 로그인 실패 N회 → 계정 잠금.
+ *
+ * 흐름:
+ * 1) Password 잘못 → failedAttempts++
+ * 2) failedAttempts >= maxFailures → account.lockedUntil = now + lockDuration
+ * 3) Lock된 계정은 로그인 자체 차단 (AuthenticationError reason: account_locked)
+ * 4) Login 성공 → failedAttempts 리셋, lockedUntil = null
+ */
 
 export interface LoginInput {
   email: string;
   password: string;
   tenantId: string;
   correlationId: string;
+  ipAddress?: string;
+  userAgent?: string;
 }
 
 export interface LoginOutput {
@@ -54,37 +58,89 @@ export interface LoginFailurePayload {
   failedAt: string;
 }
 
-const sessionDurationHours = 24; // 사장님 확립 — Sprint 후속에서 configurable
-
-const loginSchema = z.object({
-  email: Email.schema(),
-  password: z.string().min(1),
-});
+export interface LoginDeps {
+  accountRepository: IAccountRepository & {
+    incrementFailedAttempts(id: string): Promise<number>;
+    resetFailedAttempts(id: string): Promise<void>;
+  };
+  passwordHasher: IPasswordHasher;
+  sessionSigner: ISessionSigner;
+  sessionRepository: ISessionRepository;
+  idGenerator: IIdGenerator;
+  clock: IClock;
+  eventBus: IEventBus;
+  auditLogRepository: IAuditLogRepository;
+  policy: {
+    maxFailures: number;
+    lockDurationMinutes: number;
+    sessionDurationHours: number;
+  };
+}
 
 export async function loginWithEmailUseCase(
   input: LoginInput,
   deps: LoginDeps,
-): Promise<Result<LoginOutput, NotFoundError | AuthenticationError>> {
-  // 1. Schema 검증
-  const parse = loginSchema.safeParse({ email: input.email, password: input.password });
-  if (!parse.success) {
-    return Err(new AuthenticationError('Invalid input', { details: { reason: 'invalid_credentials' } }));
-  }
+): Promise<Result<LoginOutput, AuthenticationError>> {
+  const normalizedEmail = input.email.toLowerCase().trim();
 
-  const normalizedEmail = Email.normalize(input.email);
-
-  // 2. Account 조회
+  // 1. Account 조회
   const accountResult = await deps.accountRepository.findByEmail(input.tenantId, normalizedEmail);
   if (!accountResult.ok) {
-    // 존재하지 않아도 같은 에러 (계정 enumeration 방지)
-    return Err(new AuthenticationError('Invalid credentials', { details: { reason: 'invalid_credentials' } }));
+    // 존재하지 않아도 같은 응답 (enumeration 방지)
+    return Err(
+      new AuthenticationError('Invalid credentials', {
+        details: { reason: 'invalid_credentials' },
+      }),
+    );
   }
   const account = accountResult.value;
 
+  // 2. Account Lock 체크 (Sprint 2C-2-3)
+  const lockedUntil = (account as any).lockedUntil as string | null | undefined;
+  if (lockedUntil && new Date(lockedUntil) > deps.clock.now()) {
+    await recordAudit(deps.auditLogRepository, {
+      accountId: account.id,
+      tenantId: input.tenantId,
+      eventType: 'login_failed',
+      ipAddress: input.ipAddress,
+      userAgent: input.userAgent,
+      metadata: { reason: 'account_locked', lockedUntil },
+    });
+    return Err(
+      new AuthenticationError('Account temporarily locked', {
+        details: { reason: 'account_locked', lockedUntil },
+      }),
+    );
+  }
+
   // 3. Password verify
   const passwordOk = await deps.passwordHasher.verify(input.password, account.passwordHash);
+
   if (!passwordOk) {
-    // Login failure event
+    // 실패: failedAttempts++, 임계치 초과 시 lock
+    const failedAttempts = await deps.accountRepository.incrementFailedAttempts(account.id);
+    let lockedUntilTime: string | null = null;
+    let reason = 'invalid_credentials';
+
+    if (failedAttempts >= deps.policy.maxFailures) {
+      const lockEnd = new Date(
+        deps.clock.now().getTime() + deps.policy.lockDurationMinutes * 60 * 1000,
+      );
+      await deps.accountRepository.setLocked(account.id, lockEnd.toISOString());
+      lockedUntilTime = lockEnd.toISOString();
+      reason = 'account_locked';
+
+      await recordAudit(deps.auditLogRepository, {
+        accountId: account.id,
+        tenantId: input.tenantId,
+        eventType: 'account_locked',
+        ipAddress: input.ipAddress,
+        userAgent: input.userAgent,
+        metadata: { failedAttempts, lockedUntil: lockedUntilTime },
+      });
+    }
+
+    // Event
     const failureEnvelope: EventEnvelope<LoginFailurePayload> = createEnvelope({
       eventId: deps.idGenerator.generate(),
       aggregateId: account.id,
@@ -97,19 +153,37 @@ export async function loginWithEmailUseCase(
       schemaRef: 'auth.login.failure.v1',
       payload: {
         email: normalizedEmail,
-        reason: 'invalid_credentials',
+        reason,
         failedAt: deps.clock.now().toISOString(),
       },
     });
     await deps.eventBus.emit(failureEnvelope);
 
-    return Err(new AuthenticationError('Invalid credentials', { details: { reason: 'invalid_credentials' } }));
+    // Audit
+    await recordAudit(deps.auditLogRepository, {
+      accountId: account.id,
+      tenantId: input.tenantId,
+      eventType: 'login_failed',
+      ipAddress: input.ipAddress,
+      userAgent: input.userAgent,
+      metadata: { reason, failedAttempts, lockedUntil: lockedUntilTime },
+    });
+
+    return Err(
+      new AuthenticationError(
+        reason === 'account_locked' ? 'Account temporarily locked' : 'Invalid credentials',
+        { details: { reason, lockedUntil: lockedUntilTime } },
+      ),
+    );
   }
 
-  // 4. Session 생성
+  // 4. Login 성공: failedAttempts 리셋
+  await deps.accountRepository.resetFailedAttempts(account.id);
+
+  // 5. Session 생성
   const sessionId = deps.idGenerator.generate();
   const issuedAt = deps.clock.now();
-  const expiresAt = new Date(issuedAt.getTime() + sessionDurationHours * 3600 * 1000);
+  const expiresAt = new Date(issuedAt.getTime() + deps.policy.sessionDurationHours * 3600 * 1000);
 
   const sessionToken = await deps.sessionSigner.sign({
     accountId: account.id,
@@ -129,7 +203,7 @@ export async function loginWithEmailUseCase(
   };
   await deps.sessionRepository.insert(sessionRecord);
 
-  // 5. Login success event
+  // 6. Event
   const successEnvelope: EventEnvelope<LoginSuccessPayload> = createEnvelope({
     eventId: deps.idGenerator.generate(),
     aggregateId: account.id,
@@ -148,19 +222,19 @@ export async function loginWithEmailUseCase(
   });
   await deps.eventBus.emit(successEnvelope);
 
+  // 7. Audit
+  await recordAudit(deps.auditLogRepository, {
+    accountId: account.id,
+    tenantId: input.tenantId,
+    eventType: 'login_success',
+    ipAddress: input.ipAddress,
+    userAgent: input.userAgent,
+    metadata: { sessionId },
+  });
+
   return Ok({
     accountId: account.id,
     sessionToken,
     expiresAt: expiresAt.toISOString(),
   });
-}
-
-export interface LoginDeps {
-  accountRepository: IAccountRepository;
-  passwordHasher: IPasswordHasher;
-  sessionSigner: ISessionSigner;
-  sessionRepository: ISessionRepository;
-  idGenerator: IIdGenerator;
-  clock: IClock;
-  eventBus: IEventBus;
 }
