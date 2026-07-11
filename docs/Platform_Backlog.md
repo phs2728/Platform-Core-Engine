@@ -18,16 +18,18 @@
 
 ---
 
-## Sprint 2A 피드백 TODO (사장님 평가 92/100)
+## Sprint 2B-2 피드백 TODO (사장님 평가 92/100)
 
 | ID | Priority | Target | 항목 | 사유 |
 |---|---|---|---|---|
 | **RFC-001** | **P1** | Phase 2 | Configuration Engine 분리 (Policy Engine에서 Loader 추출) | SRP 위반. 장기적으로 별도 엔진이 됨. |
-| **RFC-002** | **P2** | Sprint 2C | Policy Resolution Metadata 확장 (tenantId, engine, cacheHit) | Debugging에 필수. |
 | **RFC-003** | **P1** | Sprint 2C | 3단 Cache (Memory → Redis → DB) | 매번 DB 조회 → Resolver 비효율. |
+| **RFC-002** | P2 | Sprint 2C | Policy Resolution Metadata 확장 (tenantId, engine, cacheHit) | Debugging에 필수. |
+| **RFC-005** | P2 | Sprint 2B | Event Bus Universal Core 통합 | EventEnvelope과 Universal Core IEventBus 연결. |
+| **RFC-006** | P2 | Sprint 2C | Repository 인터페이스 (IPolicyRepository) | DB 연결 추상화. |
+| **RFC-008** | P2 | Sprint 2C 이후 | Policy Engine → Core SDK PlatformError Migration | strict mode 호환성 이슈. Sprint 2B-2에서 보류. |
+| **RFC-019** | **P2** | Sprint 2C 이후 | Industry-Agnostic False Positive 16건 | GitHub actions/checkout, processor, rules 등 일반 단어 제외 규칙. Sprint 2B-2 발견. |
 | **RFC-004** | P3 | Future | Watch API (Hot Reload) | 정책 변경 시 자동 reload. 장기. |
-| **RFC-005** | **P2** | Sprint 2B | Event Bus Universal Core 통합 | EventEnvelope과 Universal Core IEventBus 연결. |
-| **RFC-006** | **P2** | Sprint 2C | Repository 인터페이스 (IPolicyRepository) | DB 연결 추상화. |
 | **RFC-007** | P3 | Future | Sprint 2A 후속 (Repository + Provider 실제) | 모노레포 workspace 설정 후 재검토. |
 
 ### P1 처리 (Active)

@@ -1171,17 +1171,36 @@ Stable
 7. Examples 실행 + PASS
 8. GitHub Actions Green
 9. PRG PASS
-10. Engine Certification PASS
+10. **Engine Certification PASS** ← Certification이 **Stable의 마지막 관문**
+
+**Stable 순서 (2026-07-11 수정)**:
+
+```
+RC
+  ↓
+Verification (pnpm 5개 Gate)
+  ↓
+Engine Certification ← 마지막 관문
+  ↓
+Stable
+```
+
+즉, **Certification을 통과했기 때문에 Stable이 되는 것**이지, Stable 후 Certification이 아님.
 
 **현재 상태** (2026-07-11):
-- Core SDK → **v1.0 RC1** (Release Candidate)
-- Identity Engine → ⏸ Stable 이후 시작
-- Phase 1 (Policy) → Sprint 2A 완료, RC 검증 대기
+- **Core SDK** → **v1.0 Stable** (사장님 Platform Owner 확립, CI Green 전제)
+- **Policy Engine** → RC 검증 대기 (Sprint 2A 완료)
+- **Identity Engine** → Sprint 2C-1 시작 승인 (Email MVP)
 
-**Stable 선언 후 Identity Engine 시작** 의 이유:
+**Stable 후 Identity Engine 시작** 의 이유:
 > "Identity는 Core SDK 위에 만들어집니다. Core SDK가 Stable이 아닌데 Identity를 만들면 나중에 SDK가 바뀔 수 있습니다."
 
 이 원칙은 **의존성 안전 + Breaking Change 방지**.
+
+**Feature Branch 정책** (2026-07-11 추가):
+- main = release branch
+- 모든 구현은 `feature/*` Branch에서 진행
+- main은 PRG 통과 후만 Merge
 
 ### 12.16 C-20 — SDK Stability Rule (사장님 Platform Owner 확립, 2026-07-11)
 

@@ -118,6 +118,7 @@ if (loginEvent.version === '1.0.0') {
 
 const logger = createLogger({ engine: 'identity' });
 logger.info('Identity Engine started', {
+  engine: 'identity',
   tenantId: 'tenant-abc',
   version: '1.0.0',
 });

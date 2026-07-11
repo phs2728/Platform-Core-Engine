@@ -1,7 +1,7 @@
 {
   "name": "@platform/core-sdk",
-  "version": "1.0.0-rc.1",
-  "description": "Core SDK — Logger, Config, Policy, Errors, Result, Event, Validation (사장님 확립)",
+  "version": "1.0.0",
+  "description": "Core SDK — Logger, Config, Policy, Errors, Result, Event, Validation (사장님 확립, v1.0 Stable)",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
