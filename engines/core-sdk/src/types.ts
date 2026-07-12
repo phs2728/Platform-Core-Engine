@@ -24,4 +24,6 @@ export type EngineName =
   | 'universal-core'
   | 'policy'
   | 'platform-validation'
+  | 'query'
+  | 'search'
   | 'core-sdk';

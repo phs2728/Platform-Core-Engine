@@ -35,8 +35,13 @@ EXCLUDE_PATTERNS=(
   "sortOrder" "sortBy" "displayOrder" "mediaRef" "pricingRef"
   # Production Readiness Audit 등 일상 단어가 Product/Order/Reservation substring 매칭되는 경우 제외
   "Production" "Readiness" "Audit"
+<<<<<<< HEAD
   # Platform Validation Engine: engine IDs and action names are legitimate Platform vocabulary
   "engines/platform-validation"
+=======
+  # Platform Validation + Query Engine: engine IDs and event types are legitimate Platform vocabulary
+  "engines/platform-validation" "engines/query"
+>>>>>>> feature/query-engine-sprint-1
 )
 
 EXCLUDE_REGEX=$(IFS='|'; echo "${EXCLUDE_PATTERNS[*]}")

@@ -1,0 +1,31 @@
+{
+  "id": "query",
+  "name": "Query Engine (Projection Engine)",
+  "version": "0.1.0",
+  "phase": 6,
+  "status": "Draft",
+  "description": "CQRS Read Model Engine — Event-driven projections, dashboards, summaries, search feeds, AI context",
+  "depends_on": ["core-sdk", "event-bus"],
+  "provides": [
+    "Projection (materialized read models from events)",
+    "Dashboard (customer/organization/sales/operations)",
+    "Summary (booking/order/payment/review/inventory)",
+    "Timeline (activity/audit)",
+    "Search Feed (documents for Search Engine)",
+    "AI Context (facts for AI Engine)",
+    "Analytics (metrics/trend/statistics/top entities)",
+    "Event Replay, Checkpoint, Idempotency, Versioning"
+  ],
+  "events_emitted": [
+    "projection.created", "projection.updated", "projection.rebuilt",
+    "projection.refreshed", "projection.failed",
+    "dashboard.updated", "summary.updated", "timeline.updated",
+    "analytics.updated", "search.document.created", "search.document.updated",
+    "ai.context.updated"
+  ],
+  "events_subscribed": [],
+  "strict_boundaries": {
+    "owns": ["Projection", "Dashboard", "Summary", "Timeline", "SearchDocument", "AIContext", "Checkpoint", "AnalyticsMetrics"],
+    "forbidden": ["CRUD writes", "Business Logic", "Direct Engine Repository Access", "Authentication", "Authorization"]
+  }
+}
