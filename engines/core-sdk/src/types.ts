@@ -24,6 +24,10 @@ export type EngineName =
   | 'workflow'
   | 'universal-core'
   | 'policy'
+  | 'platform-validation'
+  | 'query'
+  | 'search'
+  | 'release-manager'
   | 'core-sdk'
   | 'platform-compatibility'
   | 'platform-guardian';

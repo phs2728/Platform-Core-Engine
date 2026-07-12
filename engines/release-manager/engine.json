@@ -1,0 +1,32 @@
+{
+  "id": "release-manager",
+  "name": "Platform Release Manager",
+  "version": "0.1.0",
+  "phase": 6,
+  "status": "Draft",
+  "description": "Release Engineering Layer — RC→Stable promotion, pipeline validation, tagging, changelog, rollback",
+  "depends_on": ["core-sdk", "event-bus"],
+  "provides": [
+    "Release Pipeline (Compatibility → Validation → Guardian → Checklist → Version → Tag → Note → Stable)",
+    "Semantic Versioning (major/minor/patch, alpha/beta/rc/stable channels)",
+    "Release Approval (multi-approver)",
+    "Git Tag Management",
+    "Release Note Generation (features/fixes/breaking/migration/upgrade)",
+    "Changelog Generation",
+    "Rollback Planning + Execution",
+    "Release History",
+    "Release Audit",
+    "CLI: pnpm release <engine> / pnpm release all"
+  ],
+  "events_emitted": [
+    "release.created", "release.approved", "release.rejected",
+    "release.published", "release.rollback",
+    "release.tag.created", "release.note.generated",
+    "release.validation.completed", "release.guardian.completed", "release.compatibility.completed"
+  ],
+  "events_subscribed": [],
+  "strict_boundaries": {
+    "owns": ["Release", "SemanticVersion", "ReleaseChecklist", "ReleaseApproval", "ReleaseNote", "Changelog", "Tag", "RollbackPlan", "ReleaseHistory"],
+    "forbidden": ["Engine Internal Modification", "Business Logic", "Direct Engine Repository Access"]
+  }
+}
