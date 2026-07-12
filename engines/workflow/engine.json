@@ -1,0 +1,43 @@
+{
+  "id": "workflow",
+  "name": "Workflow Engine",
+  "version": "0.1.0",
+  "phase": 6,
+  "status": "Draft",
+  "description": "Platform SSoT for state machine, process orchestration, approval flow, task, timer, escalation. Industry-Agnostic Foundation Engine consumed by Booking, Order, Payment, Review, Approval, CMS, ERP, CRM, Marketplace, Hospitality, Healthcare engines.",
+  "depends_on": ["core-sdk", "policy", "organization", "identity", "user", "event-bus", "communication"],
+  "provides": [
+    "createWorkflow", "updateWorkflow", "archiveWorkflow", "restoreWorkflow",
+    "deleteWorkflow", "getWorkflow", "listWorkflows", "searchWorkflows",
+    "startWorkflow", "cancelWorkflow", "restartWorkflow",
+    "getWorkflowInstance", "listWorkflowInstances",
+    "transition", "approve", "reject", "rollback", "retry", "skip",
+    "createTask", "assignTask", "completeTask", "cancelTask", "reassignTask",
+    "scheduleTimer", "cancelTimer",
+    "getHistory", "getTimeline"
+  ],
+  "events_emitted": [
+    "workflow.created", "workflow.updated", "workflow.started",
+    "workflow.transitioned", "workflow.completed", "workflow.cancelled", "workflow.failed",
+    "workflow.task.created", "workflow.task.completed",
+    "workflow.timer.expired", "workflow.escalated",
+    "workflow.approval.requested", "workflow.approval.completed",
+    "workflow.audit.recorded"
+  ],
+  "events_subscribed": ["organization.archived", "organization.deleted"],
+  "strict_boundaries": {
+    "owns": [
+      "Workflow", "WorkflowDefinition", "WorkflowInstance", "WorkflowTask",
+      "WorkflowState", "Transition", "ApprovalStep", "Timer", "Escalation",
+      "WorkflowHistory", "WorkflowAudit"
+    ],
+    "forbidden": [
+      "Authentication", "Password", "Session", "OAuth", "MFA",
+      "Permission", "Role",
+      "TransactionCapture", "TransactionRefund", "CardProcessing",
+      "CommerceProcessing", "ShipmentProcessing", "StockManagement",
+      "InventoryHold", "SlotManagement",
+      "AddressRawField", "EmailRawField", "PhoneRawField", "IndustrySpecificField"
+    ]
+  }
+}
