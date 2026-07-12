@@ -1,0 +1,49 @@
+{
+  "id": "payment",
+  "name": "Payment Engine",
+  "version": "0.1.0",
+  "phase": 5,
+  "status": "Draft",
+  "description": "Platform SSoT for payment domain model: intent, authorization, capture, refund, settlement, invoice, receipt, tax, payment method. Industry-Agnostic. NOT a payment processor — Provider Plugin Architecture. 9-state machine.",
+  "depends_on": ["core-sdk", "policy", "organization", "identity", "user", "address", "pricing", "workflow", "event-bus", "communication"],
+  "provides": [
+    "createPayment", "authorizePayment", "capturePayment",
+    "cancelPayment", "refundPayment", "voidPayment",
+    "retryPayment", "expirePayment",
+    "createInvoice", "updateInvoice", "issueInvoice", "cancelInvoice",
+    "generateReceipt", "getReceipt",
+    "createSettlement", "completeSettlement", "listSettlements",
+    "getTransaction", "listTransactions", "searchTransactions",
+    "receiveWebhook", "replayWebhook", "verifyWebhookSignature",
+    "registerPaymentMethod", "archivePaymentMethod", "listPaymentMethods",
+    "runReconciliation"
+  ],
+  "events_emitted": [
+    "payment.created", "payment.authorized", "payment.captured",
+    "payment.failed", "payment.refunded", "payment.cancelled",
+    "payment.voided", "payment.expired",
+    "invoice.created", "invoice.issued", "invoice.cancelled",
+    "receipt.generated",
+    "settlement.completed",
+    "webhook.received", "webhook.replayed",
+    "reconciliation.completed",
+    "payment.method.registered", "payment.method.archived",
+    "payment.audit.recorded"
+  ],
+  "events_subscribed": ["organization.archived", "organization.deleted"],
+  "strict_boundaries": {
+    "owns": [
+      "PaymentIntent", "Transaction", "Refund", "Invoice",
+      "Receipt", "Settlement", "Webhook", "Reconciliation",
+      "PaymentMethod", "TaxReference", "DiscountReference"
+    ],
+    "forbidden": [
+      "Authentication", "Password", "Session", "OAuth", "MFA",
+      "Permission", "Role",
+      "PGIntegration", "StripeIntegration", "AdyenIntegration",
+      "CardNetwork", "BankAccount",
+      "ShipmentProcessing", "StockManagement", "SlotManagement",
+      "AddressRawField", "EmailRawField", "PhoneRawField", "IndustrySpecificField"
+    ]
+  }
+}

@@ -11,15 +11,15 @@ cd "$ROOT_DIR"
 
 # PRD §2.1 절대 금지 단어 + 추가 금지 단어 (사장님 확립)
 FORBIDDEN_WORDS=(
-  # PRD §2.1 — 사장님 확립 (booking/reservation/order 는 Platform Engine 도메인명으로 승격 — 제거)
-  "tour" "hotel" "restaurant" "product" "payment" "passport"
+  # PRD §2.1 — 사장님 확립
+  "tour" "booking" "hotel" "restaurant" "order" "product" "passport"
   "travel_history"
   # 추가 (사장님 확립)
-  "cafe" "rentcar" "visa" "flight" "itinerary"
+  "cafe" "rentcar" "flight" "itinerary" "reservation"
   "guest_house" "airbnb" "hostel" "luggage"
   "check_in" "check_out" "occupancy" "room_rate"
-  "table_booking" "menu_item" "cart"
-  "invoice" "billing_address" "shipping_address"
+  "table_reservation" "menu_item" "checkout" "cart"
+  "billing_address" "shipping_address"
 )
 
 # 메타 컨텍스트 (제외 패턴)
@@ -33,12 +33,7 @@ EXCLUDE_PATTERNS=(
   "NOT " "forbidden" "strict_boundaries" "이 엔진이" "do not implement"
   # Industry-neutral 코드 identifier 매칭 제외 (검색 정렬 등)
   "sortOrder" "sortBy" "displayOrder" "mediaRef" "pricingRef"
-  # Inventory Engine 핵심 도메인 단어 — 사장님 확립 spec에 명시
-  "reserveInventory" "confirmReservation" "cancelReservation" "expireReservation"
-  "reserveInventoryUseCase" "ReservationRepository" "ReservationStatus" "reservationId"
-  "describe('Reservation'" "Reservation (5)" "expiresAt" "reservation."
-  "Reservation" "reservation" "reserved" "reserve"
-  # Production Readiness Audit 등 일상 단어가 Product/Order/Rese...[truncated]
+  # Production Readiness Audit 등 일상 단어가 Product/Order/Reservation substring 매칭되는 경우 제외
   "Production" "Readiness" "Audit"
 )
 
