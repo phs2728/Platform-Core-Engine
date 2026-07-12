@@ -18,7 +18,7 @@ FORBIDDEN_WORDS=(
   "cafe" "rentcar" "visa" "flight" "itinerary"
   "guest_house" "airbnb" "hostel" "luggage"
   "check_in" "check_out" "occupancy" "room_rate"
-  "table_reservation" "menu_item" "cart"
+  "table_booking" "menu_item" "cart"
   "invoice" "billing_address" "shipping_address"
 )
 
@@ -35,8 +35,6 @@ EXCLUDE_PATTERNS=(
   "sortOrder" "sortBy" "displayOrder" "mediaRef" "pricingRef"
   # Production Readiness Audit 등 일상 단어가 Product/Order/Reservation substring 매칭되는 경우 제외
   "Production" "Readiness" "Audit"
-  # Phase 6 Engines: engine IDs, event types, domains are legitimate Platform vocabulary
-  "engines/platform-validation" "engines/query" "engines/search" "engines/ai"
 )
 
 EXCLUDE_REGEX=$(IFS='|'; echo "${EXCLUDE_PATTERNS[*]}")
