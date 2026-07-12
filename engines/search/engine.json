@@ -1,0 +1,32 @@
+{
+  "id": "search",
+  "name": "Search Engine",
+  "version": "0.1.0",
+  "phase": 6,
+  "status": "Draft",
+  "description": "Universal Search Engine — indexes Query Engine projections, provides full-text search, autocomplete, ranking, faceting, analytics",
+  "depends_on": ["core-sdk", "event-bus"],
+  "provides": [
+    "Full-text search (7 match types)",
+    "Domain-specific search (catalog/organization/booking/review/media/user/payment)",
+    "Autocomplete & suggestions",
+    "Search ranking (boost/demote)",
+    "Faceted search",
+    "Highlight",
+    "Synonym expansion",
+    "Spell correction",
+    "Search analytics",
+    "Index management (rebuild/refresh)"
+  ],
+  "events_emitted": [
+    "search.document.indexed", "search.document.updated", "search.document.deleted",
+    "search.index.rebuilt", "search.index.refreshed",
+    "search.executed", "search.autocomplete",
+    "search.analytics.updated", "search.ranking.updated", "search.failed"
+  ],
+  "events_subscribed": [],
+  "strict_boundaries": {
+    "owns": ["SearchIndex", "IndexedDocument", "SearchResult", "AutocompleteEntry", "RankingRule", "SearchAnalytics"],
+    "forbidden": ["Direct Business Engine Repository Access", "CRUD writes", "Business Logic"]
+  }
+}
