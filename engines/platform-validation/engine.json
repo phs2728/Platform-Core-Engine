@@ -1,0 +1,57 @@
+{
+  "id": "platform-validation",
+  "name": "Platform Validation Engine",
+  "version": "0.1.0",
+  "phase": 6,
+  "status": "Draft",
+  "description": "Platform-wide E2E validation, scenario testing, certification, and release readiness",
+  "depends_on": [
+    "core-sdk",
+    "event-bus"
+  ],
+  "provides": [
+    "Scenario-based E2E testing",
+    "Regression suite execution",
+    "Smoke testing",
+    "Engine certification (7 areas)",
+    "Release validation",
+    "Platform health scoring",
+    "Coverage analysis",
+    "Readiness assessment",
+    "Validation reporting (7 types)",
+    "8 built-in business flow scenarios"
+  ],
+  "events_emitted": [
+    "validation.started",
+    "validation.completed",
+    "scenario.started",
+    "scenario.completed",
+    "scenario.failed",
+    "certification.completed",
+    "release.validated",
+    "platform.health.updated"
+  ],
+  "events_subscribed": [],
+  "strict_boundaries": {
+    "owns": [
+      "Scenario",
+      "ScenarioStep",
+      "ValidationRun",
+      "ValidationResult",
+      "ValidationReport",
+      "Certification",
+      "PlatformHealth",
+      "ValidationMetrics",
+      "BusinessFlow",
+      "RegressionSuite"
+    ],
+    "forbidden": [
+      "Business Logic",
+      "Domain Entity Persistence",
+      "Direct Engine Imports",
+      "Payment Processing",
+      "Booking Logic",
+      "User Authentication"
+    ]
+  }
+}
