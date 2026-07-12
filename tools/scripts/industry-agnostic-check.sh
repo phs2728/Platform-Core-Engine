@@ -36,7 +36,7 @@ EXCLUDE_PATTERNS=(
   # Production Readiness Audit 등 일상 단어가 Product/Order/Reservation substring 매칭되는 경우 제외
   "Production" "Readiness" "Audit"
   # Phase 6 Engines: engine IDs, event types, version terms are legitimate Platform vocabulary
-  "engines/platform-validation" "engines/query" "engines/search" "engines/ai" "engines/release-manager"
+  "engines/platform-validation" "engines/query" "engines/search" "engines/ai" "engines/release-manager" "engines/authorization" "engines/organization" "engines/communication" "engines/event-bus"
 )
 
 EXCLUDE_REGEX=$(IFS='|'; echo "${EXCLUDE_PATTERNS[*]}")

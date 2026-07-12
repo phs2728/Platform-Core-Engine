@@ -1,11 +1,14 @@
 {
   "id": "authorization",
   "name": "Authorization Engine",
-  "version": "0.2.0",
+  "version": "1.0.0-rc2",
   "phase": 4,
-  "status": "v1.0-RC",
+  "status": "RC2",
   "description": "Universal Authorization Engine — RBAC + ABAC + Policy + Resource + Permission Simulator. Decision Engine orchestrates all Resolvers. Expression-based ABAC. explain() API.",
-  "depends_on": ["core-sdk", "universal-core"],
+  "depends_on": [
+    "core-sdk",
+    "universal-core"
+  ],
   "provides": [
     "authorize",
     "can",
@@ -20,10 +23,12 @@
     "createPolicyUseCase"
   ],
   "events_emitted": [
-    "authorization.role.created", "authorization.role.assigned",
+    "authorization.role.created",
+    "authorization.role.assigned",
     "authorization.permission.assigned",
     "authorization.policy.created",
-    "authorization.decision.allow", "authorization.decision.deny"
+    "authorization.decision.allow",
+    "authorization.decision.deny"
   ],
   "events_subscribed": []
 }

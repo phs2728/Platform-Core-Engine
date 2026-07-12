@@ -75,7 +75,7 @@ export interface IRolePermission {
   tenantId: string;
   roleId: string;
   permissionKey: string;
-  /** 조건 (ABAC) — e.g., "ONLY assigned_tour", "ONLY own_hostel" */
+  /** 조건 (ABAC) — e.g., "ONLY assigned_resource", "ONLY own_organization" */
   condition: string | null;
   createdAt: string;
 }
@@ -97,7 +97,7 @@ export interface IRoleAssignment {
 }
 
 export interface AssignmentScope {
-  /** 리소스 제한 (e.g., 'tour:tour-123') */
+  /** 리소스 제한 (e.g., 'resource:item-123') */
   resourceType?: string;
   resourceId?: string;
   /** 커스텀 속성 */

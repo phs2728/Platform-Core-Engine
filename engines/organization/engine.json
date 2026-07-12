@@ -1,9 +1,9 @@
 {
   "id": "organization",
   "name": "Organization Engine",
-  "version": "0.1.0",
+  "version": "1.0.0-rc2",
   "phase": 3,
-  "status": "Draft",
+  "status": "RC2",
   "description": "[사장님 확립 2026-07-11] Single Source of Truth for all organizations across multiple industries. Industry-agnostic. NOT authentication. NOT authorization. NOT transactional commerce. NOT reservation systems. NOT inventory. NOT communication. NOT workflow.",
   "depends_on": [
     "core-sdk",

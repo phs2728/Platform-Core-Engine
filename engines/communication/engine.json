@@ -1,9 +1,9 @@
 {
   "id": "communication",
   "name": "Communication Engine",
-  "version": "0.1.0",
+  "version": "1.0.0-rc2",
   "phase": 2,
-  "status": "Draft",
+  "status": "RC2",
   "description": "Universal Communication Layer — Email, SMS, Push, Webhook, In-App, WhatsApp, Telegram, Slack, Discord, Teams, Voice. No Engine may send communication directly.",
   "depends_on": [
     "core-sdk",

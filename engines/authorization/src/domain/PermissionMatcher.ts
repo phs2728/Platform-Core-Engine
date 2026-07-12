@@ -41,7 +41,7 @@ export function matchesPermission(pattern: string, permission: string): boolean 
  * Condition Evaluator (ABAC)
  *
  * 사장님 확립:
- * "가이드는 tour.edit ONLY Assigned Tour"
+ * "가이드는 resource.edit ONLY Assigned Resource"
  * "호텔 직원은 room.update ONLY Own Hostel"
  */
 

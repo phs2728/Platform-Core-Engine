@@ -1,9 +1,9 @@
 {
   "id": "event-bus",
   "name": "Universal Event Bus",
-  "version": "0.1.0",
+  "version": "1.0.0-rc2",
   "phase": 1,
-  "status": "Draft",
+  "status": "RC2",
   "description": "Universal Event Bus — Pub/Sub for all Platform engines. Industry-Agnostic.",
   "depends_on": [
     "core-sdk",
