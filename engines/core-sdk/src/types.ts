@@ -23,4 +23,7 @@ export type EngineName =
   | 'workflow'
   | 'universal-core'
   | 'policy'
+  | 'platform-validation'
+  | 'query'
+  | 'search'
   | 'core-sdk';
