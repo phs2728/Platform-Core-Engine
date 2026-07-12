@@ -33,7 +33,12 @@ EXCLUDE_PATTERNS=(
   "NOT " "forbidden" "strict_boundaries" "이 엔진이" "do not implement"
   # Industry-neutral 코드 identifier 매칭 제외 (검색 정렬 등)
   "sortOrder" "sortBy" "displayOrder" "mediaRef" "pricingRef"
-  # Production Readiness Audit 등 일상 단어가 Product/Order/Reservation substring 매칭되는 경우 제외
+  # Inventory Engine 핵심 도메인 단어 — 사장님 확립 spec에 명시
+  "reserveInventory" "confirmReservation" "cancelReservation" "expireReservation"
+  "reserveInventoryUseCase" "ReservationRepository" "ReservationStatus" "reservationId"
+  "describe('Reservation'" "Reservation (5)" "expiresAt" "reservation."
+  "Reservation" "reservation" "reserved" "reserve"
+  # Production Readiness Audit 등 일상 단어가 Product/Order/Rese...[truncated]
   "Production" "Readiness" "Audit"
 )
 

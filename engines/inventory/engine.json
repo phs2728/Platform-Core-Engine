@@ -1,0 +1,93 @@
+{
+  "id": "inventory",
+  "name": "Inventory Engine",
+  "version": "0.1.0",
+  "phase": 5,
+  "status": "Draft",
+  "description": "[사장님 확립 2026-07-11] Platform SSoT for all reservable/sellable resources. Industry-Agnostic. Organization ownership + CustomDataPolicy. NOT order/payment/shipment — manages stock state only.",
+  "depends_on": [
+    "core-sdk",
+    "policy",
+    "organization",
+    "catalog",
+    "event-bus"
+  ],
+  "provides": [
+    "createInventory",
+    "updateInventory",
+    "archiveInventory",
+    "restoreInventory",
+    "deleteInventory",
+    "increaseStock",
+    "decreaseStock",
+    "adjustStock",
+    "reserveInventory",
+    "confirmReservation",
+    "cancelReservation",
+    "expireReservation",
+    "allocateInventory",
+    "releaseAllocation",
+    "checkAvailability",
+    "getAvailableQuantity",
+    "recordMovement",
+    "listMovements",
+    "getLedger",
+    "rebuildSnapshot",
+    "setThreshold",
+    "checkThreshold",
+    "transferInventory"
+  ],
+  "events_emitted": [
+    "inventory.created",
+    "inventory.updated",
+    "inventory.stock.increased",
+    "inventory.stock.decreased",
+    "inventory.adjusted",
+    "inventory.reserved",
+    "inventory.released",
+    "inventory.allocated",
+    "inventory.transfer.completed",
+    "inventory.threshold.reached",
+    "inventory.snapshot.updated",
+    "inventory.audit.recorded"
+  ],
+  "events_subscribed": [
+    "organization.archived",
+    "organization.deleted",
+    "catalog.archived"
+  ],
+  "strict_boundaries": {
+    "owns": [
+      "Inventory",
+      "StockItem",
+      "Reservation",
+      "Allocation",
+      "InventoryMovement",
+      "InventoryLedger",
+      "AvailabilitySnapshot",
+      "Threshold",
+      "Location",
+      "InventoryAudit"
+    ],
+    "forbidden": [
+      "Authentication",
+      "Password",
+      "Session",
+      "OAuth",
+      "MFA",
+      "Permission",
+      "Role",
+      "TransactionCapture",
+      "TransactionRefund",
+      "FinancialDocuments",
+      "SlotManagementSystems",
+      "CommerceProcessing",
+      "ShipmentProcessing",
+      "WarehouseManagement",
+      "AddressRawField",
+      "EmailRawField",
+      "PhoneRawField",
+      "IndustrySpecificField"
+    ]
+  }
+}
