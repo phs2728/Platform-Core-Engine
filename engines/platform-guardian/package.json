@@ -1,0 +1,39 @@
+{
+  "name": "@platform/engine-platform-guardian",
+  "version": "0.1.0",
+  "description": "Platform Guardian — Platform CTO AI. Consumes Compatibility Suite results, produces architecture audit, risk analysis, technical debt, roadmap, and final merge decision. NO BUSINESS LOGIC. PLATFORM GOVERNANCE ONLY.",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "lint": "echo 'lint: deferred to monorepo root'",
+    "typecheck": "tsc --noEmit",
+    "guardian": "tsx cli/run-guardian.ts",
+    "guardian:scan": "tsx cli/run-guardian.ts",
+    "guardian:merge": "tsx cli/run-merge.ts",
+    "guardian:release": "tsx cli/run-release.ts",
+    "guardian:roadmap": "tsx cli/run-roadmap.ts",
+    "guardian:health": "tsx cli/run-health.ts"
+  },
+  "dependencies": {
+    "@platform/core-sdk": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "typescript": "^5.4.0",
+    "vitest": "^1.6.0",
+    "tsx": "^4.7.0"
+  },
+  "engines": {
+    "node": ">=20.10.0"
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "id": "platform-compatibility",
+  "name": "Platform Compatibility Suite",
+  "version": "0.1.0",
+  "phase": 1,
+  "status": "Draft",
+  "description": "Platform QA Foundation — validates contracts, events, references, APIs, dependencies across all engines. NO BUSINESS LOGIC. QA ONLY. Auto-generates compatibility matrix, health scores, release reports.",
+  "depends_on": ["core-sdk"],
+  "provides": [
+    "runEventValidation",
+    "runReferenceValidation",
+    "runDependencyValidation",
+    "runApiValidation",
+    "runContractValidation",
+    "buildCompatibilityMatrix",
+    "buildEventGraph",
+    "calculateHealthScores",
+    "generateReleaseReports",
+    "calculatePlatformReadiness",
+    "runFullPlatformScan",
+    "generateAllReports"
+  ],
+  "events_emitted": [
+    "compatibility.scan.completed",
+    "compatibility.scan.failed",
+    "compatibility.violation.detected"
+  ],
+  "events_subscribed": []
+}

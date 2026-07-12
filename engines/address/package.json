@@ -1,0 +1,33 @@
+{
+  "name": "@platform/engine-address",
+  "version": "1.0.0",
+  "description": "Address Engine — Single Source of Truth for all location/address data. Multi-type, multi-owner, international, geo-enabled.",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "lint": "echo 'lint: deferred to monorepo root'",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@platform/core-sdk": "workspace:*",
+    "zod": "^3.23.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "typescript": "^5.4.0",
+    "vitest": "^1.6.0"
+  },
+  "engines": {
+    "node": ">=20.10.0"
+  }
+}

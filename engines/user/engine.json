@@ -1,0 +1,42 @@
+{
+  "id": "user",
+  "name": "User Engine",
+  "version": "1.0.0",
+  "phase": 5,
+  "status": "Production",
+  "description": "User Engine — Manages User/Profile/Contact/Preference/Avatar/Metadata/Tags/Status/Search. The central 'Person' engine of the platform. NOT authentication (Identity Engine), NOT authorization (Authorization Engine).",
+  "depends_on": ["core-sdk", "policy", "identity"],
+  "provides": [
+    "createUser",
+    "updateProfile",
+    "updatePreference",
+    "uploadAvatar",
+    "changeLanguage",
+    "changeTimezone",
+    "archiveUser",
+    "restoreUser",
+    "searchUsers",
+    "getUser",
+    "listUsers"
+  ],
+  "events_emitted": [
+    "user.created",
+    "user.updated",
+    "user.profile.updated",
+    "user.preference.updated",
+    "user.avatar.changed",
+    "user.language.changed",
+    "user.timezone.changed",
+    "user.archived",
+    "user.restored",
+    "user.tag.added",
+    "user.tag.removed"
+  ],
+  "events_subscribed": [
+    "identity.account.created"
+  ],
+  "strict_boundaries": {
+    "owns": ["User", "Profile", "Contact", "Preference", "Avatar", "Metadata", "UserTag", "UserStatus"],
+    "forbidden": ["Password", "Session", "OAuth", "MFA", "Permission", "Role", "Policy", "Address", "Organization", "Tax", "Payment"]
+  }
+}
