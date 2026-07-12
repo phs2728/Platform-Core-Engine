@@ -1,0 +1,69 @@
+{
+  "id": "review",
+  "name": "Review Engine",
+  "version": "0.1.0",
+  "phase": 5,
+  "status": "Draft",
+  "description": "Trust and Reputation Engine — Platform-wide review, rating, moderation, reputation system",
+  "depends_on": [
+    "core-sdk",
+    "policy",
+    "user",
+    "organization",
+    "media",
+    "event-bus"
+  ],
+  "provides": [
+    "Review lifecycle management",
+    "Rating (1~max, half rating, weighted)",
+    "Verified reviews (transaction reference)",
+    "Replies (owner/staff/customer/system)",
+    "Helpful votes",
+    "Reactions (like/dislike/love/helpful)",
+    "Reports & Moderation (Auto/Manual/AI Hook/Admin)",
+    "Reputation scoring (trustScore 0~100)",
+    "Review Analytics"
+  ],
+  "events_emitted": [
+    "review.created",
+    "review.updated",
+    "review.published",
+    "review.archived",
+    "review.restored",
+    "review.deleted",
+    "review.rating.changed",
+    "review.reported",
+    "review.report.resolved",
+    "review.hidden",
+    "review.moderated",
+    "review.reply.created",
+    "review.reply.deleted",
+    "review.helpful",
+    "review.reaction.added",
+    "review.reputation.updated"
+  ],
+  "events_subscribed": [],
+  "strict_boundaries": {
+    "owns": [
+      "Review",
+      "Rating",
+      "ReviewReply",
+      "ReviewReport",
+      "Reaction",
+      "HelpfulVote",
+      "Reputation",
+      "ReviewAnalytics",
+      "Moderation",
+      "ReviewAttachment"
+    ],
+    "forbidden": [
+      "Authentication",
+      "Authorization",
+      "Session",
+      "Password",
+      "Payment Processing",
+      "Booking Logic",
+      "Inventory Management"
+    ]
+  }
+}
