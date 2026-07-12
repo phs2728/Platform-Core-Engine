@@ -1,0 +1,46 @@
+{
+  "id": "theme",
+  "name": "Theme Engine",
+  "version": "1.0.0-rc1",
+  "phase": 6,
+  "status": "RC1",
+  "description": "[Platform Phase 6] Design Token OS — manages themes, brands, typography scales, spacing systems, color palettes, motion specs, elevation, shadows, border radius, dark/light mode variants, white-label themes, accessibility tokens, responsive breakpoints, and personalization themes. NOT a CSS generator — data models only. Provider Plugin Architecture for token compilation.",
+  "depends_on": ["core-sdk", "policy", "organization", "event-bus"],
+  "provides": [
+    "createTheme", "updateTheme", "getTheme", "listThemes", "archiveTheme", "activateTheme",
+    "createBrand", "updateBrand", "getBrand", "listBrands",
+    "createTokenSet", "updateTokenSet", "getTokenSet", "listTokenSets", "getTokenSetByCategory",
+    "createTypographyScale", "updateTypographyScale", "getTypographyScale",
+    "createColorPalette", "updateColorPalette", "getColorPalette",
+    "createSpacingSystem", "updateSpacingSystem", "getSpacingSystem",
+    "createMotionSpec", "updateMotionSpec", "getMotionSpec",
+    "createElevationSystem", "updateElevationSystem", "getElevationSystem",
+    "createThemeVariant", "updateThemeVariant", "getThemeVariant", "listVariants", "getDarkModeVariant", "getLightModeVariant",
+    "compileTheme", "previewTheme", "exportTheme", "importTheme",
+    "createWhiteLabelTheme", "applyWhiteLabel",
+    "createResponsiveTokens", "updateResponsiveTokens", "getResponsiveTokens",
+    "validateTheme", "calculateThemeScore", "generateThemeReport"
+  ],
+  "events_emitted": [
+    "theme.created", "theme.updated", "theme.activated", "theme.archived",
+    "brand.created", "brand.updated",
+    "tokenset.created", "tokenset.updated",
+    "variant.created", "variant.updated",
+    "theme.compiled", "theme.exported", "theme.imported",
+    "theme.validated", "theme.scored"
+  ],
+  "events_subscribed": [],
+  "strict_boundaries": {
+    "owns": [
+      "Theme", "Brand", "TokenSet", "TypographyScale", "ColorPalette", "SpacingSystem",
+      "MotionSpec", "ElevationSystem", "ThemeVariant", "ResponsiveTokens",
+      "WhiteLabelTheme", "ThemeAuditRecord"
+    ],
+    "forbidden": [
+      "CSSGeneration", "SCSSCompilation", "ReactComponent", "VueComponent", "FlutterWidget",
+      "BusinessLogic", "Authentication", "Password", "Session", "OAuth", "MFA",
+      "Permission", "Role", "IndustrySpecificField", "DirectDatabaseConnection",
+      "BrowserImplementation", "WebScraper"
+    ]
+  }
+}
