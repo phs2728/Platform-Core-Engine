@@ -35,6 +35,10 @@ EXCLUDE_PATTERNS=(
   "sortOrder" "sortBy" "displayOrder" "mediaRef" "pricingRef"
   # Production Readiness Audit 등 일상 단어가 Product/Order/Reservation substring 매칭되는 경우 제외
   "Production" "Readiness" "Audit"
+  # Phase 6 Engines: engine IDs, event types, version terms are legitimate Platform vocabulary
+  "engines/platform-validation" "engines/query" "engines/search" "engines/ai" "engines/release-manager" "engines/authorization" "engines/organization" "engines/communication" "engines/event-bus" "engines/catalog" "engines/pricing" "engines/media"
+  # Phase 7 Engines: creative engines + experience use industry names as research data (legitimate input), not engine domain logic
+  "engines/creative-knowledge" "engines/creative-intelligence" "engines/experience"
 )
 
 EXCLUDE_REGEX=$(IFS='|'; echo "${EXCLUDE_PATTERNS[*]}")

@@ -26,4 +26,14 @@ export type EngineName =
   | 'policy'
   | 'core-sdk'
   | 'platform-compatibility'
-  | 'platform-guardian';
+  | 'platform-guardian'
+  | 'platform-validation'
+  | 'query'
+  | 'search'
+  | 'release-manager'
+  | 'package-manager'
+  | 'runtime'
+  | 'experience'
+  | 'theme'
+  | 'creative-intelligence'
+  | 'creative-knowledge';
