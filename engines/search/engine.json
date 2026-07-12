@@ -1,32 +1,39 @@
 {
   "id": "search",
-  "name": "Search Engine",
-  "version": "0.1.0",
+  "name": "Universal Search Engine (Search OS)",
+  "version": "0.2.0",
   "phase": 6,
   "status": "Draft",
-  "description": "Universal Search Engine — indexes Query Engine projections, provides full-text search, autocomplete, ranking, faceting, analytics",
+  "description": "Platform Universal Discovery Layer — search, recommendation, AI search, autocomplete, session, ranking, analytics",
   "depends_on": ["core-sdk", "event-bus"],
   "provides": [
+    "Universal Search (all domains + AI answer)",
+    "Semantic Search (AI intent parsing)",
+    "Hybrid Search (keyword + semantic)",
     "Full-text search (7 match types)",
-    "Domain-specific search (catalog/organization/booking/review/media/user/payment)",
+    "Domain-specific search (8 domains)",
+    "Intent Parser (keyword/NL/voice/image/barcode/QR)",
     "Autocomplete & suggestions",
-    "Search ranking (boost/demote)",
-    "Faceted search",
-    "Highlight",
-    "Synonym expansion",
-    "Spell correction",
-    "Search analytics",
-    "Index management (rebuild/refresh)"
+    "Recommendation (trending/popular/nearby/similar/related/continue)",
+    "Search Session (history/pinned/saved filters)",
+    "Search Ranking (boost/demote/rerank)",
+    "Faceted search + Filters",
+    "Highlight + Synonyms + Spell correction",
+    "AI Answer Builder (summary/recommendation/related/nextActions)",
+    "Search Analytics (CTR/trending/no-result/conversion)",
+    "Search Provider Plugin (memory/meilisearch/opensearch/elasticsearch/typesense/algolia)"
   ],
   "events_emitted": [
     "search.document.indexed", "search.document.updated", "search.document.deleted",
     "search.index.rebuilt", "search.index.refreshed",
     "search.executed", "search.autocomplete",
-    "search.analytics.updated", "search.ranking.updated", "search.failed"
+    "search.analytics.updated", "search.ranking.updated", "search.failed",
+    "search.session.saved", "search.history.updated",
+    "search.recommendation.updated", "search.ai.answer.created"
   ],
   "events_subscribed": [],
   "strict_boundaries": {
-    "owns": ["SearchIndex", "IndexedDocument", "SearchResult", "AutocompleteEntry", "RankingRule", "SearchAnalytics"],
+    "owns": ["SearchIndex", "IndexedDocument", "SearchResult", "SearchIntent", "Recommendation", "SearchSession", "AIAnswer", "AutocompleteEntry", "RankingRule", "SearchAnalytics", "SearchHistoryEntry"],
     "forbidden": ["Direct Business Engine Repository Access", "CRUD writes", "Business Logic"]
   }
 }

@@ -3,6 +3,9 @@ import type { EventEnvelope } from '@platform/core-sdk';
 import type {
   IProjectionProvider, IRankingProvider, ISynonymProvider, ISpellChecker,
   ICustomDataPolicyProvider, ProjectionSearchDoc, SynonymGroup, SpellCorrection,
+  IIntentParserProvider, IRecommendationProvider, IAIProvider, ISearchProviderPlugin,
+  IntentType, SearchIntent, IntentEntity, RecommendationItem, RecommendationType,
+  AIAnswer, SearchResult, SearchQuery, IndexedDocument, SearchProviderType,
 } from '../interfaces/index.js';
 import { Ok, Err, type Result } from '@platform/core-sdk';
 
@@ -161,4 +164,115 @@ export class InMemoryEventBus {
   byType(t: string): RecordedEnvelope[] { return this.emitted.filter((r) => r.envelope.eventType === t); }
   countByType(t: string): number { return this.byType(t).length; }
   clear(): void { this.emitted.length = 0; }
+}
+
+// ═══════════════════════════════════════════
+// Intent Parser Provider (Mock)
+// ═══════════════════════════════════════════
+
+export class MockIntentParserProvider implements IIntentParserProvider {
+  async parse(tenantId: string, input: string, type: IntentType): Promise<Result<SearchIntent, Error>> {
+    const tokens = input.toLowerCase().split(/\s+/).filter((t) => t.length > 0);
+    const entities: IntentEntity[] = tokens.map((t) => ({ name: t, value: t, category: 'keyword' }));
+    return Ok({
+      id: `intent-${Date.now()}`, tenantId, type,
+      rawInput: input, parsedQuery: tokens.join(' '),
+      entities, filters: [], confidence: 0.85,
+      createdAt: new Date().toISOString(),
+    });
+  }
+  async extractEntities(_t: string, text: string): Promise<IntentEntity[]> {
+    return text.toLowerCase().split(/\s+/).filter((t) => t.length > 0).map((t) => ({ name: t, value: t, category: 'keyword' }));
+  }
+}
+
+// ═══════════════════════════════════════════
+// Recommendation Provider (Mock)
+// ═══════════════════════════════════════════
+
+export class MockRecommendationProvider implements IRecommendationProvider {
+  private items: RecommendationItem[] = [];
+
+  addItem(item: RecommendationItem): void { this.items.push(item); }
+
+  async getRecommendations(_t: string, _type: RecommendationType, _target?: string): Promise<Result<RecommendationItem[], Error>> {
+    return Ok(this.items.slice(0, 10));
+  }
+  async getSimilar(_t: string, documentId: string): Promise<Result<RecommendationItem[], Error>> {
+    return Ok(this.items.filter((i) => i.documentId !== documentId).slice(0, 5));
+  }
+  async getNearby(_t: string, _geo: { lat: number; lng: number; radiusKm: number }): Promise<Result<RecommendationItem[], Error>> {
+    return Ok(this.items.slice(0, 5));
+  }
+  clear(): void { this.items = []; }
+}
+
+// ═══════════════════════════════════════════
+// AI Provider (Mock — simulates LLM)
+// ═══════════════════════════════════════════
+
+export class MockAIProvider implements IAIProvider {
+  async buildAnswer(tenantId: string, query: string, results: SearchResult[]): Promise<Result<AIAnswer, Error>> {
+    const best = results.length > 0 ? {
+      documentId: results[0]!.document.id,
+      sourceType: results[0]!.document.sourceType,
+      sourceId: results[0]!.document.sourceId,
+      title: results[0]!.document.title,
+    } : null;
+
+    return Ok({
+      id: `ai-${Date.now()}`, tenantId, query,
+      summary: `Found ${results.length} results for "${query}".`,
+      recommendation: best ? `Based on your search, we recommend: ${best.title}` : 'No results found.',
+      related: results.slice(1, 4).map((r) => r.document.title),
+      bestMatch: best,
+      nextActions: ['Refine search', 'Browse category', 'View similar items'],
+      confidence: results.length > 0 ? 0.8 : 0.3,
+      createdAt: new Date().toISOString(),
+    });
+  }
+
+  async parseIntent(tenantId: string, input: string, type: IntentType): Promise<Result<SearchIntent, Error>> {
+    const tokens = input.toLowerCase().split(/\s+/).filter((t) => t.length > 0);
+    return Ok({
+      id: `intent-${Date.now()}`, tenantId, type,
+      rawInput: input, parsedQuery: tokens.join(' '),
+      entities: tokens.map((t) => ({ name: t, value: t, category: 'keyword' })),
+      filters: [], confidence: 0.9,
+      createdAt: new Date().toISOString(),
+    });
+  }
+
+  async explainResults(_t: string, query: string, results: SearchResult[]): Promise<Result<string, Error>> {
+    return Ok(`Query "${query}" matched ${results.length} documents using full-text search with TF-IDF scoring.`);
+  }
+}
+
+// ═══════════════════════════════════════════
+// Search Provider Plugin (In-Memory default)
+// ═══════════════════════════════════════════
+
+export class MemorySearchProviderPlugin implements ISearchProviderPlugin {
+  readonly providerId = 'memory';
+  readonly providerType = 'memory' as SearchProviderType;
+
+  async index(_doc: IndexedDocument): Promise<Result<boolean, Error>> { return Ok(true); }
+
+  async search(query: SearchQuery, docs: IndexedDocument[]): Promise<Result<SearchResult[], Error>> {
+    const { matchDocument } = await import('../domain/searchEngine.js');
+    const queryTokens = query.query.toLowerCase().split(/\s+/).filter((t) => t.length > 0);
+    const matchType = query.matchType ?? 'full_text';
+    const fuzzyDistance = query.fuzzyDistance ?? 1;
+    const results: SearchResult[] = [];
+
+    for (const doc of docs) {
+      const { matched, score, matchedTerms } = matchDocument(doc, queryTokens, matchType, fuzzyDistance);
+      if (matched) results.push({ document: doc, score, highlights: [], matchedTerms });
+    }
+    results.sort((a, b) => b.score - a.score);
+    return Ok(results);
+  }
+
+  async delete(_t: string, _id: string): Promise<Result<boolean, Error>> { return Ok(true); }
+  async clear(_t: string): Promise<Result<boolean, Error>> { return Ok(true); }
 }

@@ -1,9 +1,11 @@
-/** In-Memory Repositories — Search Engine (7 repos) */
+/** In-Memory Repositories — Search Engine (10 repos) */
 import type {
   ISearchRepository, IIndexRepository, IAutocompleteRepository,
   IRankingRepository, IAnalyticsRepository, ISynonymRepository, ISearchAuditRepository,
+  IRecommendationRepository, ISessionRepository, IHistoryRepository,
   IndexedDocument, SearchIndex, AutocompleteEntry, RankingRule,
   SearchLog, SynonymGroup, SearchAuditRecord, SearchDomain,
+  Recommendation, RecommendationType, SearchSession, SearchHistoryEntry,
 } from '../interfaces/index.js';
 
 function key(t: string, id: string): string { return `${t}::${id}`; }
@@ -171,4 +173,56 @@ export class InMemorySearchAuditRepository implements ISearchAuditRepository {
     return limit !== undefined ? list.slice(-limit) : list;
   }
   clear(): void { this.store.clear(); this.counter = 0; }
+}
+
+// ═══════════════════════════════════════════
+// Recommendation Repository
+// ═══════════════════════════════════════════
+
+export class InMemoryRecommendationRepository implements IRecommendationRepository {
+  private store = new Map<string, Recommendation>();
+  async insert(r: Recommendation): Promise<void> { this.store.set(key(r.tenantId, r.id), r); }
+  async findById(t: string, id: string): Promise<Recommendation | null> { return this.store.get(key(t, id)) ?? null; }
+  async findByType(t: string, type: RecommendationType, limit?: number): Promise<Recommendation[]> {
+    const list = [...this.store.values()].filter((r) => r.tenantId === t && r.type === type);
+    list.sort((a, b) => b.createdAt.localeCompare(a.createdAt));
+    return limit !== undefined ? list.slice(0, limit) : list;
+  }
+  clear(): void { this.store.clear(); }
+}
+
+// ═══════════════════════════════════════════
+// Session Repository
+// ═══════════════════════════════════════════
+
+export class InMemorySessionRepository implements ISessionRepository {
+  private store = new Map<string, SearchSession>();
+  async upsert(s: SearchSession): Promise<void> { this.store.set(key(s.tenantId, s.id), s); }
+  async findByUser(t: string, userId: string): Promise<SearchSession | null> {
+    for (const s of this.store.values()) if (s.tenantId === t && s.userId === userId) return s;
+    return null;
+  }
+  async update(t: string, id: string, patch: Partial<SearchSession>): Promise<void> {
+    const k = key(t, id); const ex = this.store.get(k); if (!ex) throw new Error(`Not found: ${id}`);
+    this.store.set(k, { ...ex, ...patch });
+  }
+  clear(): void { this.store.clear(); }
+}
+
+// ═══════════════════════════════════════════
+// History Repository
+// ═══════════════════════════════════════════
+
+export class InMemoryHistoryRepository implements IHistoryRepository {
+  private entries: SearchHistoryEntry[] = [];
+  async insert(e: SearchHistoryEntry): Promise<void> { this.entries.push(e); }
+  async findByUser(t: string, userId: string, limit?: number): Promise<SearchHistoryEntry[]> {
+    const list = this.entries.filter((e) => e.tenantId === t && e.userId === userId);
+    list.sort((a, b) => b.timestamp.localeCompare(a.timestamp));
+    return limit !== undefined ? list.slice(0, limit) : list;
+  }
+  async clearByUser(t: string, userId: string): Promise<void> {
+    this.entries = this.entries.filter((e) => !(e.tenantId === t && e.userId === userId));
+  }
+  clear(): void { this.entries = []; }
 }

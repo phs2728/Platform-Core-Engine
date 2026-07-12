@@ -4,8 +4,11 @@ import {
   InMemorySearchRepository, InMemoryIndexRepository, InMemoryAutocompleteRepository,
   InMemoryRankingRepository, InMemoryAnalyticsRepository, InMemorySynonymRepository,
   InMemorySearchAuditRepository,
+  InMemoryRecommendationRepository, InMemorySessionRepository, InMemoryHistoryRepository,
   MockProjectionProvider, MockRankingProvider, MockSynonymProvider,
   MockSpellChecker, StaticSearchPolicyProvider, InMemoryEventBus,
+  MockIntentParserProvider, MockRecommendationProvider, MockAIProvider,
+  MemorySearchProviderPlugin,
 } from '../src/index.js';
 
 export function makeClock() {
@@ -22,6 +25,10 @@ export function makeDeps(): SearchUseCaseDeps & {
   projectionProvider: MockProjectionProvider; rankingProvider: MockRankingProvider;
   synonymProvider: MockSynonymProvider; spellChecker: MockSpellChecker;
   policyProvider: StaticSearchPolicyProvider; eventBus: InMemoryEventBus;
+  recommendationRepo: InMemoryRecommendationRepository; sessionRepo: InMemorySessionRepository;
+  historyRepo: InMemoryHistoryRepository;
+  intentParserProvider: MockIntentParserProvider; recommendationProvider: MockRecommendationProvider;
+  aiProvider: MockAIProvider; searchProviderPlugin: MemorySearchProviderPlugin;
   idGenerator: { generate(): string }; clock: { now(): Date };
 } {
   const searchRepo = new InMemorySearchRepository();
@@ -37,6 +44,14 @@ export function makeDeps(): SearchUseCaseDeps & {
   const synonymProvider = new MockSynonymProvider();
   const spellChecker = new MockSpellChecker();
   const policyProvider = new StaticSearchPolicyProvider();
+  // Search OS deps
+  const recommendationRepo = new InMemoryRecommendationRepository();
+  const sessionRepo = new InMemorySessionRepository();
+  const historyRepo = new InMemoryHistoryRepository();
+  const intentParserProvider = new MockIntentParserProvider();
+  const recommendationProvider = new MockRecommendationProvider();
+  const aiProvider = new MockAIProvider();
+  const searchProviderPlugin = new MemorySearchProviderPlugin();
 
   policyProvider.set('t-1', { allowedDomains: ['catalog', 'organization', 'booking', 'review', 'media', 'user', 'payment', 'global'] });
 
@@ -49,6 +64,8 @@ export function makeDeps(): SearchUseCaseDeps & {
     searchRepo, indexRepo, autocompleteRepo, rankingRepo, analyticsRepo, synonymRepo,
     auditRepo, eventBus, projectionProvider, rankingProvider, synonymProvider, spellChecker,
     policyProvider, idGenerator, clock: makeClock(),
+    recommendationRepo, sessionRepo, historyRepo,
+    intentParserProvider, recommendationProvider, aiProvider, searchProviderPlugin,
   };
 }
 

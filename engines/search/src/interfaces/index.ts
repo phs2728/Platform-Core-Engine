@@ -388,3 +388,154 @@ export interface ISearchAuditRepository {
 }
 
 export { type Result, type EventEnvelope };
+
+// ═══════════════════════════════════════════
+// Search OS Extensions (Intent, Recommendation, Session, AI, Provider)
+// ═══════════════════════════════════════════
+
+// ── Intent Parser ──
+
+export type IntentType = 'keyword' | 'natural_language' | 'voice' | 'image' | 'barcode' | 'qr';
+
+export interface SearchIntent {
+  id: string;
+  tenantId: string;
+  type: IntentType;
+  rawInput: string;
+  parsedQuery: string;
+  entities: IntentEntity[];
+  filters: SearchFilter[];
+  confidence: number;
+  createdAt: string;
+}
+
+export interface IntentEntity {
+  name: string;             // 'hotel', 'wine', 'family'
+  value: string;
+  category: string;         // 'intent', 'attribute', 'modifier'
+}
+
+/** AI-powered Intent Parser — host-implemented plugin. */
+export interface IIntentParserProvider {
+  parse(tenantId: string, input: string, type: IntentType): Promise<Result<SearchIntent, Error>>;
+  extractEntities(tenantId: string, text: string): Promise<IntentEntity[]>;
+}
+
+// ── Recommendation ──
+
+export type RecommendationType =
+  | 'trending' | 'popular' | 'recommended'
+  | 'continue' | 'recent' | 'nearby' | 'similar' | 'related';
+
+export interface Recommendation {
+  id: string;
+  tenantId: string;
+  type: RecommendationType;
+  targetRef: string | null;     // user or entity being recommended for
+  targetType: string;
+  items: RecommendationItem[];
+  reason: string;
+  createdAt: string;
+}
+
+export interface RecommendationItem {
+  documentId: string;
+  sourceType: string;
+  sourceId: string;
+  title: string;
+  score: number;
+  reason: string;
+}
+
+/** Recommendation Provider — host-implemented for ML/recommendation engines. */
+export interface IRecommendationProvider {
+  getRecommendations(tenantId: string, type: RecommendationType, targetRef?: string): Promise<Result<RecommendationItem[], Error>>;
+  getSimilar(tenantId: string, documentId: string): Promise<Result<RecommendationItem[], Error>>;
+  getNearby(tenantId: string, geo: { lat: number; lng: number; radiusKm: number }): Promise<Result<RecommendationItem[], Error>>;
+}
+
+// ── Search Session ──
+
+export interface SearchSession {
+  id: string;
+  tenantId: string;
+  userId: string;
+  recentSearches: string[];
+  pinnedSearches: string[];
+  savedFilters: SavedFilter[];
+  lastCategory: SearchDomain | null;
+  lastActiveAt: string;
+  createdAt: string;
+}
+
+export interface SavedFilter {
+  id: string;
+  name: string;
+  filters: SearchFilter[];
+  domain: SearchDomain;
+}
+
+export interface SearchHistoryEntry {
+  id: string;
+  tenantId: string;
+  userId: string;
+  query: string;
+  domain: SearchDomain;
+  resultCount: number;
+  timestamp: string;
+}
+
+// ── AI Answer ──
+
+export interface AIAnswer {
+  id: string;
+  tenantId: string;
+  query: string;
+  summary: string;
+  recommendation: string;
+  related: string[];
+  bestMatch: { documentId: string; sourceType: string; sourceId: string; title: string } | null;
+  nextActions: string[];
+  confidence: number;
+  createdAt: string;
+}
+
+/** AI Provider — host-implemented LLM plugin (OpenAI, Gemini, Claude, etc.). */
+export interface IAIProvider {
+  buildAnswer(tenantId: string, query: string, results: SearchResult[]): Promise<Result<AIAnswer, Error>>;
+  parseIntent(tenantId: string, input: string, type: IntentType): Promise<Result<SearchIntent, Error>>;
+  explainResults(tenantId: string, query: string, results: SearchResult[]): Promise<Result<string, Error>>;
+}
+
+// ── Search Provider Plugin ──
+
+export type SearchProviderType = 'memory' | 'meilisearch' | 'opensearch' | 'elasticsearch' | 'typesense' | 'algolia';
+
+export interface ISearchProviderPlugin {
+  readonly providerId: string;
+  readonly providerType: SearchProviderType;
+  index(doc: IndexedDocument): Promise<Result<boolean, Error>>;
+  search(query: SearchQuery, docs: IndexedDocument[]): Promise<Result<SearchResult[], Error>>;
+  delete(tenantId: string, docId: string): Promise<Result<boolean, Error>>;
+  clear(tenantId: string): Promise<Result<boolean, Error>>;
+}
+
+// ── Additional Repositories ──
+
+export interface IRecommendationRepository {
+  insert(rec: Recommendation): Promise<void>;
+  findById(tenantId: string, id: string): Promise<Recommendation | null>;
+  findByType(tenantId: string, type: RecommendationType, limit?: number): Promise<Recommendation[]>;
+}
+
+export interface ISessionRepository {
+  upsert(session: SearchSession): Promise<void>;
+  findByUser(tenantId: string, userId: string): Promise<SearchSession | null>;
+  update(tenantId: string, id: string, patch: Partial<SearchSession>): Promise<void>;
+}
+
+export interface IHistoryRepository {
+  insert(entry: SearchHistoryEntry): Promise<void>;
+  findByUser(tenantId: string, userId: string, limit?: number): Promise<SearchHistoryEntry[]>;
+  clearByUser(tenantId: string, userId: string): Promise<void>;
+}

@@ -58,15 +58,46 @@ export {
 
 export type { SearchUseCaseDeps } from './use-cases/types.js';
 
+// ═══════════════════════════════════════════
+// Search OS — Types
+// ═══════════════════════════════════════════
+export type {
+  SearchIntent, IntentEntity, IntentType,
+  Recommendation, RecommendationItem, RecommendationType,
+  SearchSession, SavedFilter, SearchHistoryEntry,
+  AIAnswer,
+  SearchProviderType,
+  IIntentParserProvider, IRecommendationProvider, IAIProvider, ISearchProviderPlugin,
+  IRecommendationRepository, ISessionRepository, IHistoryRepository,
+} from './interfaces/index.js';
+
+// ═══════════════════════════════════════════
+// Search OS — UseCases (14)
+// ═══════════════════════════════════════════
+export {
+  recommendUseCase, relatedUseCase, nearbyUseCase, continueSearchUseCase,
+  saveSearchUseCase, loadHistoryUseCase, clearHistoryUseCase, pinSearchUseCase,
+  parseIntentUseCase, buildAnswerUseCase, explainResultsUseCase,
+  universalSearchUseCase, semanticSearchUseCase, hybridSearchUseCase,
+} from './use-cases/SearchOSUseCases.js';
+
+// ═══════════════════════════════════════════
+// Intent Parser
+// ═══════════════════════════════════════════
+export { parseKeywordIntent, extractFiltersFromText } from './intent/intentParser.js';
+
 // In-Memory Repositories
 export {
   InMemorySearchRepository, InMemoryIndexRepository, InMemoryAutocompleteRepository,
   InMemoryRankingRepository, InMemoryAnalyticsRepository, InMemorySynonymRepository,
   InMemorySearchAuditRepository,
+  InMemoryRecommendationRepository, InMemorySessionRepository, InMemoryHistoryRepository,
 } from './infrastructure/InMemoryRepositories.js';
 
 // Host Stubs
 export {
   MockProjectionProvider, MockRankingProvider, MockSynonymProvider,
   MockSpellChecker, StaticSearchPolicyProvider, InMemoryEventBus, type RecordedEnvelope,
+  MockIntentParserProvider, MockRecommendationProvider, MockAIProvider,
+  MemorySearchProviderPlugin,
 } from './infrastructure/hostAdapters.js';
