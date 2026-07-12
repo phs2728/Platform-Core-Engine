@@ -1,9 +1,9 @@
 {
   "id": "catalog",
   "name": "Catalog Engine",
-  "version": "0.1.0",
+  "version": "1.0.0-rc2",
   "phase": 4,
-  "status": "Draft",
+  "status": "RC2",
   "description": "[사장님 확립 2026-07-11 Business Foundation Phase 4] Reference Business Engine. Industry-Agnostic catalog of items, categories, variants, bundles — Organization ownership enforced, CustomDataPolicy validation at UseCase entry, attributes/customFields/metadata as free-form JSON.",
   "depends_on": [
     "core-sdk",

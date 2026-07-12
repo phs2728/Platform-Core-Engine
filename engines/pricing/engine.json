@@ -1,9 +1,9 @@
 {
   "id": "pricing",
   "name": "Pricing Engine",
-  "version": "0.1.0",
+  "version": "1.0.0-rc2",
   "phase": 4,
-  "status": "Draft",
+  "status": "RC2",
   "description": "[사장님 확립 2026-07-11] Business Foundation Phase 4. Industry-Agnostic pricing plan management — plans, components, tiers, time-based pricing, currencies, versions, history. Organization ownership enforced. NOT a calculation engine — manages pricing models only.",
   "depends_on": [
     "core-sdk",
