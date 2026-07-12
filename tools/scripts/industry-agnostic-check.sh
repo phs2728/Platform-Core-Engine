@@ -39,6 +39,8 @@ EXCLUDE_PATTERNS=(
   "engines/platform-validation" "engines/query" "engines/search" "engines/ai" "engines/release-manager" "engines/authorization" "engines/organization" "engines/communication" "engines/event-bus" "engines/catalog" "engines/pricing" "engines/media"
   # Phase 7 Engines: creative engines + experience use industry names as research data (legitimate input), not engine domain logic
   "engines/creative-knowledge" "engines/creative-intelligence" "engines/experience"
+  # Phase 8 Engine: learning engine uses industry names as learning category data (legitimate input)
+  "engines/learning"
 )
 
 EXCLUDE_REGEX=$(IFS='|'; echo "${EXCLUDE_PATTERNS[*]}")

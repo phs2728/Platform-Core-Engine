@@ -36,4 +36,5 @@ export type EngineName =
   | 'experience'
   | 'theme'
   | 'creative-intelligence'
-  | 'creative-knowledge';
+  | 'creative-knowledge'
+  | 'learning';
