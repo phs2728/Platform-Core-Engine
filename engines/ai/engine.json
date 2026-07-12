@@ -1,0 +1,34 @@
+{
+  "id": "ai",
+  "name": "AI Engine (Intelligence Layer)",
+  "version": "0.1.0",
+  "phase": 6,
+  "status": "Draft",
+  "description": "Platform Intelligence Layer — AI Assistant, Recommendation, Insight, Prediction, Generation, Knowledge, Prompt Management",
+  "depends_on": ["core-sdk", "event-bus"],
+  "provides": [
+    "AI Assistant (ask/chat/explain/reason)",
+    "AI Recommendation (personalized/trending/similar/next-best-action)",
+    "AI Insight (revenue/customer/booking/payment/inventory/review)",
+    "AI Prediction (demand/cancellation/fraud/churn/forecast)",
+    "Content Generation (reply/description/email/notification/report/summary)",
+    "Entity Extraction & Classification",
+    "Translation (multi-language)",
+    "Prompt Management (versioned templates with validation)",
+    "Knowledge Base (RAG with vector search)",
+    "Conversation Management (multi-turn chat sessions)",
+    "Multi-Provider Plugin (OpenAI/Gemini/Claude/Ollama — swappable)"
+  ],
+  "events_emitted": [
+    "ai.chat.started", "ai.chat.completed", "ai.chat_failed",
+    "ai.summary.generated", "ai.recommendation.generated",
+    "ai.prediction.completed", "ai.insight.generated",
+    "ai.translation.completed", "ai.generation.completed",
+    "ai.prompt.updated", "ai.provider.changed", "ai.failed"
+  ],
+  "events_subscribed": [],
+  "strict_boundaries": {
+    "owns": ["Conversation", "PromptTemplate", "AIRecommendation", "AIInsight", "AIPrediction", "AIGeneration", "KnowledgeEntry"],
+    "forbidden": ["Direct Business Engine Repository Access", "Business Logic", "State Changes (AI advises only)"]
+  }
+}
