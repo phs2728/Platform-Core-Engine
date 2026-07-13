@@ -4,8 +4,12 @@ import {
   InMemoryTokenSystemRepository,
   InMemoryThemeVariantRepository, InMemoryResponsiveTokensRepository,
   InMemoryWhiteLabelRepository, InMemoryThemeAuditRepository,
+  InMemoryBrandPersonalityRepository, InMemoryBrandVoiceRepository,
+  InMemoryDesignLanguageRepository, InMemoryThemeManifestRepository,
+  InMemoryThemeIntelligenceRepository,
   InMemoryOrganizationVerifier, StaticThemePolicyProvider,
   MockThemeCompilerProvider, InMemoryEventBus,
+  MockCreativeIntelligenceProvider, MockComponentThemeProvider,
 } from '../src/index.js';
 import type { TypographyScale, ColorPalette, SpacingSystem, MotionSpec, ElevationSystem } from '../src/interfaces/index.js';
 import type { ThemeUseCaseDeps } from '../src/index.js';
@@ -26,6 +30,14 @@ export function makeDemoDeps(): ThemeUseCaseDeps {
     whiteLabelRepo: new InMemoryWhiteLabelRepository(), auditRepo: new InMemoryThemeAuditRepository(),
     eventBus: new InMemoryEventBus(), organizationVerifier, policyProvider,
     themeCompiler: new MockThemeCompilerProvider(),
+    // RC2
+    personalityRepo: new InMemoryBrandPersonalityRepository(),
+    voiceRepo: new InMemoryBrandVoiceRepository(),
+    designLanguageRepo: new InMemoryDesignLanguageRepository(),
+    manifestRepo: new InMemoryThemeManifestRepository(),
+    intelligenceRepo: new InMemoryThemeIntelligenceRepository(),
+    creativeIntelligenceProvider: new MockCreativeIntelligenceProvider(),
+    componentThemeProvider: new MockComponentThemeProvider(),
     idGenerator: { generate: () => `demo-${Math.random().toString(36).slice(2, 8)}` },
     clock: { now: () => new Date('2026-07-12T08:00:00.000Z') },
   };

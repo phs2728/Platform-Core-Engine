@@ -99,3 +99,59 @@ export class InMemoryThemeAuditRepository implements IThemeAuditRepository {
   async findByOrganization(t: string, orgId: string, limit = 100): Promise<ThemeAuditRecord[]> { return this.store.filter((r) => r.tenantId === t && r.organizationId === orgId).sort((a, b) => b.createdAt.localeCompare(a.createdAt)).slice(0, limit); }
   clear(): void { this.store = []; this.idCounter = 0; }
 }
+
+// ═══════════════════════════════════════════
+// RC2: Brand & Design Language Repositories
+// ═══════════════════════════════════════════
+
+import type {
+  BrandPersonality, BrandVoice, DesignLanguage, ThemeManifest, ThemeIntelligence,
+  IBrandPersonalityRepository, IBrandVoiceRepository,
+  IDesignLanguageRepository, IThemeManifestRepository, IThemeIntelligenceRepository,
+} from '../interfaces/index.js';
+
+export class InMemoryBrandPersonalityRepository implements IBrandPersonalityRepository {
+  protected store = new Map<string, BrandPersonality>();
+  async insert(p: BrandPersonality): Promise<void> { this.store.set(`${p.tenantId}::${p.id}`, { ...p }); }
+  async findById(t: string, id: string): Promise<BrandPersonality | null> { return this.store.get(`${t}::${id}`) ?? null; }
+  async findByBrand(t: string, brandId: string): Promise<BrandPersonality | null> { for (const v of this.store.values()) if (v.tenantId === t && v.brandId === brandId) return { ...v }; return null; }
+  async update(t: string, id: string, patch: Partial<BrandPersonality>): Promise<void> { const k = `${t}::${id}`; const e = this.store.get(k); if (!e) return; this.store.set(k, { ...e, ...patch }); }
+  clear(): void { this.store.clear(); }
+}
+
+export class InMemoryBrandVoiceRepository implements IBrandVoiceRepository {
+  protected store = new Map<string, BrandVoice>();
+  async insert(v: BrandVoice): Promise<void> { this.store.set(`${v.tenantId}::${v.id}`, { ...v }); }
+  async findById(t: string, id: string): Promise<BrandVoice | null> { return this.store.get(`${t}::${id}`) ?? null; }
+  async findByBrand(t: string, brandId: string): Promise<BrandVoice | null> { for (const v of this.store.values()) if (v.tenantId === t && v.brandId === brandId) return { ...v }; return null; }
+  async update(t: string, id: string, patch: Partial<BrandVoice>): Promise<void> { const k = `${t}::${id}`; const e = this.store.get(k); if (!e) return; this.store.set(k, { ...e, ...patch }); }
+  clear(): void { this.store.clear(); }
+}
+
+export class InMemoryDesignLanguageRepository implements IDesignLanguageRepository {
+  protected store = new Map<string, DesignLanguage>();
+  async insert(d: DesignLanguage): Promise<void> { this.store.set(`${d.tenantId}::${d.id}`, { ...d }); }
+  async findById(t: string, id: string): Promise<DesignLanguage | null> { return this.store.get(`${t}::${id}`) ?? null; }
+  async findByBrand(t: string, brandId: string): Promise<DesignLanguage | null> { for (const v of this.store.values()) if (v.tenantId === t && v.brandId === brandId) return { ...v }; return null; }
+  async update(t: string, id: string, patch: Partial<DesignLanguage>): Promise<void> { const k = `${t}::${id}`; const e = this.store.get(k); if (!e) return; this.store.set(k, { ...e, ...patch }); }
+  clear(): void { this.store.clear(); }
+}
+
+export class InMemoryThemeManifestRepository implements IThemeManifestRepository {
+  protected store = new Map<string, ThemeManifest>();
+  async insert(m: ThemeManifest): Promise<void> { this.store.set(`${m.tenantId}::${m.id}`, { ...m }); }
+  async findById(t: string, id: string): Promise<ThemeManifest | null> { return this.store.get(`${t}::${id}`) ?? null; }
+  async findByTheme(t: string, themeId: string): Promise<ThemeManifest | null> { for (const v of this.store.values()) if (v.tenantId === t && v.themeId === themeId) return { ...v }; return null; }
+  async findByBrand(t: string, brandId: string): Promise<ThemeManifest | null> { for (const v of this.store.values()) if (v.tenantId === t && v.brandId === brandId) return { ...v }; return null; }
+  async update(t: string, id: string, patch: Partial<ThemeManifest>): Promise<void> { const k = `${t}::${id}`; const e = this.store.get(k); if (!e) return; this.store.set(k, { ...e, ...patch }); }
+  clear(): void { this.store.clear(); }
+}
+
+export class InMemoryThemeIntelligenceRepository implements IThemeIntelligenceRepository {
+  protected store = new Map<string, ThemeIntelligence>();
+  async insert(i: ThemeIntelligence): Promise<void> { this.store.set(`${i.tenantId}::${i.id}`, { ...i }); }
+  async findById(t: string, id: string): Promise<ThemeIntelligence | null> { return this.store.get(`${t}::${id}`) ?? null; }
+  async findByBrand(t: string, brandId: string): Promise<ThemeIntelligence | null> { for (const v of this.store.values()) if (v.tenantId === t && v.brandId === brandId) return { ...v }; return null; }
+  async update(t: string, id: string, patch: Partial<ThemeIntelligence>): Promise<void> { const k = `${t}::${id}`; const e = this.store.get(k); if (!e) return; this.store.set(k, { ...e, ...patch }); }
+  clear(): void { this.store.clear(); }
+}

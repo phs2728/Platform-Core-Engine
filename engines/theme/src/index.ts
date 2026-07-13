@@ -47,16 +47,44 @@ export { THEME_EVENTS, type ThemeEventType, THEME_EVENT_SCHEMAS } from './domain
 
 export type { ThemeUseCaseDeps } from './use-cases/types.js';
 
+// RC2: Brand & Design Language Use Cases
+export {
+  createBrandPersonalityUseCase, getBrandPersonalityUseCase,
+  createBrandVoiceUseCase, getBrandVoiceUseCase,
+  createDesignLanguageUseCase, getDesignLanguageUseCase,
+  createThemeManifestUseCase, publishThemeManifestUseCase,
+  getThemeManifestUseCase, resolveThemeManifestUseCase,
+  generateThemeIntelligenceUseCase, getThemeIntelligenceUseCase,
+} from './use-cases/BrandDesignLanguageUseCases.js';
+
+// RC2: Brand & Design Language Types
+export type {
+  BrandPersonality, BrandVoice, BrandEmotion, DesignLanguage,
+  MotionProfile, AccessibilityProfile, ContentStyle, BrandConstraint,
+  ThemeManifest, ThemeIntelligence,
+  BrandDirectionInput, BrandDirection,
+  DensityLevel, WhitespaceLevel, MotionIntensity, WCAGLevel as ThemeWCAGLevel,
+  ICreativeIntelligenceProvider, IComponentThemeProvider,
+  IBrandPersonalityRepository, IBrandVoiceRepository,
+  IDesignLanguageRepository, IThemeManifestRepository, IThemeIntelligenceRepository,
+} from './interfaces/index.js';
+
 // In-Memory Repositories
 export {
   InMemoryThemeRepository, InMemoryBrandRepository, InMemoryTokenSetRepository,
   InMemoryTokenSystemRepository,
   InMemoryThemeVariantRepository, InMemoryResponsiveTokensRepository,
   InMemoryWhiteLabelRepository, InMemoryThemeAuditRepository,
+  // RC2
+  InMemoryBrandPersonalityRepository, InMemoryBrandVoiceRepository,
+  InMemoryDesignLanguageRepository, InMemoryThemeManifestRepository,
+  InMemoryThemeIntelligenceRepository,
 } from './infrastructure/InMemoryRepositories.js';
 
 // Host Adapters
 export {
   InMemoryOrganizationVerifier, StaticThemePolicyProvider,
   MockThemeCompilerProvider, InMemoryEventBus, type RecordedEnvelope,
+  // RC2
+  MockCreativeIntelligenceProvider, MockComponentThemeProvider,
 } from './infrastructure/hostAdapters.js';

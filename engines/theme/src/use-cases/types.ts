@@ -6,6 +6,10 @@ import type {
   ITokenSystemRepository, IThemeVariantRepository, IResponsiveTokensRepository,
   IWhiteLabelRepository, IThemeAuditRepository,
   TypographyScale, ColorPalette, SpacingSystem, MotionSpec, ElevationSystem,
+  // RC2
+  ICreativeIntelligenceProvider, IComponentThemeProvider,
+  IBrandPersonalityRepository, IBrandVoiceRepository,
+  IDesignLanguageRepository, IThemeManifestRepository, IThemeIntelligenceRepository,
 } from '../interfaces/index.js';
 
 export interface ThemeUseCaseDeps {
@@ -27,4 +31,12 @@ export interface ThemeUseCaseDeps {
   themeCompiler: IThemeCompilerProvider;
   idGenerator: IIdGenerator;
   clock: IClock;
+  // RC2: Brand & Design Language
+  personalityRepo: IBrandPersonalityRepository;
+  voiceRepo: IBrandVoiceRepository;
+  designLanguageRepo: IDesignLanguageRepository;
+  manifestRepo: IThemeManifestRepository;
+  intelligenceRepo: IThemeIntelligenceRepository;
+  creativeIntelligenceProvider: ICreativeIntelligenceProvider;
+  componentThemeProvider: IComponentThemeProvider;
 }

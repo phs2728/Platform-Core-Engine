@@ -1,6 +1,6 @@
 {
   "name": "@platform/engine-theme",
-  "version": "1.0.0-rc1",
+  "version": "1.0.0-rc2",
   "description": "Theme Engine — Platform Design Token OS: themes, brands, typography, spacing, color, motion, dark mode, white-label, and responsive tokens.",
   "type": "module",
   "main": "./dist/index.js",

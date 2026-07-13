@@ -9,6 +9,8 @@ import { Ok, type Result } from '@platform/core-sdk';
 import type {
   IOrganizationVerifier, IPolicyProvider, IThemeCompilerProvider,
   ThemeCompilationInput, ThemeCompilationOutput,
+  ICreativeIntelligenceProvider, IComponentThemeProvider,
+  BrandDirectionInput, BrandDirection,
 } from '../interfaces/index.js';
 
 export class InMemoryOrganizationVerifier implements IOrganizationVerifier {
@@ -48,4 +50,34 @@ export class InMemoryEventBus {
   byType(t: string): RecordedEnvelope[] { return this.emitted.filter((r) => r.envelope.eventType === t); }
   countByType(t: string): number { return this.byType(t).length; }
   clear(): void { this.emitted.length = 0; }
+}
+
+// ── RC2: Creative Intelligence Provider (Mock) ──
+export class MockCreativeIntelligenceProvider implements ICreativeIntelligenceProvider {
+  private presets = new Map<string, BrandDirection>();
+  setPreset(key: string, dir: BrandDirection): void { this.presets.set(key, dir); }
+  async generateBrandDirection(_t: string, input: BrandDirectionInput): Promise<Result<BrandDirection, Error>> {
+    const preset = this.presets.get(input.industry);
+    if (preset) return Ok(preset);
+    // deterministic generation based on industry + positioning
+    const isLuxury = input.positioning.toLowerCase().includes('luxury') || input.targetAudience.toLowerCase().includes('high income');
+    return Ok({
+      personality: isLuxury ? ['Luxury', 'Elegant', 'Refined'] : ['Approachable', 'Modern', 'Clean'],
+      voice: isLuxury ? ['Warm', 'Confident', 'Sophisticated'] : ['Friendly', 'Direct', 'Clear'],
+      emotion: isLuxury ? ['Trust', 'Calm', 'Aspiration'] : ['Confidence', 'Clarity', 'Delight'],
+      designLanguage: isLuxury ? ['Premium', 'Editorial', 'Minimal'] : ['Functional', 'Contemporary', 'Structured'],
+      recommendations: isLuxury
+        ? ['Use generous whitespace', 'Editorial typography scale', 'Subtle motion only', 'AAA contrast compliance']
+        : ['Use medium density', 'Clean sans-serif typography', 'Moderate motion', 'AA contrast compliance'],
+    });
+  }
+}
+
+// ── RC2: Component Theme Provider (Mock) ──
+export class MockComponentThemeProvider implements IComponentThemeProvider {
+  readonly notifications: { tenantId: string; themeId: string }[] = [];
+  async notifyThemeChanged(tenantId: string, themeId: string): Promise<Result<void, Error>> {
+    this.notifications.push({ tenantId, themeId });
+    return Ok(undefined);
+  }
 }

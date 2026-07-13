@@ -308,3 +308,246 @@ export interface IThemeAuditRepository {
 }
 
 export { type Result, type EventEnvelope };
+
+// ═══════════════════════════════════════════
+// RC2: Brand & Design Language Domain
+// ═══════════════════════════════════════════
+
+// ── RC2 Host Interfaces ──
+
+export interface ICreativeIntelligenceProvider {
+  generateBrandDirection(tenantId: string, input: BrandDirectionInput): Promise<Result<BrandDirection, Error>>;
+}
+
+export interface IComponentThemeProvider {
+  notifyThemeChanged(tenantId: string, themeId: string): Promise<Result<void, Error>>;
+}
+
+export interface BrandDirectionInput {
+  industry: string;
+  targetAudience: string;
+  positioning: string;
+  competitors: string[];
+}
+
+export interface BrandDirection {
+  personality: string[];
+  voice: string[];
+  emotion: string[];
+  designLanguage: string[];
+  recommendations: string[];
+}
+
+// ── RC2 Enums ──
+
+export type DensityLevel = 'ultra-low' | 'low' | 'medium' | 'high' | 'ultra-high';
+export type WhitespaceLevel = 'minimal' | 'low' | 'medium' | 'high' | 'generous';
+export type MotionIntensity = 'none' | 'subtle' | 'moderate' | 'dynamic' | 'energetic';
+export type WCAGLevel = 'A' | 'AA' | 'AAA';
+
+// ── RC2 Core Entities ──
+
+export interface BrandPersonality {
+  id: string;
+  tenantId: string;
+  organizationId: string;
+  brandId: string;
+  traits: string[];           // e.g. ['Luxury', 'Elegant', 'Minimal']
+  archetypes: string[];       // e.g. ['Sage', 'Explorer']
+  attributes: Record<string, unknown>;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface BrandVoice {
+  id: string;
+  tenantId: string;
+  organizationId: string;
+  brandId: string;
+  tone: string[];             // e.g. ['Warm', 'Confident']
+  vocabulary: string[];       // preferred words
+  forbiddenWords: string[];   // words to avoid
+  sentenceStyle: string;      // e.g. 'concise', 'editorial'
+  attributes: Record<string, unknown>;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface BrandEmotion {
+  id: string;
+  tenantId: string;
+  organizationId: string;
+  brandId: string;
+  primaryEmotions: string[];  // e.g. ['Trust', 'Calm']
+  secondaryEmotions: string[];
+  emotionalJourney: { stage: string; emotion: string }[];
+  attributes: Record<string, unknown>;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface DesignLanguage {
+  id: string;
+  tenantId: string;
+  organizationId: string;
+  brandId: string;
+  style: string[];            // e.g. ['Premium', 'Editorial']
+  whitespace: WhitespaceLevel;
+  visualHierarchy: 'strong' | 'moderate' | 'subtle';
+  informationDensity: DensityLevel;
+  attributes: Record<string, unknown>;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface MotionProfile {
+  id: string;
+  tenantId: string;
+  organizationId: string;
+  brandId: string;
+  intensity: MotionIntensity;
+  defaultDuration: string;
+  defaultEasing: string;
+  principles: string[];
+  attributes: Record<string, unknown>;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface AccessibilityProfile {
+  id: string;
+  tenantId: string;
+  organizationId: string;
+  brandId: string;
+  wcagLevel: WCAGLevel;
+  targetContrastRatio: number;
+  minTouchTargetPx: number;
+  focusIndicatorPolicy: string;
+  motionReductionPolicy: string;
+  attributes: Record<string, unknown>;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ContentStyle {
+  id: string;
+  tenantId: string;
+  organizationId: string;
+  brandId: string;
+  photographyStyle: string;   // e.g. 'editorial', 'minimal', 'documentary'
+  illustrationStyle: string;
+  iconographyStyle: string;   // e.g. 'outline', 'filled', 'duotone'
+  videoStyle: string;
+  attributes: Record<string, unknown>;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface BrandConstraint {
+  id: string;
+  tenantId: string;
+  organizationId: string;
+  brandId: string;
+  type: 'color' | 'typography' | 'layout' | 'motion' | 'content';
+  rule: string;
+  enforcement: 'strict' | 'recommended';
+  description: string;
+  attributes: Record<string, unknown>;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ThemeManifest {
+  id: string;
+  tenantId: string;
+  organizationId: string;
+  themeId: string;
+  brandId: string;
+  version: string;
+  personality: string[];
+  voice: string[];
+  emotion: string[];
+  designLanguage: string[];
+  visual: {
+    whitespace: WhitespaceLevel;
+    hierarchy: 'strong' | 'moderate' | 'subtle';
+    density: DensityLevel;
+  };
+  motion: {
+    intensity: MotionIntensity;
+    duration: string;
+    easing: string;
+  };
+  accessibility: {
+    wcagLevel: WCAGLevel;
+    contrastRatio: number;
+  };
+  content: {
+    photography: string;
+    illustration: string;
+    iconography: string;
+  };
+  constraints: string[];
+  status: 'Draft' | 'Active' | 'Published';
+  attributes: Record<string, unknown>;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ThemeIntelligence {
+  id: string;
+  tenantId: string;
+  organizationId: string;
+  brandId: string;
+  industry: string;
+  targetAudience: string;
+  positioning: string;
+  competitors: string[];
+  generatedPersonality: string[];
+  generatedVoice: string[];
+  generatedEmotion: string[];
+  generatedDesignLanguage: string[];
+  recommendations: string[];
+  confidence: number;
+  attributes: Record<string, unknown>;
+  createdAt: string;
+  updatedAt: string;
+}
+
+// ── RC2 Repository Contracts ──
+
+export interface IBrandPersonalityRepository {
+  insert(p: BrandPersonality): Promise<void>;
+  findById(tenantId: string, id: string): Promise<BrandPersonality | null>;
+  findByBrand(tenantId: string, brandId: string): Promise<BrandPersonality | null>;
+  update(tenantId: string, id: string, patch: Partial<BrandPersonality>): Promise<void>;
+}
+
+export interface IBrandVoiceRepository {
+  insert(v: BrandVoice): Promise<void>;
+  findById(tenantId: string, id: string): Promise<BrandVoice | null>;
+  findByBrand(tenantId: string, brandId: string): Promise<BrandVoice | null>;
+  update(tenantId: string, id: string, patch: Partial<BrandVoice>): Promise<void>;
+}
+
+export interface IDesignLanguageRepository {
+  insert(d: DesignLanguage): Promise<void>;
+  findById(tenantId: string, id: string): Promise<DesignLanguage | null>;
+  findByBrand(tenantId: string, brandId: string): Promise<DesignLanguage | null>;
+  update(tenantId: string, id: string, patch: Partial<DesignLanguage>): Promise<void>;
+}
+
+export interface IThemeManifestRepository {
+  insert(m: ThemeManifest): Promise<void>;
+  findById(tenantId: string, id: string): Promise<ThemeManifest | null>;
+  findByTheme(tenantId: string, themeId: string): Promise<ThemeManifest | null>;
+  findByBrand(tenantId: string, brandId: string): Promise<ThemeManifest | null>;
+  update(tenantId: string, id: string, patch: Partial<ThemeManifest>): Promise<void>;
+}
+
+export interface IThemeIntelligenceRepository {
+  insert(i: ThemeIntelligence): Promise<void>;
+  findById(tenantId: string, id: string): Promise<ThemeIntelligence | null>;
+  findByBrand(tenantId: string, brandId: string): Promise<ThemeIntelligence | null>;
+  update(tenantId: string, id: string, patch: Partial<ThemeIntelligence>): Promise<void>;
+}

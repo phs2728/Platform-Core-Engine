@@ -15,6 +15,17 @@ export const THEME_EVENTS = {
   THEME_IMPORTED: 'theme.imported',
   THEME_VALIDATED: 'theme.validated',
   THEME_SCORED: 'theme.scored',
+  // RC2: Brand & Design Language
+  PERSONALITY_CREATED: 'brand.personality.created',
+  VOICE_CREATED: 'brand.voice.created',
+  EMOTION_CREATED: 'brand.emotion.created',
+  DESIGN_LANGUAGE_CREATED: 'designlanguage.created',
+  MOTION_PROFILE_CREATED: 'motionprofile.created',
+  MANIFEST_CREATED: 'themanifest.created',
+  MANIFEST_PUBLISHED: 'themanifest.published',
+  MANIFEST_RESOLVED: 'themanifest.resolved',
+  INTELLIGENCE_GENERATED: 'intelligence.generated',
+  THEME_CHANGED: 'theme.changed',
 } as const;
 
 export type ThemeEventType = typeof THEME_EVENTS[keyof typeof THEME_EVENTS];
@@ -35,4 +46,14 @@ export const THEME_EVENT_SCHEMAS: Record<ThemeEventType, string> = {
   'theme.imported': 'theme.imported.v1',
   'theme.validated': 'theme.validated.v1',
   'theme.scored': 'theme.scored.v1',
+  'brand.personality.created': 'brand.personality.created.v1',
+  'brand.voice.created': 'brand.voice.created.v1',
+  'brand.emotion.created': 'brand.emotion.created.v1',
+  'designlanguage.created': 'designlanguage.created.v1',
+  'motionprofile.created': 'motionprofile.created.v1',
+  'themanifest.created': 'themanifest.created.v1',
+  'themanifest.published': 'themanifest.published.v1',
+  'themanifest.resolved': 'themanifest.resolved.v1',
+  'intelligence.generated': 'intelligence.generated.v1',
+  'theme.changed': 'theme.changed.v1',
 };
