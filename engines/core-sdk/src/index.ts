@@ -301,3 +301,26 @@ export {
   validateNoIndustryCoupling, validatePreservedEngines,
   runPlatformValidation,
 } from './validation_suite/index.js';
+
+// ═══════════════════════════════════════════
+// Enterprise Skill Standard v1
+// ═══════════════════════════════════════════
+
+export {
+  type SkillCertification, CERTIFICATION_DESCRIPTIONS,
+  canExecuteByDefault, requiresApproval, isDisabled,
+  type EvidenceSource, evidenceTier,
+  type SkillCategory, ALL_SKILL_CATEGORIES,
+  type SkillDefinition, type SkillInput, type SkillOutput, type SkillStep,
+  type SkillReference, type SkillCompatibility,
+  type SkillManifest,
+  type SkillValidationResult, validateSkill,
+  type ISkillRegistry, type SkillValidationReport,
+  InMemorySkillRegistry,
+  type QualityGateResult, runQualityGates,
+  type GovernanceAction, type GovernanceDecision,
+  type SkillGovernance, DefaultSkillGovernance,
+  type SkillExecutionRecord, SkillExecutionAudit,
+} from './skill_standard/index.js';
+
+export { INITIAL_SKILL_LIBRARY } from './skill_standard/library.js';
