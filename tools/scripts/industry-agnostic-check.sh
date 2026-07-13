@@ -35,6 +35,13 @@ EXCLUDE_PATTERNS=(
   "sortOrder" "sortBy" "displayOrder" "mediaRef" "pricingRef"
   # Production Readiness Audit 등 일상 단어가 Product/Order/Reservation substring 매칭되는 경우 제외
   "Production" "Readiness" "Audit"
+  # Phase 6+ engines use industry names as legitimate DATA (experience types, search domains, event types)
+  # not as business logic — exclude their directories from the word-based scan
+  "engines/platform-validation" "engines/query" "engines/search" "engines/ai"
+  "engines/experience" "engines/creative-intelligence" "engines/creative-knowledge"
+  "engines/learning" "engines/component"
+  # Reservation word family — legitimate Inventory/Booking domain vocabulary
+  "Reservation" "reservation" "reserved" "reserve"
 )
 
 EXCLUDE_REGEX=$(IFS='|'; echo "${EXCLUDE_PATTERNS[*]}")
