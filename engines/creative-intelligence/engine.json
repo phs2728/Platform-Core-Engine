@@ -1,10 +1,10 @@
 {
   "id": "creative-intelligence",
   "name": "Creative Intelligence Engine",
-  "version": "1.0.0-rc3",
+  "version": "1.0.0-rc31",
   "phase": 7,
-  "status": "RC3",
-  "description": "[Platform Phase 7 RC3] Customer Psychology Director — Platform Vision v2. NOT 점수 매기는 AI; IS Trust Evidence 배치 시스템. 5 Industries (Restaurant/Hotel/Travel/Hospital/SaaS) + 7 Trust Architecture 산출물.",
+  "status": "RC3.1",
+  "description": "[Platform Phase 7 RC3.1] Customer Decision Architect — Platform Vision RC3.1. NOT Website Builder; IS Human Decision Experience Platform. 12 Industries (Hospitality/Restaurant/Travel/Marketplace/Retail/Medical/Education/RealEstate/SaaS/NGO/Church/Government) × 7 Page Types × 11 Frameworks × Customer Question Model (CQM).",
   "depends_on": ["core-sdk", "policy", "organization", "event-bus", "creative-knowledge"],
   "provides": [
     "createArtDirection", "activateArtDirection", "getArtDirectionByStyle", "generateArtDirection",

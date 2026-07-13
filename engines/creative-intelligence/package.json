@@ -1,6 +1,6 @@
 {
   "name": "@platform/engine-creative-intelligence",
-  "version": "1.0.0-rc3",
+  "version": "1.0.0-rc31",
   "description": "Creative Intelligence Engine RC2 — Senior Art Director Upgrade: Art Direction (8 styles), Visual Review (12 dimensions), Premium/Luxury/First Impression scoring, Design Critique, AI Artifact Detection, Quality Gate. Industry-agnostic — Boutique Hospitality, Luxury Travel, SaaS, Marketplace, Restaurant, Hotel 모두 평가 가능.",
   "type": "module",
   "main": "./dist/index.js",

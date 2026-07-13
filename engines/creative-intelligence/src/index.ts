@@ -73,8 +73,26 @@ export {
   getIndustryTrustProfileUseCase,
 } from './use-cases/TrustArchitectureUseCases.js';
 
-// Trust Industry Profiles (5 industries)
-export { INDUSTRY_TRUST_PROFILES } from './infrastructure/hostAdapters.js';
+// Use Cases — Customer Decision Architecture (RC3.1 Platform Vision)
+export {
+  generateCustomerDecisionArchitectureUseCase,
+  generateDecisionJourneyUseCase as generateCDADecisionJourneyUseCase,
+  generateDetailStrategyUseCase,
+  generateTrustEvidencePlacementUseCase,
+  generateObjectionLibraryUseCase,
+  generateFAQStrategyUseCase,
+  generateAIConciergeStrategyUseCase,
+  generateSocialProofStrategyUseCase,
+  generateStoryArchitectureUseCase,
+  generateIndustryDetailBlueprintUseCase,
+  generateCustomerQuestionModelUseCase,
+  validateSectionExistenceUseCase,
+  getIndustryDetailBlueprintUseCase,
+  getObjectionLibraryUseCase,
+} from './use-cases/CDAUseCases.js';
+
+// Trust Industry Profiles (5 industries, RC3) + Industry Detail Blueprints (12 industries, RC3.1)
+export { INDUSTRY_TRUST_PROFILES, INDUSTRY_DETAIL_BLUEPRINTS, OBJECTION_LIBRARIES, JOURNEY_STEPS, generateCustomerQuestions, generateQuestionSequence } from './infrastructure/hostAdapters.js';
 
 // Events
 export { CREATIVE_EVENTS, type CreativeEventType, CREATIVE_EVENT_SCHEMAS } from './domain/events.js';

@@ -1,20 +1,31 @@
 /**
- * Creative Intelligence Engine RC3 — Public Interfaces
+ * Creative Intelligence Engine RC3.1 — Public Interfaces
  *
- * Sprint: Customer Psychology Director Upgrade (Platform Vision v2)
- * - 점수 표시 금지 (UI 노출 차단)
- * - Trust Evidence 배치로 전환
- * - 7대 신규 산출물 (Trust Architecture Report 등)
- * - 5대 산업 Trust Profile (Restaurant / Hotel / Travel / Hospital / SaaS)
+ * Sprint: Customer Decision Architect Upgrade (Platform Vision RC3.1)
+ * - "웹사이트를 만드는 시스템" → "사람의 의사결정을 설계하는 시스템"
+ * - Trust Architecture + 11대 Framework + Customer Question Model (CQM)
+ * - 12개 산업 Detail Blueprint
+ * - 점수 표시 금지 + Website Builder/Page Builder 용어 금지
  */
 import type { Result, EventEnvelope } from '@platform/core-sdk';
 
-// Trust Architecture types re-exported from core-sdk (Platform Vision v2)
+// Trust Architecture (V2) + Customer Decision Architecture (RC3.1)
 export type {
   IndustryType, TrustEvidence, IndustryTrustProfile,
   TrustJourney, ObjectionMap, EvidencePlacement, ConfidenceJourney, DecisionJourney,
   TrustChecklist, TrustChecklistItem, TrustChecklistItemStatus,
   TrustArchitectureReport, CustomerPsychologyReport, EvidencePlacementStrategy,
+  // RC3.1 CDA
+  JourneyStage, JourneyStep, Objection, ObjectionSeverity, ObjectionType,
+  PlacementStrategy, EvidencePlacementSpec, IndustryBlueprint, SectionBlueprint,
+  IndustryDetailBlueprint, FAQItem, FAQCategory, ConciergeContext,
+  ConciergeRecommendation, ConciergeTrigger, SocialProofType, SocialProofAsset,
+  StoryStage, StoryArchitecture, CustomerQuestion, CustomerQuestionModel,
+  QuestionPriority, CustomerDecisionArchitectureReport, DecisionJourneyReport,
+  DetailStrategyReport, TrustEvidencePlacementReport, ObjectionLibraryReport,
+  FAQStrategyReport, AIConciergeStrategy, SocialProofStrategy,
+  StoryArchitectureReport, IndustryDetailBlueprintEntity, CustomerQuestionModelReport,
+  SectionJustification,
 } from '@platform/core-sdk';
 
 // ═══════════════════════════════════════════
