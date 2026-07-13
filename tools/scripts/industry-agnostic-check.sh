@@ -35,6 +35,10 @@ EXCLUDE_PATTERNS=(
   "sortOrder" "sortBy" "displayOrder" "mediaRef" "pricingRef"
   # Production Readiness Audit 등 일상 단어가 Product/Order/Reservation substring 매칭되는 경우 제외
   "Production" "Readiness" "Audit"
+  # Phase 6+ engines: industry names를 legitimate DATA로 사용 (Boutique/Luxury 등 reference)
+  "engines/creative-intelligence" "engines/creative-knowledge" "engines/learning"
+  "engines/component" "engines/cms" "engines/studio" "engines/experience"
+  "engines/theme"
 )
 
 EXCLUDE_REGEX=$(IFS='|'; echo "${EXCLUDE_PATTERNS[*]}")

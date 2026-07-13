@@ -1,0 +1,52 @@
+{
+  "id": "creative-intelligence",
+  "name": "Creative Intelligence Engine",
+  "version": "1.0.0-rc2",
+  "phase": 7,
+  "status": "RC2",
+  "description": "[Platform Phase 7 RC2] Senior Art Director Upgrade — evaluates design at world-class level (Boutique Hospitality / Luxury Travel / SaaS / Marketplace / Restaurant / Hotel benchmarks). Art Direction (8 styles), 12 visual reviews, Design Critique, AI Artifact Detection, Quality Gate. Not a designer — a JUDGE.",
+  "depends_on": ["core-sdk", "policy", "organization", "event-bus", "creative-knowledge"],
+  "provides": [
+    "createArtDirection", "activateArtDirection", "getArtDirectionByStyle", "generateArtDirection",
+    "reviewVisualHierarchy", "reviewWhitespace", "reviewTypography", "reviewPhotography",
+    "reviewComposition", "reviewScrollExperience", "reviewMicroInteraction", "reviewVisualConsistency",
+    "reviewBrandExpression", "reviewEmotionalJourney", "reviewConversion",
+    "reviewFirstImpression", "reviewPremiumQuality", "reviewLuxury", "reviewAISmell",
+    "generateCreativeCritique", "generateVisualRecommendations",
+    "generatePhotographyGuide", "generateMotionGuide", "generateInteractionGuide",
+    "approveCreative", "rejectCreative", "generateReport"
+  ],
+  "events_emitted": [
+    "ci.art_direction.created", "ci.art_direction.activated",
+    "ci.first_impression.reviewed", "ci.premium.reviewed", "ci.luxury.reviewed",
+    "ci.visual_hierarchy.reviewed", "ci.whitespace.reviewed", "ci.typography.reviewed",
+    "ci.photography.reviewed", "ci.composition.reviewed", "ci.scroll.reviewed",
+    "ci.micro_interaction.reviewed", "ci.visual_consistency.reviewed",
+    "ci.brand_expression.reviewed", "ci.emotional_journey.reviewed", "ci.conversion.reviewed",
+    "ci.ai_smell.detected",
+    "ci.design_critique.generated", "ci.design_recommendation.generated",
+    "ci.creative.approved", "ci.creative.rejected",
+    "ci.report.creative_review", "ci.report.art_direction", "ci.report.premium",
+    "ci.report.luxury", "ci.report.three_second", "ci.report.design_critique", "ci.report.design_recommendation"
+  ],
+  "events_subscribed": [],
+  "strict_boundaries": {
+    "owns": [
+      "ArtDirection", "VisualStory", "FirstImpression",
+      "VisualHierarchy", "Composition", "PhotographyDirection", "TypographyDirection",
+      "WhitespaceStrategy", "GridSystem", "VisualRhythm", "VisualConsistency",
+      "PremiumReview", "DesignCritique", "DesignRecommendation",
+      "ConversionReview", "EmotionalJourney", "InteractionReview",
+      "MicroInteractionProfile", "MotionDirection",
+      "AIArtifactDetection", "BrandEmotion", "BrandExpression", "LuxuryScore",
+      "CreativeApproval", "CreativeAuditRecord"
+    ],
+    "forbidden": [
+      "HTMLGeneration", "CSSGeneration", "ReactComponent", "VueComponent", "FlutterWidget",
+      "BusinessLogic", "Authentication", "Password", "Session", "OAuth", "MFA",
+      "Permission", "Role", "DirectDatabaseConnection",
+      "ThemeManifest", "BrandPersonality", "BrandVoice", "BrandEmotion", "DesignLanguage",
+      "ComponentDefinition", "ContentDefinition", "PageDefinition"
+    ]
+  }
+}
