@@ -40,4 +40,5 @@ export type EngineName =
   | 'learning'
   | 'inventory'
   | 'order'
-  | 'component';
+  | 'component'
+  | 'cms';
