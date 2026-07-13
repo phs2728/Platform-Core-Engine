@@ -8,11 +8,13 @@ import type { EventEnvelope } from '@platform/core-sdk';
 import { Ok, type Result } from '@platform/core-sdk';
 import type {
   IOrganizationVerifier, IPolicyProvider,
-  IExperienceProvider, IThemeProvider, ICreativeIntelligenceProvider,
+  IExperienceProvider, ICreativeIntelligenceProvider,
   ILearningProvider, ISearchProvider, IAIProvider, IRuntimeProvider,
   IComponentRendererProvider, IAnimationProvider, IAccessibilityProvider,
   IPreviewProvider, IAnalyticsProvider, ILearningPluginProvider,
-  ExperienceRef, ThemeRef, CreativeDirectionRef,
+  // RC2: ThemeManifest Consumer replaces IThemeProvider
+  IThemeManifestConsumer, ResolvedManifest,
+  ExperienceRef, CreativeDirectionRef,
   ComponentOutcomeRef, ComponentSearchResult,
   ComponentRecommendationContext, ComponentRecommendation, ComponentHealth,
   ComponentRenderInput, ComponentRenderOutput,
@@ -61,22 +63,6 @@ export class MockExperienceProvider implements IExperienceProvider {
   async validateExperienceLayout(_t: string, _layout: string[]): Promise<Result<boolean, Error>> { return Ok(true); }
 }
 
-// ── Theme Provider (Theme Engine adapter) ──
-export class MockThemeProvider implements IThemeProvider {
-  private themes = new Map<string, ThemeRef>();
-  private tokens = new Map<string, string>();
-  add(t: string, themeId: string, ref: ThemeRef): void { this.themes.set(`${t}::${themeId}`, ref); }
-  setToken(t: string, themeId: string, key: string, value: string): void { this.tokens.set(`${t}::${themeId}::${key}`, value); }
-  async getTheme(t: string, themeId: string): Promise<Result<ThemeRef, Error>> {
-    const r = this.themes.get(`${t}::${themeId}`);
-    return r ? Ok(r) : Ok({ themeId, name: 'Mock Theme', defaultMode: 'Light' });
-  }
-  async resolveToken(t: string, themeId: string, key: string): Promise<Result<string, Error>> {
-    const r = this.tokens.get(`${t}::${themeId}::${key}`);
-    return r ? Ok(r) : Ok(`resolved-${key}`);
-  }
-}
-
 // ── Creative Intelligence Provider ──
 export class MockCreativeIntelligenceProvider implements ICreativeIntelligenceProvider {
   private store = new Map<string, CreativeDirectionRef>();
@@ -84,6 +70,52 @@ export class MockCreativeIntelligenceProvider implements ICreativeIntelligencePr
   async getCreativeDirection(t: string, style: string): Promise<Result<CreativeDirectionRef, Error>> {
     const r = this.store.get(`${t}::${style}`);
     return r ? Ok(r) : Ok({ directionId: 'mock-dir', style, premiumScore: 90, professionalScore: 92 });
+  }
+}
+
+// ═══════════════════════════════════════════
+// RC2: Theme Manifest Consumer (single read-only API, deterministic)
+// Sprint B 원칙 2: Component는 이 하나의 API만 호출 가능
+// 결정적: 같은 입력(tenantId, themeId) → 항상 같은 ResolvedManifest
+// ═══════════════════════════════════════════
+
+export class MockThemeManifestConsumer implements IThemeManifestConsumer {
+  private store = new Map<string, ResolvedManifest>();
+  /** manifestKey for test setup: `${tenantId}::${themeId}` → ResolvedManifest */
+  set(tenantId: string, themeId: string, manifest: ResolvedManifest): void {
+    this.store.set(`${tenantId}::${themeId}`, manifest);
+  }
+  clear(): void { this.store.clear(); }
+  async resolveThemeManifest(tenantId: string, themeId: string): Promise<Result<ResolvedManifest, Error>> {
+    const key = `${tenantId}::${themeId}`;
+    const r = this.store.get(key);
+    if (r) return Ok(r);
+    return Ok({
+      manifestId: `manifest-${themeId}`,
+      themeId,
+      brandId: `brand-${themeId}`,
+      version: '1.0.0',
+      resolvedTokens: {
+        '--brand-whitespace': 'medium',
+        '--brand-hierarchy': 'moderate',
+        '--brand-density': 'medium',
+        '--brand-motion-intensity': 'subtle',
+        '--brand-motion-duration': '300ms',
+        '--brand-motion-easing': 'ease',
+        '--brand-wcag-level': 'AA',
+        '--brand-contrast-ratio': '4.5',
+        '--brand-photography': 'editorial',
+        '--brand-illustration': 'minimal',
+        '--brand-iconography': 'outline',
+      },
+      manifestHash: this.computeHash(themeId),
+    });
+  }
+  /** deterministic hash: 같은 themeId → 같은 hash */
+  private computeHash(themeId: string): string {
+    let h = 0;
+    for (let i = 0; i < themeId.length; i++) h = (h * 31 + themeId.charCodeAt(i)) >>> 0;
+    return `hash-${h.toString(16)}`;
   }
 }
 

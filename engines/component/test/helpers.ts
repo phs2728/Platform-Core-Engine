@@ -11,7 +11,7 @@ import {
   InMemoryComponentAuditRepository,
   InMemoryOrganizationVerifier, StaticComponentPolicyProvider,
   InMemoryEventBus,
-  MockExperienceProvider, MockThemeProvider, MockCreativeIntelligenceProvider,
+  MockExperienceProvider, MockThemeManifestConsumer, MockCreativeIntelligenceProvider,
   MockLearningProvider, MockSearchProvider, MockAIProvider, MockRuntimeProvider,
   MockComponentRendererProvider, MockAnimationProvider, MockAccessibilityProvider,
   MockPreviewProvider, MockAnalyticsProvider, MockLearningPluginProvider,
@@ -44,7 +44,7 @@ export function makeDeps(): ComponentUseCaseDeps & {
   organizationVerifier: InMemoryOrganizationVerifier;
   policyProvider: StaticComponentPolicyProvider;
   experienceProvider: MockExperienceProvider;
-  themeProvider: MockThemeProvider;
+  themeManifestConsumer: MockThemeManifestConsumer;
   creativeIntelligenceProvider: MockCreativeIntelligenceProvider;
   learningProvider: MockLearningProvider;
   searchProvider: MockSearchProvider;
@@ -61,8 +61,12 @@ export function makeDeps(): ComponentUseCaseDeps & {
   organizationVerifier.add('t-1', 'org-1');
   const policyProvider = new StaticComponentPolicyProvider();
   policyProvider.set('t-1', { maxComponents: 100 });
-  const themeProvider = new MockThemeProvider();
-  themeProvider.add('t-1', 'theme-1', { themeId: 'theme-1', name: 'Default', defaultMode: 'Light' as const });
+  const themeManifestConsumer = new MockThemeManifestConsumer();
+  themeManifestConsumer.set('t-1', 'theme-1', {
+    manifestId: 'manifest-1', themeId: 'theme-1', brandId: 'brand-1', version: '1.0.0',
+    resolvedTokens: { '--brand-whitespace': 'medium', '--color.primary': '#7c2d3a' },
+    manifestHash: 'hash-test',
+  });
   const runtimeProvider = new MockRuntimeProvider();
   runtimeProvider.add('t-1', 'comp-health-1', { componentId: 'comp-health-1', healthy: true, loadTime: 120, errorRate: 0.01 });
   let idCounter = 0;
@@ -88,7 +92,7 @@ export function makeDeps(): ComponentUseCaseDeps & {
     organizationVerifier,
     policyProvider,
     experienceProvider: new MockExperienceProvider(),
-    themeProvider,
+    themeManifestConsumer,
     creativeIntelligenceProvider: new MockCreativeIntelligenceProvider(),
     learningProvider: new MockLearningProvider(),
     searchProvider: new MockSearchProvider(),

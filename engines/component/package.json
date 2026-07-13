@@ -1,6 +1,6 @@
 {
   "name": "@platform/engine-component",
-  "version": "1.0.0-rc1",
+  "version": "1.0.0-rc2",
   "description": "Experience Component Engine — Platform Component OS: experience components, atomic components, composition, variants, quality scoring, accessibility, animation, interaction, learning, marketplace.",
   "type": "module",
   "main": "./dist/index.js",

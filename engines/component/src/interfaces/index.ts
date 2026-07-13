@@ -44,7 +44,7 @@ export interface ExperienceRef {
   slug: string;
 }
 
-// ── Theme Engine host adapter ──
+// ── Theme Engine host adapter (RC1: read-only) ──
 export interface IThemeProvider {
   getTheme(tenantId: string, themeId: string): Promise<Result<ThemeRef, Error>>;
   resolveToken(tenantId: string, themeId: string, tokenKey: string): Promise<Result<string, Error>>;
@@ -54,6 +54,43 @@ export interface ThemeRef {
   themeId: string;
   name: string;
   defaultMode: 'Light' | 'Dark';
+}
+
+// ═══════════════════════════════════════════
+// RC2: ThemeManifest Consumer (single API surface, read-only)
+// Sprint B 원칙 2: Component는 resolveThemeManifest()만 호출 가능
+// ═══════════════════════════════════════════
+
+export interface IThemeManifestConsumer {
+  /**
+   * Component가 호출할 수 있는 유일한 Theme API.
+   * Theme 변경/저장/생성/이벤트 발행 절대 불가.
+   * 결정적(deterministic): 동일 입력 → 항상 동일 resolvedTokens 반환.
+   */
+  resolveThemeManifest(tenantId: string, themeId: string): Promise<Result<ResolvedManifest, Error>>;
+}
+
+/** ResolvedManifest = ThemeManifest가 디자인 토큰으로 변환된 read-only 데이터 */
+export interface ResolvedManifest {
+  manifestId: string;
+  themeId: string;
+  brandId: string;
+  version: string;
+  /** brand-* prefix 디자인 토큰 (14+ 항목) */
+  resolvedTokens: Record<string, string>;
+  /** 결정적 해시 (테스트/캐시 검증용) */
+  manifestHash: string;
+}
+
+export interface ThemeChangedEvent {
+  tenantId: string;
+  themeId: string;
+  manifestId: string;
+  brandId: string;
+  version: string;
+  /** 영향받는 Component 식별용 (manifestHash로 비교) */
+  manifestHash: string;
+  occurredAt: string;
 }
 
 // ── Creative Intelligence host adapter ──

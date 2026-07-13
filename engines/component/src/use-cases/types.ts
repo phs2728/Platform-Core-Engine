@@ -2,8 +2,10 @@
 import type {
   IClock, IIdGenerator, IEventBus,
   IOrganizationVerifier, IPolicyProvider,
-  IExperienceProvider, IThemeProvider, ICreativeIntelligenceProvider,
+  IExperienceProvider, ICreativeIntelligenceProvider,
   ILearningProvider, ISearchProvider, IAIProvider, IRuntimeProvider,
+  // RC2: ThemeManifest Consumer replaces IThemeProvider (single API surface, read-only)
+  IThemeManifestConsumer,
   IComponentRendererProvider, IAnimationProvider, IAccessibilityProvider,
   IPreviewProvider, IAnalyticsProvider, ILearningPluginProvider,
   IComponentRepository, IComponentSubEntityRepository,
@@ -37,7 +39,8 @@ export interface ComponentUseCaseDeps {
   organizationVerifier: IOrganizationVerifier;
   policyProvider: IPolicyProvider;
   experienceProvider: IExperienceProvider;
-  themeProvider: IThemeProvider;
+  // RC2: ThemeManifest Consumer (replaces IThemeProvider, single read-only API)
+  themeManifestConsumer: IThemeManifestConsumer;
   creativeIntelligenceProvider: ICreativeIntelligenceProvider;
   learningProvider: ILearningProvider;
   searchProvider: ISearchProvider;

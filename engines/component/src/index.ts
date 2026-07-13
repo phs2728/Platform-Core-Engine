@@ -22,7 +22,9 @@ export type {
   PreviewInput, PreviewOutput,
   AnalyticsEvent, ComponentMetrics,
   LearningInput, LearningOutput,
-  ExperienceRef, ThemeRef, CreativeDirectionRef,
+  // RC2: Theme Manifest Consumer (Sprint B)
+  IThemeManifestConsumer, ResolvedManifest, ThemeChangedEvent,
+  ExperienceRef, CreativeDirectionRef,
   ComponentOutcomeRef, ComponentSearchResult,
   ComponentRecommendationContext, ComponentRecommendation, ComponentHealth,
 } from './interfaces/index.js';
@@ -31,7 +33,7 @@ export type {
 export type {
   IClock, IIdGenerator, IEventBus,
   IOrganizationVerifier, IPolicyProvider,
-  IExperienceProvider, IThemeProvider, ICreativeIntelligenceProvider,
+  IExperienceProvider, ICreativeIntelligenceProvider,
   ILearningProvider, ISearchProvider, IAIProvider, IRuntimeProvider,
   IComponentRendererProvider, IAnimationProvider, IAccessibilityProvider,
   IPreviewProvider, IAnalyticsProvider, ILearningPluginProvider,
@@ -74,6 +76,14 @@ export {
   type ComponentReport,
 } from './use-cases/IntelligenceMarketplaceUseCases.js';
 
+// Use Cases — RC2 Manifest Consumer (Sprint B)
+export {
+  resolveThemeManifestUseCase,
+  subscribeToThemeChangedUseCase, reResolveComponentTokensUseCase,
+  recalculateComponentScoresUseCase, regenerateComponentPreviewUseCase,
+  createPublishCandidateUseCase, getComponentsByManifestThemeUseCase,
+} from './use-cases/ManifestConsumerUseCases.js';
+
 // Events
 export { COMPONENT_EVENTS, type ComponentEventType, COMPONENT_EVENT_SCHEMAS } from './domain/events.js';
 
@@ -95,7 +105,7 @@ export {
 export {
   InMemoryOrganizationVerifier, StaticComponentPolicyProvider,
   InMemoryEventBus, type RecordedEnvelope,
-  MockExperienceProvider, MockThemeProvider, MockCreativeIntelligenceProvider,
+  MockExperienceProvider, MockThemeManifestConsumer, MockCreativeIntelligenceProvider,
   MockLearningProvider, MockSearchProvider, MockAIProvider, MockRuntimeProvider,
   MockComponentRendererProvider, MockAnimationProvider, MockAccessibilityProvider,
   MockPreviewProvider, MockAnalyticsProvider, MockLearningPluginProvider,

@@ -142,10 +142,14 @@ export async function createTokenReferenceUseCase(
   const c = await deps.componentRepo.findById(d.tenantId, d.componentId);
   if (!c) return Err(new NotFoundError('Component not found'));
   const id = deps.idGenerator.generate(); const now = deps.clock.now().toISOString();
-  // try resolve via theme provider
+  // RC2: single API call to themeManifestConsumer (Sprint B 원칙 2)
+  // resolveThemeManifest returns ALL brand-* tokens, then we lookup the specific key
   let resolvedValue: string | null = null;
-  const resolved = await deps.themeProvider.resolveToken(d.tenantId, d.themeId, d.tokenKey);
-  if (resolved.ok) resolvedValue = resolved.value;
+  const manifestResult = await deps.themeManifestConsumer.resolveThemeManifest(d.tenantId, d.themeId);
+  if (manifestResult.ok) {
+    const tokenKey = d.tokenKey.startsWith('--') ? d.tokenKey : `--${d.tokenKey}`;
+    resolvedValue = manifestResult.value.resolvedTokens[tokenKey] ?? manifestResult.value.resolvedTokens[d.tokenKey] ?? null;
+  }
   const tokenRef: ComponentTokenReference = {
     id, tenantId: d.tenantId, organizationId: d.organizationId, componentId: d.componentId,
     themeId: d.themeId, tokenKey: d.tokenKey, tokenValue: d.tokenValue,
@@ -162,11 +166,20 @@ export async function resolveTokenReferencesUseCase(
   const c = await deps.componentRepo.findById(tenantId, componentId);
   if (!c) return Err(new NotFoundError('Component not found'));
   const refs = await deps.tokenRefRepo.findByComponent(tenantId, componentId);
+  // RC2: resolve manifest once per unique themeId (deterministic, single API)
+  const manifestCache = new Map<string, Record<string, string>>();
   let resolved = 0; let unresolved = 0;
   for (const ref of refs) {
-    const r = await deps.themeProvider.resolveToken(tenantId, ref.themeId, ref.tokenKey);
-    if (r.ok) {
-      await deps.tokenRefRepo.update(tenantId, ref.id, { resolvedValue: r.value, updatedAt: deps.clock.now().toISOString() });
+    let tokens = manifestCache.get(ref.themeId);
+    if (!tokens) {
+      const m = await deps.themeManifestConsumer.resolveThemeManifest(tenantId, ref.themeId);
+      tokens = m.ok ? m.value.resolvedTokens : {};
+      manifestCache.set(ref.themeId, tokens);
+    }
+    const tokenKey = ref.tokenKey.startsWith('--') ? ref.tokenKey : `--${ref.tokenKey}`;
+    const value = tokens[tokenKey] ?? tokens[ref.tokenKey];
+    if (value !== undefined) {
+      await deps.tokenRefRepo.update(tenantId, ref.id, { resolvedValue: value, updatedAt: deps.clock.now().toISOString() });
       resolved++;
     } else {
       unresolved++;

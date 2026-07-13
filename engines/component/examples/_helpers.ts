@@ -10,7 +10,7 @@ import {
   InMemoryVersionRepository, InMemoryMarketplaceRepository,
   InMemoryComponentAuditRepository,
   InMemoryOrganizationVerifier, StaticComponentPolicyProvider, InMemoryEventBus,
-  MockExperienceProvider, MockThemeProvider, MockCreativeIntelligenceProvider,
+  MockExperienceProvider, MockThemeManifestConsumer, MockCreativeIntelligenceProvider,
   MockLearningProvider, MockSearchProvider, MockAIProvider, MockRuntimeProvider,
   MockComponentRendererProvider, MockAnimationProvider, MockAccessibilityProvider,
   MockPreviewProvider, MockAnalyticsProvider, MockLearningPluginProvider,
@@ -22,8 +22,12 @@ export function makeDemoDeps(): ComponentUseCaseDeps {
   organizationVerifier.add('t-1', 'org-1');
   const policyProvider = new StaticComponentPolicyProvider();
   policyProvider.set('t-1', { maxComponents: 100 });
-  const themeProvider = new MockThemeProvider();
-  themeProvider.add('t-1', 'theme-1', { themeId: 'theme-1', name: 'Default', defaultMode: 'Light' });
+  const themeManifestConsumer = new MockThemeManifestConsumer();
+  themeManifestConsumer.set('t-1', 'theme-1', {
+    manifestId: 'manifest-1', themeId: 'theme-1', brandId: 'brand-1', version: '1.0.0',
+    resolvedTokens: { '--brand-whitespace': 'medium', '--color.primary': '#7c2d3a' },
+    manifestHash: 'hash-test',
+  });
   let idCounter = 0;
   return {
     componentRepo: new InMemoryComponentRepository(),
@@ -46,7 +50,7 @@ export function makeDemoDeps(): ComponentUseCaseDeps {
     eventBus: new InMemoryEventBus(),
     organizationVerifier, policyProvider,
     experienceProvider: new MockExperienceProvider(),
-    themeProvider,
+    themeManifestConsumer,
     creativeIntelligenceProvider: new MockCreativeIntelligenceProvider(),
     learningProvider: new MockLearningProvider(),
     searchProvider: new MockSearchProvider(),
