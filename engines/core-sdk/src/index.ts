@@ -230,3 +230,74 @@ export {
   type ConsumerContractTest, type ConsumerTestResult, runConsumerContractTest,
   isVersionCompatible,
 } from './contracts/index.js';
+
+// ═══════════════════════════════════════════
+// Platform Capability Upgrade RC1 (7 Capabilities)
+// ═══════════════════════════════════════════
+
+// Capability 1: BFF / Host Gateway
+export {
+  type BFFProtocol, type FrontendFramework,
+  type HostGatewayConfig, type BFFQuery, type BFFQueryResult,
+  type BFFBatchQuery, type BFFBatchResult,
+  type AggregationPattern, type CachingStrategy, type StreamingStrategy,
+  type HostGatewaySpec, DEFAULT_BFF_CONFIG,
+  createBFFQuery, shouldCache,
+} from './host/index.js';
+
+// Capability 2: Localization Framework
+export {
+  type LocaleCode, type LocalizationConfig, type LocaleManifest,
+  type LocalizedContent, type LocalizationProvider, type LocalizationStrategy,
+  type AILocalizationRequest, type AILocalizationResult,
+  DEFAULT_LOCALE_CONFIG, detectLocaleFromHeaders, buildHreflangTags, formatCurrency,
+} from './localization/index.js';
+
+// Capability 3: Contract First Automation
+export {
+  type ContractTarget, ALL_CONTRACT_TARGETS,
+  type ZodSchemaInfo, type OpenAPISpec, type JSONSchemaExport,
+  type SDKFile, type MCPToolDef, type AIPromptSchema,
+  type ContractGenerationPipeline, type ContractGenerationResult,
+  zodToJSONSchema, jsonSchemaToOpenAPI, generateContractPipeline,
+  checkBackwardCompatibility,
+} from './contract_gen/index.js';
+
+// Capability 4: AI Frontend Generation Contract
+export {
+  type FrontendOutputTarget, ALL_FRONTEND_TARGETS,
+  type FrontendGenerationContract,
+  type ThemeManifestForAI, type ExperienceManifestForAI, type ComponentManifestForAI,
+  type CMSSchemaForAI, type APIContractForAI, type LocalizationContractForAI,
+  type AccessibilityRulesForAI, type SEORulesForAI, type AnimationRulesForAI,
+  type ResponsiveRulesForAI, type ImageRulesForAI, type TypographyRulesForAI,
+  type InteractionRulesForAI,
+  createFrontendGenerationContract, validateGenerationContract,
+} from './frontend_gen/index.js';
+
+// Capability 5: Design Detail Strategy
+export {
+  type DetailPageIndustry, type DetailSection, type DetailPageStrategy,
+  DETAIL_STRATEGY_LIBRARY, getDetailStrategy, listAllDetailStrategies,
+} from './detail_strategy/index.js';
+
+// Capability 6: Customer Assistance Layer
+export {
+  type AssistanceChannel, type ConversationIntent, type EscalationLevel,
+  type ConversationMessage, type ConversationSession, type ConversationContext,
+  type IAssistanceProvider, type AssistanceResponse,
+  type SuggestedAction, type NextActionRecommendation,
+  type EscalationRule, DEFAULT_ESCALATION_RULES,
+  evaluateEscalation,
+  type ConversationStrategy, DEFAULT_CONVERSATION_STRATEGY,
+} from './assistance/index.js';
+
+// Capability 7: Platform Validation
+export {
+  type ValidationSeverity, type ValidationFinding, type ValidationReport,
+  type ValidationRule, PLATFORM_VALIDATION_RULES,
+  APPROVED_ENGINES,
+  validateNoDuplicateEngine, validateNoNewBusinessEngine,
+  validateNoIndustryCoupling, validatePreservedEngines,
+  runPlatformValidation,
+} from './validation_suite/index.js';
