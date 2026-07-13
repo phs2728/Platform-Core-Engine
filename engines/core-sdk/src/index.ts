@@ -324,3 +324,42 @@ export {
 } from './skill_standard/index.js';
 
 export { INITIAL_SKILL_LIBRARY } from './skill_standard/library.js';
+
+// ═══════════════════════════════════════════
+// Enterprise Skill Library v2
+// ═══════════════════════════════════════════
+
+// Part 1: Skill Packs
+export {
+  type SkillPack, type ExecutionPhase, type SkillPackManifest,
+  type PackValidationResult, validateSkillPack,
+  type ISkillPackRegistry, InMemorySkillPackRegistry,
+  INITIAL_SKILL_PACKS,
+} from './skill_standard/packs/index.js';
+
+// Part 2: Agency Playbooks
+export {
+  type AgencyPlaybook, type PlaybookSection, type PlaybookSectionCategory,
+  ALL_PLAYBOOK_SECTIONS,
+  type IPlaybookRegistry, InMemoryPlaybookRegistry,
+  INITIAL_PLAYBOOKS,
+} from './skill_standard/playbooks/index.js';
+
+// Part 3: Reverse Engineering System
+export {
+  type ReverseEngineeringInputType, type ReverseEngineeringInput,
+  type DesignDNAType, type DesignDNA,
+  type PipelineStage, PIPELINE_STAGES, type PipelineResult,
+  runReverseEngineeringPipeline,
+  type ProductionProvenReference, PRODUCTION_PROVEN_REGISTRY,
+  type EvidenceClassification, EVIDENCE_CLASSIFICATION_ORDER,
+  evidenceClassificationToCertification,
+} from './skill_standard/reverse/index.js';
+
+// Part 4: Knowledge Evolution
+export {
+  type KnowledgeAssetType, type KnowledgeAsset,
+  type IKnowledgeBase, InMemoryKnowledgeBase,
+  type KnowledgeEvolutionEvent, type KnowledgeEvolutionReport,
+  KnowledgeEvolutionTracker,
+} from './skill_standard/knowledge/index.js';
