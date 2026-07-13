@@ -140,3 +140,20 @@ export {
   FORBIDDEN_V2_TERMS,
   validatePlatformTerminology,
 } from './cda.js';
+
+// Agency OS (Platform Agency OS RC1 — 사장님 확립 2026-07-13)
+export {
+  AGENCY_FIRST_PRINCIPLE,
+  type DecisionPhase, DECISION_PIPELINE, type DecisionGate,
+  type ExecutiveRole, type ExecutiveAgent, type ExecutiveDecision,
+  type SwarmType, type SwarmSpecialist, type Swarm,
+  type TaskStatus, type TaskPriority, type AgencyTask, type TaskResult,
+  type DebateStance, type DebateOpinion, type ExpertDebate,
+  type WorkflowPhase, WORKFLOW_PHASES, type WorkflowStatus, type AgencyWorkflow,
+  type WorkflowTemplateType, type WorkflowTemplate,
+  type MemoryCategory, type ExecutiveMemory,
+  type AgencyExecutionReport, type SwarmCollaborationReport,
+  type DebateSummaryReport, type DecisionLogReport,
+  type ExecutiveMemoryReport, type LearningEvolutionReport,
+  type AgencyAuditEventType, type AgencyAuditRecord,
+} from './agency-os.js';

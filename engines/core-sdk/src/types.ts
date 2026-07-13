@@ -42,4 +42,5 @@ export type EngineName =
   | 'order'
   | 'component'
   | 'cms'
-  | 'studio';
+  | 'studio'
+  | 'agency-os';

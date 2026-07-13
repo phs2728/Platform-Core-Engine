@@ -1,0 +1,43 @@
+{
+  "id": "agency-os",
+  "name": "Agency OS Engine",
+  "version": "1.0.0-rc1",
+  "phase": 8,
+  "status": "RC1",
+  "description": "[Platform Phase 8 RC1] AI Digital Agency Operating System — Executive Layer + Swarm Layer + Expert Debate + Executive Memory + Workflow Automation. Agency First Principle: No single AI agent makes important decisions alone.",
+  "depends_on": ["core-sdk", "policy", "organization", "event-bus"],
+  "provides": [
+    "initiateWorkflow", "advanceWorkflowPhase", "getWorkflow", "listWorkflows",
+    "createSwarm", "completeSwarm", "getSwarm",
+    "createTask", "executeTask", "retryTask", "getTask",
+    "startDebate", "addOpinion", "resolveDebate",
+    "makeDecision", "listDecisions",
+    "storeMemory", "queryMemory", "seedDefaultMemory", "updateMemory",
+    "generateReport", "listWorkflowTemplates",
+    "validateAgencyFirstPrinciple"
+  ],
+  "events_emitted": [
+    "agency.workflow.initiated", "agency.workflow.phase_changed", "agency.workflow.released", "agency.workflow.failed",
+    "agency.swarm.created", "agency.swarm.completed", "agency.swarm.failed",
+    "agency.task.assigned", "agency.task.completed", "agency.task.failed", "agency.task.retried",
+    "agency.debate.started", "agency.debate.resolved",
+    "agency.decision.made", "agency.decision.rejected",
+    "agency.memory.stored", "agency.memory.updated",
+    "agency.report.generated"
+  ],
+  "events_subscribed": [],
+  "strict_boundaries": {
+    "owns": [
+      "AgencyWorkflow", "Swarm", "SwarmSpecialist", "AgencyTask", "TaskResult",
+      "ExpertDebate", "DebateOpinion", "ExecutiveDecision", "DecisionGate",
+      "ExecutiveMemory", "AgencyAuditRecord"
+    ],
+    "forbidden": [
+      "HTMLGeneration", "CSSGeneration", "ReactComponent", "VueComponent", "FlutterWidget",
+      "BusinessLogic", "Authentication", "Password", "Session", "OAuth",
+      "ThemeManifest", "BrandPersonality", "ComponentDefinition",
+      "Content", "Page", "PageSection", "ContentSlot",
+      "TrustScore", "PremiumScore", "LuxuryScore", "WebsiteBuilder", "PageBuilder"
+    ]
+  }
+}
