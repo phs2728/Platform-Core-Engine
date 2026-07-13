@@ -363,3 +363,23 @@ export {
   type KnowledgeEvolutionEvent, type KnowledgeEvolutionReport,
   KnowledgeEvolutionTracker,
 } from './skill_standard/knowledge/index.js';
+
+// ═══════════════════════════════════════════
+// Quality Execution Standard v1 (QES)
+// ═══════════════════════════════════════════
+
+export {
+  type ExecutionLevel, EXECUTION_LEVEL_ORDER,
+  levelRank, meetsMinimumLevel,
+  type QualityCategory, ALL_QUALITY_CATEGORIES,
+  type QESVerdict, type CategoryAssessment, type PageAssessment,
+  type PageType, type PageQualityStandard, PAGE_QUALITY_MATRIX,
+  type AISmellType, type AISmellRule, AI_SMELL_RULES,
+  type AISmellFinding, detectAISmell,
+  type GoldenReferenceResult, compareAgainstGoldenReference,
+  type ReviewerRole, ALL_REVIEWER_ROLES,
+  type ProfessionalReview, runProfessionalReview,
+  aggregateVerdicts, determineExecutionLevel,
+  generateImprovementTasks, assessPage,
+  type QESUpdateEvent, QESContinuousImprovement,
+} from './qes/index.js';
