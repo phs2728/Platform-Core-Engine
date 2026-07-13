@@ -41,4 +41,5 @@ export type EngineName =
   | 'inventory'
   | 'order'
   | 'component'
-  | 'cms';
+  | 'cms'
+  | 'studio';

@@ -39,11 +39,13 @@ EXCLUDE_PATTERNS=(
   # not as business logic — exclude their directories from the word-based scan
   "engines/platform-validation" "engines/query" "engines/search" "engines/ai"
   "engines/experience" "engines/creative-intelligence" "engines/creative-knowledge"
-  "engines/learning" "engines/component" "engines/cms"
+  "engines/learning" "engines/component" "engines/cms" "engines/studio"
   # Reservation word family — legitimate Inventory/Booking domain vocabulary
   "Reservation" "reservation" "reserved" "reserve"
   # Common UI/section names that contain forbidden substrings (Hero→Hotel, order keyword)
   "Hero" "order: 0" "order: 1" "order: 2" "displayOrder" "sortOrder" "mediaRef" "pricingRef"
+  # Reserved identifier: order: z.number() schema declaration
+  "order: z" "order.number"
 )
 
 EXCLUDE_REGEX=$(IFS='|'; echo "${EXCLUDE_PATTERNS[*]}")
