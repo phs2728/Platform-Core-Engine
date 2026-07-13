@@ -1,0 +1,85 @@
+# CI Hardening Configuration — Sprint A-7
+#
+# Dummy PASS is forbidden.
+# CI must enforce: Coverage, Architecture, Performance, Security, License, Dependencies.
+
+# ═══════════════════════════════════════════
+# Coverage Enforcement
+# ═══════════════════════════════════════════
+coverage:
+  minimum:
+    lines: 80        # 80% line coverage minimum
+    functions: 75    # 75% function coverage minimum
+    branches: 70     # 70% branch coverage minimum
+  per_engine:
+    core-sdk: 90
+    creative-intelligence: 85
+    agency-os: 80
+    theme: 85
+    component: 85
+    cms: 80
+    studio: 80
+  forbidden:
+    - "0% coverage files"
+    - "empty test files"
+    - "dummy PASS (test that always passes without assertions)"
+
+# ═══════════════════════════════════════════
+# Architecture Tests
+# ═══════════════════════════════════════════
+architecture:
+  rules:
+    - no-direct-engine-imports
+    - no-interface-to-usecase
+    - no-domain-to-infra
+  circular_dependency: fail
+  manifest_validation: required
+
+# ═══════════════════════════════════════════
+# Performance Smoke Tests
+# ═══════════════════════════════════════════
+performance:
+  smoke:
+    - name: "Build time < 30s"
+      command: "pnpm build"
+      timeout: 30000
+    - name: "Test suite < 60s"
+      command: "pnpm test"
+      timeout: 60000
+    - name: "TypeCheck < 15s"
+      command: "pnpm typecheck"
+      timeout: 15000
+
+# ═══════════════════════════════════════════
+# Security Scan
+# ═══════════════════════════════════════════
+security:
+  scan:
+    - npm-audit      # pnpm audit
+    - license-check   # license compliance
+  forbidden_licenses:
+    - GPL-3.0
+    - AGPL-3.0
+  secrets_scan: true
+
+# ═══════════════════════════════════════════
+# License Scan
+# ═══════════════════════════════════════════
+license:
+  allowed:
+    - MIT
+    - Apache-2.0
+    - BSD-3-Clause
+    - ISC
+    - CC0-1.0
+    - Unlicense
+
+# ═══════════════════════════════════════════
+# Dependency Audit
+# ═══════════════════════════════════════════
+dependency:
+  audit:
+    - high: fail      # high severity vulns fail CI
+    - critical: fail
+    - moderate: warn
+  outdated_check: warn

@@ -157,3 +157,76 @@ export {
   type ExecutiveMemoryReport, type LearningEvolutionReport,
   type AgencyAuditEventType, type AgencyAuditRecord,
 } from './agency-os.js';
+
+// ═══════════════════════════════════════════
+// Platform Hardening RC1 (Sprint A-1 ~ A-6)
+// ═══════════════════════════════════════════
+
+// Sprint A-1: Transactional Reliability
+export {
+  type OutboxStatus, type OutboxMessage, type IOutboxRepository,
+  type OutboxDispatcherOptions, DEFAULT_DISPATCHER_OPTIONS,
+  type OutboxDispatcherDeps, OutboxDispatcher,
+  calculateBackoff, isPoisonMessage,
+  type DeadLetterEntry, type IDeadLetterQueue,
+  type IdempotencyRecord, type IIdempotencyStore, InMemoryIdempotencyStore,
+  type TraceContext, createTraceContext, createChildTraceContext,
+  type RetryPolicy, DEFAULT_RETRY_POLICY,
+  calculateRetryDelay, executeWithRetry,
+  type EventOrdering, type EventSequence,
+  type EventReplayPolicy, DEFAULT_REPLAY_POLICY,
+} from './reliability/index.js';
+
+// Sprint A-2: Tenant Context
+export {
+  type TenantContext, createTenantContext,
+  runInTenantContext, runInTenantContextSync,
+  getTenantContext, getTenantContextOrNull,
+  getTenantId, getOrganizationId, getActorId, getCorrelationId,
+  TenantContextError,
+  getRlsContext,
+  assertTenantAccess, TenantIsolationViolationError,
+} from './tenant/index.js';
+
+// Sprint A-5: Observability
+export {
+  type LogLevel as ObservabilityLogLevel, type StructuredLogEntry, type IStructuredLogger,
+  ConsoleStructuredLogger,
+  type MetricType, type MetricSample, type IMetricsCollector,
+  InMemoryMetricsCollector,
+  type HealthStatus, type HealthCheckResult, type HealthCheck, type HealthCheckFramework,
+  DefaultHealthCheckFramework,
+  type ITracer, type ISpan, NoopTracer,
+  type ObservabilityContainer, createDefaultObservability,
+} from './observability/index.js';
+
+// Sprint A-6: Production Adapter Framework
+export {
+  type DatabaseAdapter, type DatabaseTransaction,
+  type CacheAdapter,
+  type MessageQueueAdapter,
+  type ObjectStorageAdapter,
+  type EmailAdapter,
+  type PaymentAdapter,
+  type SearchAdapter,
+  type AdapterRegistry, AdapterManager, AdapterNotConfiguredError,
+} from './infrastructure/index.js';
+
+// Sprint A-3: Architecture Enforcement
+export {
+  type ArchitectureRule,
+  NO_DIRECT_ENGINE_IMPORT, NO_INTERFACE_TO_USECASE, NO_DOMAIN_TO_INFRA,
+  ALL_ARCHITECTURE_RULES,
+  type ArchitectureViolation,
+  type BoundaryCheckResult, verifyBoundaries,
+  type CircularDependency, detectCircularDependencies,
+  type EngineManifest, type ManifestValidationResult, validateManifest,
+} from './architecture/index.js';
+
+// Sprint A-4: Contract Testing
+export {
+  type EventContract, type ContractRegistry, InMemoryContractRegistry,
+  type SchemaCompatibilityResult, checkSchemaCompatibility,
+  type ConsumerContractTest, type ConsumerTestResult, runConsumerContractTest,
+  isVersionCompatible,
+} from './contracts/index.js';
