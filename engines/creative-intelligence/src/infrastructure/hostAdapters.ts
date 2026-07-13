@@ -14,8 +14,115 @@
 import { Ok, type Result } from '@platform/core-sdk';
 import type {
   IOrganizationVerifier, ICreativeKnowledgeReader,
-  CompetitorResearch, DesignTrend,
+  CompetitorResearch, DesignTrend, IndustryType, TrustEvidence, IndustryTrustProfile,
 } from '../interfaces/index.js';
+
+// ═══════════════════════════════════════════
+// TRUST EVIDENCE LIBRARY (5 industries, Platform Vision v2)
+// ═══════════════════════════════════════════
+
+export const INDUSTRY_TRUST_PROFILES: Record<IndustryType, IndustryTrustProfile> = {
+  Restaurant: {
+    industry: 'Restaurant',
+    description: '고객은 음식 사진, 셰프 정보, 매장 신뢰도를 본다',
+    requiredEvidence: [
+      { id: 'r-photos', name: '실제 음식 사진', description: '전문 촬영된 실제 음식 사진 (스톡 금지)', objectionAddressed: ['진짜 음식?', '주문 후失望?'], naturalPages: ['hero', 'menu', 'about'], priority: 1 },
+      { id: 'r-chef', name: '셰프 소개', description: '셰프 경력, 철학, 얼굴', objectionAddressed: ['어느 셰프?'], naturalPages: ['about'], priority: 2 },
+      { id: 'r-origin', name: '원산지', description: '식재료 원산지 표시', objectionAddressed: ['신선도?'], naturalPages: ['menu', 'about'], priority: 3 },
+      { id: 'r-reviews', name: '리뷰', description: 'Google/CatchTable 등 외부 리뷰', objectionAddressed: ['다른 사람 후기?'], naturalPages: ['hero-secondary', 'footer'], priority: 1 },
+      { id: 'r-reservation', name: '예약 시스템', description: '실시간 예약 가능', objectionAddressed: ['언제 가능한지?'], naturalPages: ['hero', 'footer'], priority: 1 },
+      { id: 'r-open-today', name: '오늘 영업', description: '오늘 영업시간 표시', objectionAddressed: ['지금 영업?'], naturalPages: ['hero', 'header'], priority: 1 },
+      { id: 'r-space', name: '매장 사진', description: '실제 매장 내부', objectionAddressed: ['분위기?'], naturalPages: ['about', 'gallery'], priority: 2 },
+      { id: 'r-location', name: '위치/오시는 길', description: '지도, 주소, 교통편', objectionAddressed: ['어디?'], naturalPages: ['footer', 'contact'], priority: 2 },
+    ],
+    topSignals: ['food photos', 'chef face', 'live reservation', 'operating hours', 'reviews'],
+  },
+  Hotel: {
+    industry: 'Hotel',
+    description: '고객은 실제 객실, 투숙 후기, 운영 신뢰를 본다',
+    requiredEvidence: [
+      { id: 'h-rooms', name: '실제 객실', description: '실제 객실 사진 (여러 타입)', objectionAddressed: ['실제 객실?'], naturalPages: ['rooms', 'hero'], priority: 1 },
+      { id: 'h-guests', name: '실제 투숙객', description: '실제 투숙 후기 (사진 포함)', objectionAddressed: ['진짜 후기?'], naturalPages: ['reviews', 'hero-secondary'], priority: 1 },
+      { id: 'h-booking-reviews', name: 'Booking.com 리뷰', description: '외부 예약 사이트 후기', objectionAddressed: ['신뢰성?'], naturalPages: ['hero-secondary', 'reviews'], priority: 1 },
+      { id: 'h-google', name: 'Google Reviews', description: 'Google 평점/리뷰', objectionAddressed: ['인정받는?'], naturalPages: ['footer', 'hero-secondary'], priority: 1 },
+      { id: 'h-awards', name: 'Awards', description: '업계 수상 이력', objectionAddressed: ['품질 보증?'], naturalPages: ['about'], priority: 2 },
+      { id: 'h-since', name: 'Since', description: '운영 시작 연도', objectionAddressed: ['오래됐나?'], naturalPages: ['about', 'footer'], priority: 2 },
+      { id: 'h-24h', name: '24시간 운영', description: '24시간 프론트 데스크', objectionAddressed: ['늦은 체크인?'], naturalPages: ['rooms', 'footer'], priority: 2 },
+      { id: 'h-best-price', name: 'Best Price Guarantee', description: '공식 사이트 최저가 보장', objectionAddressed: ['저렴?'], naturalPages: ['hero', 'rooms'], priority: 1 },
+      { id: 'h-official', name: '공식 사이트', description: '공식 사이트 표시 (스팸/중개 사이트 구분)', objectionAddressed: ['진짜 사이트?'], naturalPages: ['header', 'footer'], priority: 1 },
+    ],
+    topSignals: ['real rooms', 'verified reviews', 'since year', '24h desk', 'best price guarantee'],
+  },
+  Travel: {
+    industry: 'Travel',
+    description: '고객은 현지 운영, 가이드, 투어 사진, 후기를 본다',
+    requiredEvidence: [
+      { id: 't-local', name: '현지 운영', description: '현지 사무소/운영자', objectionAddressed: ['중개만?'], naturalPages: ['about', 'footer'], priority: 1 },
+      { id: 't-guide', name: '실제 가이드', description: '가이드 프로필, 사진, 언어', objectionAddressed: ['가이드?'], naturalPages: ['tours', 'about'], priority: 1 },
+      { id: 't-tour-photos', name: '투어 사진', description: '실제 투어 사진 (고객 포함)', objectionAddressed: ['실제?'], naturalPages: ['tours', 'gallery'], priority: 1 },
+      { id: 't-reviews', name: '후기', description: '고객 후기 (TripAdvisor/Google)', objectionAddressed: ['다른 사람?'], naturalPages: ['tours', 'hero-secondary'], priority: 1 },
+      { id: 't-itinerary', name: '여행 일정', description: '구체적인 일자별 일정', objectionAddressed: ['뭐 하나?'], naturalPages: ['tours'], priority: 2 },
+      { id: 't-office', name: '현지 사무소', description: '현지 사무소 위치/연락처', objectionAddressed: ['문제 생기면?'], naturalPages: ['footer', 'contact'], priority: 1 },
+      { id: 't-emergency', name: '긴급 연락', description: '24시간 긴급 연락처', objectionAddressed: ['긴급시?'], naturalPages: ['footer', 'contact'], priority: 1 },
+      { id: 't-partner', name: '파트너', description: '현지 파트너/공급자', objectionAddressed: ['믿을만?'], naturalPages: ['about'], priority: 2 },
+    ],
+    topSignals: ['local operation', 'real guide', 'tour photos', 'local office', '24h emergency'],
+  },
+  Hospital: {
+    industry: 'Hospital',
+    description: '고객은 의사, 학회, 경력, 장비, 인증을 본다',
+    requiredEvidence: [
+      { id: 'm-doctor', name: '의사 소개', description: '주치의 프로필, 전문과목, 사진', objectionAddressed: ['어느 의사?'], naturalPages: ['doctors', 'about'], priority: 1 },
+      { id: 'm-society', name: '학회', description: '소속 학회, 위원회', objectionAddressed: ['전문성?'], naturalPages: ['doctors', 'about'], priority: 1 },
+      { id: 'm-career', name: '경력', description: '연차, 주요 수술 이력', objectionAddressed: ['경험?'], naturalPages: ['doctors'], priority: 1 },
+      { id: 'm-equipment', name: '장비', description: '의료 장비, 도입 연도', objectionAddressed: ['최신?'], naturalPages: ['facilities', 'about'], priority: 1 },
+      { id: 'm-cert', name: '인증', description: 'JCI, 의료기관 인증', objectionAddressed: ['인증?'], naturalPages: ['about', 'footer'], priority: 1 },
+      { id: 'm-count', name: '수술 건수', description: '연간 수술/시술 건수', objectionAddressed: ['실력?'], naturalPages: ['about', 'doctors'], priority: 2 },
+      { id: 'm-reviews', name: '후기', description: '실제 환자 후기', objectionAddressed: ['다른 환자?'], naturalPages: ['hero-secondary', 'reviews'], priority: 2 },
+    ],
+    topSignals: ['doctor profile', 'society membership', 'certification', 'equipment', 'case count'],
+  },
+  SaaS: {
+    industry: 'SaaS',
+    description: '고객은 Enterprise 고객, Case Study, 인증, 보안을 본다',
+    requiredEvidence: [
+      { id: 's-enterprise', name: 'Enterprise 고객', description: '대기업 로고 (허가 받은)', objectionAddressed: ['신뢰성?'], naturalPages: ['hero-secondary', 'footer'], priority: 1 },
+      { id: 's-case-study', name: 'Case Study', description: '구체적 성과 (정량 데이터)', objectionAddressed: ['효과?'], naturalPages: ['case-studies'], priority: 1 },
+      { id: 's-soc2', name: 'SOC2', description: 'SOC 2 Type II 인증', objectionAddressed: ['보안?'], naturalPages: ['footer', 'security'], priority: 1 },
+      { id: 's-iso', name: 'ISO 27001', description: 'ISO 27001 인증', objectionAddressed: ['보안?'], naturalPages: ['footer', 'security'], priority: 2 },
+      { id: 's-uptime', name: '99.99% 가용성', description: 'SLA 99.99% 보장', objectionAddressed: ['다운?'], naturalPages: ['security', 'pricing'], priority: 1 },
+      { id: 's-security', name: '보안', description: 'GDPR, HIPAA, 데이터 암호화', objectionAddressed: ['데이터?'], naturalPages: ['security'], priority: 1 },
+      { id: 's-api', name: 'API', description: 'API 문서/SDK', objectionAddressed: ['연동?'], naturalPages: ['developers', 'docs'], priority: 2 },
+      { id: 's-docs', name: 'Documentation', description: '상세한 기술 문서', objectionAddressed: ['사용?'], naturalPages: ['docs', 'developers'], priority: 2 },
+    ],
+    topSignals: ['enterprise logos', 'SOC2', '99.99% uptime', 'case study', 'API docs'],
+  },
+  Marketplace: {
+    industry: 'Marketplace',
+    description: '신뢰할 수 있는 seller, 안전한 결제, 분쟁 해결',
+    requiredEvidence: [
+      { id: 'mk-verified', name: 'Verified Sellers', description: '인증된 판매자 표시', objectionAddressed: ['가짜?'], naturalPages: ['listings'], priority: 1 },
+      { id: 'mk-escrow', name: '안전 결제 (Escrow)', description: '에스크로 결제 보호', objectionAddressed: ['환불?'], naturalPages: ['footer', 'policy'], priority: 1 },
+      { id: 'mk-dispute', name: '분쟁 해결', description: '분쟁 해결 정책', objectionAddressed: ['문제?'], naturalPages: ['policy', 'footer'], priority: 1 },
+      { id: 'mk-reviews', name: '리뷰', description: '양방향 리뷰', objectionAddressed: ['다른 사람?'], naturalPages: ['listings', 'seller-profile'], priority: 1 },
+    ],
+    topSignals: ['verified seller', 'escrow payment', 'dispute resolution', 'reviews'],
+  },
+  Generic: {
+    industry: 'Generic',
+    description: '범용 신뢰 요소 (산업 미지정)',
+    requiredEvidence: [
+      { id: 'g-about', name: '회사 소개', description: '회사 정보, 연혁', objectionAddressed: ['어디 회사?'], naturalPages: ['about'], priority: 1 },
+      { id: 'g-contact', name: '연락처', description: '실제 연락 가능한 정보', objectionAddressed: ['연락?'], naturalPages: ['footer', 'contact'], priority: 1 },
+      { id: 'g-reviews', name: '리뷰/후기', description: '고객 후기', objectionAddressed: ['다른 사람?'], naturalPages: ['hero-secondary'], priority: 1 },
+    ],
+    topSignals: ['about', 'contact', 'reviews'],
+  },
+};
+
+// ═══════════════════════════════════════════
+// Original adapters
+// ═══════════════════════════════════════════
 
 // ── Organization Verifier ──
 export class InMemoryOrganizationVerifier implements IOrganizationVerifier {

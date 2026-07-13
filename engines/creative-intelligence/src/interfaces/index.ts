@@ -1,15 +1,21 @@
 /**
- * Creative Intelligence Engine RC2 — Public Interfaces
+ * Creative Intelligence Engine RC3 — Public Interfaces
  *
- * Sprint: Senior Art Director Upgrade
- * - Visual Review (First Impression / Premium / Luxury / Typography / etc.)
- * - Art Direction (8 styles)
- * - Photography / Motion / Interaction Direction
- * - AI Artifact Detection (9 categories)
- * - Design Critique + Recommendations
- * - Quality Gate (Approve/Reject)
+ * Sprint: Customer Psychology Director Upgrade (Platform Vision v2)
+ * - 점수 표시 금지 (UI 노출 차단)
+ * - Trust Evidence 배치로 전환
+ * - 7대 신규 산출물 (Trust Architecture Report 등)
+ * - 5대 산업 Trust Profile (Restaurant / Hotel / Travel / Hospital / SaaS)
  */
 import type { Result, EventEnvelope } from '@platform/core-sdk';
+
+// Trust Architecture types re-exported from core-sdk (Platform Vision v2)
+export type {
+  IndustryType, TrustEvidence, IndustryTrustProfile,
+  TrustJourney, ObjectionMap, EvidencePlacement, ConfidenceJourney, DecisionJourney,
+  TrustChecklist, TrustChecklistItem, TrustChecklistItemStatus,
+  TrustArchitectureReport, CustomerPsychologyReport, EvidencePlacementStrategy,
+} from '@platform/core-sdk';
 
 // ═══════════════════════════════════════════
 // Core Infra

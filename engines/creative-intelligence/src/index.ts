@@ -26,6 +26,9 @@ export type {
   CompetitorResearch, DesignTrend,
 } from './interfaces/index.js';
 
+// RC3: Trust Architecture types re-exported from interfaces (which re-exports from core-sdk)
+// No duplicate export needed
+
 // Interface types
 export type {
   IClock, IIdGenerator, IEventBus, IOrganizationVerifier,
@@ -57,6 +60,21 @@ export {
   generatePhotographyGuideUseCase, generateMotionGuideUseCase, generateInteractionGuideUseCase,
   approveCreativeUseCase, rejectCreativeUseCase, generateReportUseCase,
 } from './use-cases/CritiqueApprovalUseCases.js';
+
+// Use Cases — Trust Architecture (RC3 Platform Vision v2)
+export {
+  generateTrustArchitectureReportUseCase,
+  generateCustomerPsychologyReportUseCase,
+  generateEvidencePlacementStrategyUseCase,
+  generateObjectionMapUseCase,
+  generateConfidenceJourneyUseCase,
+  generateDecisionJourneyUseCase,
+  generateTrustChecklistUseCase,
+  getIndustryTrustProfileUseCase,
+} from './use-cases/TrustArchitectureUseCases.js';
+
+// Trust Industry Profiles (5 industries)
+export { INDUSTRY_TRUST_PROFILES } from './infrastructure/hostAdapters.js';
 
 // Events
 export { CREATIVE_EVENTS, type CreativeEventType, CREATIVE_EVENT_SCHEMAS } from './domain/events.js';

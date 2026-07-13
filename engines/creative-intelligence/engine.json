@@ -1,10 +1,10 @@
 {
   "id": "creative-intelligence",
   "name": "Creative Intelligence Engine",
-  "version": "1.0.0-rc2",
+  "version": "1.0.0-rc3",
   "phase": 7,
-  "status": "RC2",
-  "description": "[Platform Phase 7 RC2] Senior Art Director Upgrade — evaluates design at world-class level (Boutique Hospitality / Luxury Travel / SaaS / Marketplace / Restaurant / Hotel benchmarks). Art Direction (8 styles), 12 visual reviews, Design Critique, AI Artifact Detection, Quality Gate. Not a designer — a JUDGE.",
+  "status": "RC3",
+  "description": "[Platform Phase 7 RC3] Customer Psychology Director — Platform Vision v2. NOT 점수 매기는 AI; IS Trust Evidence 배치 시스템. 5 Industries (Restaurant/Hotel/Travel/Hospital/SaaS) + 7 Trust Architecture 산출물.",
   "depends_on": ["core-sdk", "policy", "organization", "event-bus", "creative-knowledge"],
   "provides": [
     "createArtDirection", "activateArtDirection", "getArtDirectionByStyle", "generateArtDirection",

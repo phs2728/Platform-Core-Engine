@@ -76,3 +76,24 @@ export {
   type Unsubscribe,
   type CreateEventInput,
 } from './event/index.js';
+
+// Trust Architecture (Platform Vision v2 — 사장님 확립 2026-07-13)
+export {
+  type IndustryType,
+  type TrustEvidence,
+  type IndustryTrustProfile,
+  type TrustStage,
+  type TrustJourney,
+  type ObjectionMap,
+  type EvidencePlacement,
+  type ConfidenceJourney,
+  type DecisionJourney,
+  type TrustChecklistItem,
+  type TrustChecklistItemStatus,
+  type TrustChecklist,
+  type TrustArchitectureReport,
+  type CustomerPsychologyReport,
+  type EvidencePlacementStrategy,
+  FORBIDDEN_UI_PATTERNS,
+  validateTrustUIPattern,
+} from './trust-architecture.js';
