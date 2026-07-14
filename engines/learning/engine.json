@@ -1,0 +1,47 @@
+{
+  "id": "learning",
+  "name": "Learning Engine",
+  "version": "1.0.0-rc1",
+  "phase": 8,
+  "status": "RC1",
+  "description": "[Platform Phase 8] Platform Intelligence Memory — continuous learning from outcomes, success/failure pattern extraction, trend detection, knowledge evolution, recommendation feedback, design memory, personalization, and explainable learning analytics. Provider Plugin Architecture — no ML framework, no training pipeline. All learning is evidence-based and explainable.",
+  "depends_on": ["core-sdk", "policy", "organization", "event-bus"],
+  "provides": [
+    "createLearningProject", "startLearning", "completeLearning", "archiveLearning",
+    "getLearningProject", "listLearningProjects",
+    "learnSuccessPattern", "learnFailurePattern", "detectTrend", "updateLearningModel", "calculateConfidence",
+    "recordRecommendationResult", "learnRecommendation", "recommendImprovement",
+    "learnDesign", "learnUX", "learnCopy", "learnSearch",
+    "updateKnowledge", "evolveKnowledge", "generateLearningReport", "searchLearningMemory",
+    "calculateLearningScore", "calculateImprovementRate", "generateTrendAnalysis",
+    "getLearningMemory", "updateLearningMemory", "getLearningStatistics",
+    "recordOutcome", "getDesignMemory", "getPersonalizationProfile",
+    "getPattern", "listPatterns", "getTrend", "listTrends"
+  ],
+  "events_emitted": [
+    "learning.started", "learning.completed",
+    "pattern.learned", "pattern.updated",
+    "trend.detected", "recommendation.learned",
+    "knowledge.evolved", "memory.updated",
+    "confidence.updated", "learning.report.generated",
+    "improvement.detected", "analytics.updated"
+  ],
+  "events_subscribed": [],
+  "strict_boundaries": {
+    "owns": [
+      "LearningProject", "LearningSession", "LearningMemory", "LearningPattern",
+      "SuccessPattern", "FailurePattern", "ConversionPattern", "ABTestResult",
+      "RecommendationFeedback", "DesignInsight", "UXInsight", "CopyInsight", "SearchInsight",
+      "KnowledgeEvolution", "EvidenceAggregate", "Trend", "LearningModel",
+      "ConfidenceScore", "PersonalizationProfile", "LearningStatistics", "LearningEvidence"
+    ],
+    "forbidden": [
+      "MLFramework", "TrainingPipeline", "GradientDescent", "NeuralNetwork",
+      "TensorFlow", "PyTorch", "ModelWeights", "HyperparameterTuning",
+      "BusinessLogic", "ReactCode", "VueCode", "FlutterCode",
+      "Authentication", "Password", "Session", "OAuth", "MFA", "Permission", "Role",
+      "IndustrySpecificField", "DirectDatabaseConnection",
+      "BrowserImplementation", "WebScraper", "DirectExternalAPICalls"
+    ]
+  }
+}
