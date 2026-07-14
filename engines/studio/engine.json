@@ -1,0 +1,46 @@
+{
+  "id": "studio",
+  "name": "Studio Engine",
+  "version": "1.0.0-rc1",
+  "phase": 6,
+  "status": "RC1",
+  "description": "[Platform Phase 6] Page Builder Process — manages Workspace, BuildSession, PageDraft, ComponentBinding, ContentBinding, PublishIntent. Accesses Theme Manifest + Component Manifest + CMS Content/Page via READ-ONLY Host Interfaces. NEVER writes to Theme, Component, or CMS engines.",
+  "depends_on": ["core-sdk", "policy", "organization", "event-bus", "experience", "theme", "component", "cms"],
+  "provides": [
+    "createWorkspace", "updateWorkspace", "archiveWorkspace", "listWorkspaces",
+    "startBuildSession", "attachTheme", "attachComponentLibrary", "endBuildSession",
+    "createDraft", "updateDraftTitle", "archiveDraft",
+    "addComponentBinding", "updateComponentBindingProps", "removeComponentBinding",
+    "addContentBinding", "updateContentBinding", "removeContentBinding",
+    "verifyDraftComposition", "previewDraft",
+    "createPublishIntent", "listPublishIntents", "cancelPublishIntent",
+    "searchComponents", "searchContent", "getCompatibleThemes"
+  ],
+  "events_emitted": [
+    "studio.workspace.created", "studio.workspace.updated", "studio.workspace.archived",
+    "studio.session.started", "studio.session.ended",
+    "studio.theme.attached", "studio.component_library.attached",
+    "studio.draft.created", "studio.draft.updated", "studio.draft.archived",
+    "studio.component_binding.added", "studio.component_binding.removed",
+    "studio.content_binding.added", "studio.content_binding.removed",
+    "studio.draft.verified", "studio.draft.previewed",
+    "studio.publish.intent", "studio.publish.processed", "studio.publish.failed", "studio.publish.cancelled",
+    "studio.asset.uploaded", "studio.asset.attached"
+  ],
+  "events_subscribed": [],
+  "strict_boundaries": {
+    "owns": [
+      "Workspace", "BuildSession", "PageDraft",
+      "ComponentBinding", "ContentBinding", "PublishIntent",
+      "StudioAsset", "StudioAuditRecord"
+    ],
+    "forbidden": [
+      "ReactComponent", "VueComponent", "FlutterWidget", "HTMLGeneration",
+      "CSSGeneration", "BusinessLogic", "Authentication", "Password", "Session",
+      "ThemeWrite", "ComponentWrite", "CMSWrite", "ContentWrite", "PageWrite",
+      "ThemeManifest", "BrandPersonality", "BrandVoice", "BrandEmotion",
+      "DesignLanguage", "ExperienceComponent", "ComponentVariant", "ComponentPreset",
+      "Content", "Page", "PageSection"
+    ]
+  }
+}
