@@ -1,0 +1,43 @@
+{
+  "id": "creative-knowledge",
+  "name": "Creative Knowledge Engine",
+  "version": "1.0.0-rc1",
+  "phase": 7,
+  "status": "RC1",
+  "description": "[Platform Phase 7] AI Research Platform — the brain of the Creative pipeline. Performs Research-First: client interviews, business/market/competitor research, website/UX/SEO/accessibility/performance/content audits, visual/copy/layout pattern extraction, knowledge management, gap analysis, and evidence-based recommendations. Provider Plugin Architecture — no browser/crawler/scraper logic. All recommendations require Evidence.",
+  "depends_on": ["core-sdk", "policy", "organization", "event-bus"],
+  "provides": [
+    "createResearchProject", "startResearchSession", "completeResearch", "archiveResearch",
+    "conductInterview", "generateCreativeBrief", "updateBusinessProfile",
+    "auditWebsite", "auditUX", "auditSEO", "auditAccessibility", "auditPerformance", "auditContent",
+    "analyzeCompetitor", "compareCompetitors", "extractPatterns", "generateBenchmark",
+    "createKnowledge", "updateKnowledge", "searchKnowledge", "recommendKnowledge",
+    "generateRecommendations", "generateGapAnalysis", "generateEvidence", "calculateConfidence",
+    "updateResearchMemory", "getResearchMemory", "searchResearchHistory",
+    "extractVisualPatterns", "extractCopyPatterns", "extractLayoutPatterns",
+    "getResearchProject", "listResearchProjects"
+  ],
+  "events_emitted": [
+    "research.created", "research.completed",
+    "interview.completed", "website.audited",
+    "competitor.analyzed", "knowledge.created", "knowledge.updated",
+    "benchmark.generated", "recommendation.generated", "evidence.generated",
+    "brief.generated", "memory.updated"
+  ],
+  "events_subscribed": [],
+  "strict_boundaries": {
+    "owns": [
+      "ResearchProject", "ResearchSession", "ClientInterview", "BusinessProfile", "CompetitorProfile",
+      "WebsiteAudit", "UXAudit", "SEOAudit", "AccessibilityAudit", "PerformanceAudit", "ContentAudit",
+      "DesignPattern", "LayoutPattern", "CopyPattern", "CreativeBrief", "ResearchEvidence",
+      "Benchmark", "GapAnalysis", "ResearchRecommendation", "KnowledgeArticle", "ResearchMemory"
+    ],
+    "forbidden": [
+      "BrowserImplementation", "WebScraper", "CrawlerLogic", "DirectExternalAPICalls",
+      "ScreenshotCapture", "HTMLParsing", "CSSExtraction", "DOMManipulation",
+      "BusinessLogic", "ReactCode", "VueCode", "FlutterCode",
+      "Authentication", "Password", "Session", "OAuth", "MFA", "Permission", "Role",
+      "IndustrySpecificField", "DirectDatabaseConnection"
+    ]
+  }
+}
