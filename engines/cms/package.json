@@ -1,0 +1,20 @@
+{
+  "name": "@platform/engine-cms",
+  "version": "1.0.0-rc1",
+  "description": "CMS Engine — Content-only Engine: Content, Page, Section, ContentSlot, Locale Variant, Layout Snapshot. Read-only consumer of Theme Manifest + Component.",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": { ".": { "import": "./dist/index.js", "types": "./dist/index.d.ts" } },
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "lint": "echo 'lint: deferred to monorepo root'",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": { "@platform/core-sdk": "workspace:*", "zod": "^3.23.0" },
+  "devDependencies": { "@types/node": "^20.11.0", "typescript": "^5.4.0", "vitest": "^1.6.0" },
+  "engines": { "node": ">=20.10.0" }
+}

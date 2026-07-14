@@ -1,0 +1,40 @@
+{
+  "id": "cms",
+  "name": "CMS Engine",
+  "version": "1.0.0-rc1",
+  "phase": 6,
+  "status": "RC1",
+  "description": "[Platform Phase 6] Content Engine — manages Content, Page, Section, ContentSlot, Locale Variant, Layout Snapshot. Content is the ONLY writable aggregate. Theme/Component accessed via read-only Host Interfaces (IThemeManifestReader, IComponentReader). NO write access to Theme or Component engines.",
+  "depends_on": ["core-sdk", "policy", "organization", "event-bus", "experience", "theme", "component"],
+  "provides": [
+    "createContent", "updateContent", "deleteContent", "getContent", "listContentByType",
+    "createPage", "updatePage", "archivePage", "getPage", "listPages",
+    "addSection", "updateSection", "removeSection",
+    "createContentSlot", "assignContentToSlot", "removeContentFromSlot",
+    "createLocaleVariant", "publishContent", "listContentVersions",
+    "createLayoutSnapshot", "getLayoutSnapshot", "compareLayoutSnapshots",
+    "renderPage", "renderSection", "renderPreview"
+  ],
+  "events_emitted": [
+    "cms.content.created", "cms.content.updated", "cms.content.deleted", "cms.content.published",
+    "cms.page.created", "cms.page.updated", "cms.page.published", "cms.page.archived",
+    "cms.section.added", "cms.section.removed",
+    "cms.slot.created", "cms.slot.assigned",
+    "cms.locale.created", "cms.snapshot.created", "cms.page.rendered"
+  ],
+  "events_subscribed": [],
+  "strict_boundaries": {
+    "owns": [
+      "Content", "ContentVersion", "Page", "PageSection", "ContentSlot",
+      "LocaleVariant", "LayoutSnapshot", "CMSAuditRecord"
+    ],
+    "forbidden": [
+      "ReactComponent", "VueComponent", "FlutterWidget", "HTMLGeneration",
+      "CSSGeneration", "BusinessLogic", "Authentication", "Password", "Session",
+      "Permission", "Role", "DirectDatabaseConnection",
+      "ThemeWrite", "ComponentWrite", "ThemeManifest", "BrandPersonality",
+      "BrandVoice", "BrandEmotion", "DesignLanguage", "ExperienceComponent",
+      "ComponentVariant", "ComponentPreset"
+    ]
+  }
+}
