@@ -1,0 +1,49 @@
+{
+  "id": "component",
+  "name": "Experience Component Engine",
+  "version": "1.0.0-rc1",
+  "phase": 6,
+  "status": "RC1",
+  "description": "[Platform Phase 6] Experience Component OS — manages experience components, atomic components, composition, variants, presets, states, interactions, animations, accessibility, quality scoring, learning, and marketplace. NOT a UI library — Component Experience Models only.",
+  "depends_on": ["core-sdk", "policy", "organization", "event-bus", "experience", "theme"],
+  "provides": [
+    "createComponent", "updateComponent", "getComponent", "listComponents", "deleteComponent", "archiveComponent", "restoreComponent", "cloneComponent", "publishComponent",
+    "createVariant", "updateVariant", "getVariant", "listVariants", "recommendVariant",
+    "composeExperience", "decomposeExperience", "validateComposition",
+    "reviewComponent", "calculateComponentScore", "improveComponent",
+    "validateAccessibility", "evaluatePerformance",
+    "recommendComponent", "findBestComponent",
+    "learnComponent", "recordComponentOutcome",
+    "createPreset", "applyPreset",
+    "createPattern", "getPattern", "listPatterns",
+    "createSlot", "assignSlot",
+    "createTokenReference", "resolveTokenReferences",
+    "registerState", "transitionState",
+    "createBehavior", "assignBehavior",
+    "createResponsiveRule", "getResponsiveRules",
+    "createVersion", "getVersionHistory", "rollbackVersion",
+    "registerMarketplaceComponent", "installMarketplaceComponent", "listMarketplaceComponents",
+    "generateComponentReport"
+  ],
+  "events_emitted": [
+    "component.created", "component.updated", "component.deleted", "component.published",
+    "component.composed", "component.reviewed", "component.score.updated", "component.learned",
+    "component.variant.created", "component.accessibility.validated", "component.performance.updated",
+    "component.analytics.updated", "component.marketplace.registered"
+  ],
+  "events_subscribed": [],
+  "strict_boundaries": {
+    "owns": [
+      "ExperienceComponent", "ComponentVariant", "ComponentPreset", "ComponentState",
+      "ComponentInteraction", "ComponentAnimation", "ComponentAccessibility",
+      "ComponentScore", "ComponentReview", "ComponentPattern", "ComponentComposition",
+      "ComponentSlot", "ComponentTokenReference", "ComponentBehavior", "ComponentRule",
+      "ComponentVersion", "MarketplaceEntry"
+    ],
+    "forbidden": [
+      "ReactComponent", "VueComponent", "FlutterWidget", "HTMLGeneration", "CSSGeneration",
+      "BusinessLogic", "Authentication", "Password", "Session", "OAuth", "MFA",
+      "Permission", "Role", "DirectDatabaseConnection", "BrowserImplementation"
+    ]
+  }
+}
