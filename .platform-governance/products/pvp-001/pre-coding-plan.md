@@ -2,12 +2,13 @@
 product_id: PVP-001
 product_name: "Envoy Hostel & Tours"
 founder: 사장님 박흥식 / Tim Park
-version: 0.1.0
-status: pvc-approved
+version: 0.2.0
+status: pvc-iterating
 filed: 2026-07-15
 last_reviewed: 2026-07-15
-pvc_chair_signoff_at: 2026-07-15
-approval_authority: PCR-003 (Client Project Mode Resolution) + 사장님 직접 결재
+pvc_chair_signoff_at: (blank — pending Chair review per Constitution §17)
+iteration_note: "Per ADR-004 / Constitution §24-§26 (C-30 / C-31 / C-32), this Pre-Coding Plan is now in iterative authoring mode. Initial status: pvc-iterating (allowed, non-blocking). Final status: pvc-approved (Critical gate before Phase 6/7 coding starts)."
+---
 mode_after_approval: Client Project Mode (per PCR-003 + Constitution §18 [ADR-002])
 next_action: Client Project auto-execution per Platform Agency pipeline
 ---

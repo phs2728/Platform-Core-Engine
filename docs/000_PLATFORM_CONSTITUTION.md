@@ -1,8 +1,8 @@
 # Platform Constitution
 
-**Version**: **v1.3 — FROZEN + ADR-001 + ADR-002 + ADR-003 amendments** (v1.0 from 2026-07-11; v1.1 amended by ADR-001 on 2026-07-15; v1.2 amended by §18 on 2026-07-15 via PCR-003; v1.3 amended by §20-§23 on 2026-07-15 via ADR-003)
+**Version**: **v1.4 — FROZEN + ADR-001 + ADR-002 + ADR-003 + ADR-004 amendments** (v1.0 from 2026-07-11; v1.1 by ADR-001; v1.2 by §18 ADR-002; v1.3 by §20-§23 ADR-003; v1.4 by §24-§26 ADR-004)
 **Status**: 🔒 **FROZEN** — 변경은 ADR 절차로만 가능
-**Effective Date**: 2026-07-11 (v1.0); 2026-07-15 (v1.1 — C-24 + Product Lab Principle + Product Lab Standard); 2026-07-15 (v1.2 — Hidden Platform Principle §18); 2026-07-15 (v1.3 — C-26 Project Workspace / C-27 Premium Visual Restraint / C-28 Content First / C-29 Less But Better)
+**Effective Date**: 2026-07-11 (v1.0); 2026-07-15 (v1.1); 2026-07-15 (v1.2); 2026-07-15 (v1.3); 2026-07-15 (v1.4 — Progressive Decision Principle + Decision Queue + Working Website First)
 **Next Review**: 2027-07-11 (1년)
 **Owner**: 사장님 (박흥식 / Tim Park)
 
@@ -643,6 +643,7 @@ git tag -a v1.0.0 -m "Identity Engine v1.0.0"
 | v1.1 | 2026-07-15 | + C-24 Platform Freeze Rule / + Product Lab Principle / + Product Lab Standard (헌법 §15, §16, §17 신설) | ADR-001 |
 | v1.2 | 2026-07-15 | + §18 Hidden Platform Principle (Client Project Mode 운영 원칙) | ADR-002 (filed under PCR-003) |
 | v1.3 | 2026-07-15 | + §20-§23 Platform Client Rules (C-26 Workspace / C-27 Visual Restraint / C-28 Content First / C-29 Less But Better) | ADR-003 (filed under Chair direct adoption) |
+| v1.4 | 2026-07-15 | + §24-§26 Product Delivery Cadence (C-30 Progressive Decision / C-31 Decision Queue / C-32 Working Website First); Pre-Coding Plan status: pvc-pending -> pvc-iterating | ADR-004 (filed under Chair direct adoption) |
 
 ### 9.3 헌법 vs ADR
 
@@ -1954,4 +1955,246 @@ C-29 Less But Better
 
 ---
 
-**End of Platform Constitution v1.3**
+**End of Platform Constitution v1.4 (frozen v1.0 + ADR-001 / + ADR-002 / + ADR-003 / + ADR-004 amendments)**
+
+> 사장님 확립 (2026-07-15, ADR-004): "Never stop implementation unless the missing decision physically prevents implementation." [C-30 Progressive Decision] [C-31 Decision Queue] [C-32 Working Website First]
+
+---
+
+## 24. Product Delivery Cadence — §24-§26 [ADR-004]
+
+> **Authority**: ADR-004 (Council Chair direct adoption, 2026-07-15; supersedes CFD-001 STOP clause on this specific point).
+> **Source text**: Verbatim from Council Chair's instruction "수정해야 할 운영 원칙" of 2026-07-15.
+> **Effective**: Immediately upon ADR-004 adoption.
+> **Scope**: All Platform Agency / Client Project delivery work (not just Envoy).
+> **Numbering note**: existing §21 C-27 / §22 C-28 / §23 C-29 (Premium Visual Restraint / Content First / Less But Better per ADR-003) are preserved unchanged. New principles are **C-30 / C-31 / C-32**.
+
+### 24.1 §24. C-30 — Progressive Decision Principle
+
+```
+C-30 Progressive Decision Principle
+
+Never stop implementation
+
+unless
+
+the missing decision
+
+physically prevents implementation.
+
+즉
+
+"결정이 없어도 만들 수 있으면 만든다."
+```
+
+#### 24.1.1 Worked examples (verbatim from Chair)
+
+| Question (Open Decision) | Proceed without resolving |
+|---|---|
+| 언어 (language) | 영어로 만든다. 나중에 i18n 적용. |
+| Currency | Multi Currency Engine 사용. |
+| URL | Router 추상화. |
+| Cloudbeds | Adapter Interface 작성. |
+
+**Closure principle (verbatim from Chair)**: **"90%는 이미 구현 가능합니다."**
+
+### 24.2 §25. C-31 — Decision Queue
+
+```
+C-31 Decision Queue
+
+Open Decision을 모두 해결하려 하지 말고
+
+Critical
+
+↓
+
+High
+
+↓
+
+Medium
+
+↓
+
+Low
+
+로 나눕니다.
+```
+
+#### 24.2.1 Critical decisions (do not proceed without)
+
+**Envoy current Critical decisions (verbatim from Chair, 2026-07-15)**:
+
+- **Cloudbeds 연동 (예약 시스템)**
+- **직접 예약 방식 (Booking Flow)**
+
+#### 24.2.2 Non-Critical categories (verbatim from Chair)
+
+> "나머지는
+>
+> * 언어
+> * URL
+> * Currency
+> * 메뉴 이름
+> * 카피
+> * 브랜드 문구
+>
+> 등은 **나중에도 충분히 변경 가능합니다.**"
+
+These categories are by definition **Medium / Low** under C-31 — they do not physically block implementation.
+
+#### 24.2.3 Worked transformation (verbatim from Chair)
+
+**Before** (BLOCKED → STOP):
+
+```
+OD-1
+↓
+STOP
+```
+
+**After** (parallel execution):
+
+```
+Brand
+
+UI
+
+Layout
+
+Photo Strategy
+
+Component
+
+Typography
+
+Navigation
+
+Animation
+
+CMS
+
+SEO
+
+Accessibility
+
+동시에 진행
+
+↓
+
+언어 결정
+
+↓
+
+예약 연동
+```
+
+### 24.3 §26. C-32 — Working Website First
+
+```
+C-32 Working Website First
+
+앞으로는 항상
+
+Working Website
+
+↓
+
+Beautiful Website
+
+↓
+
+Perfect Website
+
+순서입니다.
+
+절대로
+
+Perfect Planning
+
+↓
+
+Perfect PRD
+
+↓
+
+Perfect TRD
+
+↓
+
+Perfect Decision
+
+↓
+
+Website
+
+가 되어서는 안 됩니다.
+```
+
+#### 24.3.1 5 Product Delivery Rules (verbatim from Chair)
+
+```
+Product Delivery Rules
+
+1. Always keep the project moving.
+2. Only block work that is technically impossible without a decision.
+3. Everything else continues in parallel.
+4. Collect decisions just before they become necessary.
+5. Deliver a working product first, then refine it.
+```
+
+#### 24.3.2 Customer Discovery BLOCKED → Continue (verbatim from Chair)
+
+```
+Customer Discovery
+↓
+Continue UI
+↓
+Continue Components
+↓
+Continue Layout
+↓
+Continue CMS
+↓
+Continue SEO
+↓
+Continue Design
+↓
+Need customer answer?
+↓
+Ask only that question.
+```
+
+---
+
+## 25. Cross-references for §24-§26
+
+| Companion artifact | Path |
+|---|---|
+| Charter (verbatim source) | `.charters/PRODUCT_DELIVERY_CADENCE_C27_to_C29.md` |
+| ADR-004 (full rationale) | `docs/ADR/ADR-004-product-delivery-cadence.md` |
+| Hidden Platform Principle (§18) | `docs/000_PLATFORM_CONSTITUTION.md` §18 |
+| Product Lab Standard (§17) | `docs/000_PLATFORM_CONSTITUTION.md` §17 |
+| C-26-C-29 Client Rules (§20-§23) | `docs/000_PLATFORM_CONSTITUTION.md` §20-§23 |
+| Council Final Directive (CFD-001) | `.charters/COUNCIL_FINAL_DIRECTIVE.md` |
+| Envoy Gap Report (Decision Queue source) | `/opt/data/clients/envoy/shared/references/02-gap-report.md` |
+| Pre-Coding Plan (status: pvc-iterating) | `/opt/data/projects/identity-engine/.platform-governance/products/pvp-001/pre-coding-plan.md` |
+
+---
+
+## 26. Pre-Coding Plan status under §24-§26 (non-normative)
+
+Constitution §17 (Product Lab Standard) pre-coding gate is **retained as Critical**: Frontend/Backend implementation may begin only after the Pre-Coding Plan reaches status `pvc-approved`.
+
+However, §24-§26 establish that the **Pre-Coding Plan authoring itself** is **iterative**, per C-32:
+
+- Initial status: `pvc-iterating` (allowed; non-blocking)
+- Final status: `pvc-approved` (Critical gate before Phase 6/7 coding starts)
+- Iteration: §17-fields (Hypotheses / Metrics / Experiments / Success Criteria / Learning Goals) authored progressively, not in a single "perfect" pass
+
+Pre-Coding Plans operating under this rule do not need to be "perfect" before reaching `pvc-iterating`; they progress to `pvc-approved` when Critical fields are filled and owner-signed.
+
+---
+
+**End of Platform Constitution v1.4**
