@@ -1,8 +1,8 @@
 # Platform Constitution
 
-**Version**: **v1.2 — FROZEN + ADR-001 amendments + ADR-002 amendments** (v1.0 from 2026-07-11; v1.1 from 2026-07-15 via ADR-001; v1.2 from 2026-07-15 via ADR-002)
+**Version**: **v1.2 — FROZEN + ADR-001 + ADR-002 amendments** (v1.0 from 2026-07-11; v1.1 amended by ADR-001 on 2026-07-15; v1.2 amended by §18 on 2026-07-15 via PCR-003)
 **Status**: 🔒 **FROZEN** — 변경은 ADR 절차로만 가능
-**Effective Date**: 2026-07-11 (v1.0); 2026-07-15 (v1.1 — C-24 + Product Lab Principle + Product Lab Standard); 2026-07-15 (v1.2 — C-25 + Customer Charter)
+**Effective Date**: 2026-07-11 (v1.0); 2026-07-15 (v1.1 — C-24 + Product Lab Principle + Product Lab Standard); 2026-07-15 (v1.2 — Hidden Platform Principle §18)
 **Next Review**: 2027-07-11 (1년)
 **Owner**: 사장님 (박흥식 / Tim Park)
 
@@ -641,7 +641,7 @@ git tag -a v1.0.0 -m "Identity Engine v1.0.0"
 | v0.1-draft | 2026-07-11 | Initial draft (사장님 확립 대기) | — |
 | v1.0 | 2026-07-11 | 사장님 최종 확립 후 Frozen (Platform Core v1.0 Freeze 1차) | — |
 | v1.1 | 2026-07-15 | + C-24 Platform Freeze Rule / + Product Lab Principle / + Product Lab Standard (헌법 §15, §16, §17 신설) | ADR-001 |
-| v1.2 | 2026-07-15 | + C-25 Client Project Principle / + Customer Charter (헌법 §18, §19 신설) / + PVP-001 re-designation Product Lab 001 → Client Project 001 | ADR-002 |
+| v1.2 | 2026-07-15 | + §18 Hidden Platform Principle (Client Project Mode 운영 원칙) | ADR-002 (filed under PCR-003) |
 
 ### 9.3 헌법 vs ADR
 
@@ -1664,8 +1664,69 @@ The split is: **principle in Constitution, full operational declaration in Chart
 
 ---
 
-**End of Platform Constitution v1.2 (frozen v1.0 + ADR-001 amendments + ADR-002 amendments)**
+## 18. Hidden Platform Principle [ADR-002 — pending; currently operating per PCR-003]
 
-> 사장님 확립 (2026-07-15, ADR-001): "After Platform Freeze, no new Engines, no new Standards, no new Playbooks — unless production evidence requires them. Every Product is a Laboratory for the Platform. Every Product must define Hypotheses, Metrics, Experiments, Success Criteria, Learning Goals before coding starts."
+> **Authority**: PCR-003 (Product Validation Council Chair adoption, 2026-07-15).
+> **Source text**: Verbatim from Council Chair's resolution adopting the Hidden Platform Charter.
+> **Status**: Operating under PCR-003 + Hidden Platform Charter; ADR-002 to be filed to formalize into constitutional §18 (per §9.1 procedural rule).
+
+### 18.1 Canonical text
+
+```
+Hidden Platform Principle
+
+"플랫폼은 보이지 않는다. 고객의 결과물만 보인다."
+
+지금까지 만든 엔진, 스킬, 플레이북은 모두 내부 구현입니다.
+
+이제부터는 고객이 의뢰하면 플랫폼이 내부적으로 모든 것을 활용해서
+$10,000 이상의 가치를 가진 결과물을 만들어내는 단계입니다.
+
+고객은 엔진을 몰라도 됩니다.
+
+그 이상도 아닙니다.
+```
+
+### 18.2 What this principle establishes (substantively)
+
+- The Platform Core v1.1 (Frozen + ADR-001 amendments + this §18) is an **internal operating system**.
+- Clients — whether Envoy Hostel & Tours or any future client — see only the **deliverable**: a beautiful, fast, bookable, manageable, SEO-optimized, AI-assisted, mobile-first website.
+- Clients never see **PRD, TRD, Agency OS, QES, Skills, Playbooks, ADR, EPS**, or any Platform-internal mechanism. These are **implementation details**, not deliverables.
+- The Platform performs Customer Discovery → Requirements Analysis → PRD → TRD → UX Research → IA → Content Strategy → Trust Architecture → Customer Decision Architecture → Visual Design → Frontend → Backend → CMS → SEO → A11y → Performance → QA → QES → Final Delivery **automatically and internally**.
+
+### 18.3 Anti-patterns prohibited by §18
+
+| Anti-pattern | Why forbidden |
+|---|---|
+| Showing the client the PRD / TRD | Breaks the hidden platform contract |
+| Asking the client to "approve Engines" | Client does not need to know Engines exist |
+| Naming a Playbook in client communication | Violates the agency-only delivery illusion |
+| Selling "Platform access" to the client | Client buys a website, not a Platform |
+
+### 18.4 Compatibility with prior sections
+
+| Prior section | Compatibility |
+|---|---|
+| §15 C-24 Platform Freeze Rule | ✅ Remains in force; this §18 prohibits modifying Platform during Client Project work, which is consistent |
+| §16 Product Lab Principle | ✅ "Product" can include Client Projects; Client work is a form of Product |
+| §17 Product Lab Standard pre-coding gate | ✅ Pre-Coding Plan gates Frontend/Backend work for Client Projects too |
+
+### 18.5 Re-designation of PVP-001 under PCR-003
+
+PVP-001 ("Envoy Hostel & Tours" canonical Platform Validation Project) is hereby **re-designated** under PCR-003 as:
+
+- **Client Project**: CP-001 (the first client project)
+- Client: Envoy Hostel & Tours
+- Project type: Website Remodel
+- Target value: US$10,000+
+- Internal binding: All existing PVP-001 internal artifacts (pre-coding-plan.md, discovery-beta-checklist.md, etc.) become Client Project internal artifacts.
+
+This re-designation does **not** require new Platform assets. It is a **framing change** of the same work. The Charter's purpose is to make this framing explicit.
+
+---
+
+**End of Platform Constitution v1.1 + §18 (Hidden Platform Principle; pending ADR-002 formalization)**
+
+> 사장님 확립 (2026-07-15, PCR-003): "플랫폼은 보이지 않는다. 고객의 결과물만 보인다. 고객은 엔진을 몰라도 됩니다. 그 이상도 아닙니다."
 >
 > 사장님 확립 (2026-07-15, ADR-002): "플랫폼은 보이지 않는다. 고객의 결과물만 보인다. The client must never need to understand PRD, TRD, Agency OS, QES, Skills, Playbooks, or Platform internals. The Platform performs all of these automatically."
