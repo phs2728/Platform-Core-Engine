@@ -1,8 +1,8 @@
 # Platform Constitution
 
-**Version**: **v1.2 — FROZEN + ADR-001 + ADR-002 amendments** (v1.0 from 2026-07-11; v1.1 amended by ADR-001 on 2026-07-15; v1.2 amended by §18 on 2026-07-15 via PCR-003)
+**Version**: **v1.3 — FROZEN + ADR-001 + ADR-002 + ADR-003 amendments** (v1.0 from 2026-07-11; v1.1 amended by ADR-001 on 2026-07-15; v1.2 amended by §18 on 2026-07-15 via PCR-003; v1.3 amended by §20-§23 on 2026-07-15 via ADR-003)
 **Status**: 🔒 **FROZEN** — 변경은 ADR 절차로만 가능
-**Effective Date**: 2026-07-11 (v1.0); 2026-07-15 (v1.1 — C-24 + Product Lab Principle + Product Lab Standard); 2026-07-15 (v1.2 — Hidden Platform Principle §18)
+**Effective Date**: 2026-07-11 (v1.0); 2026-07-15 (v1.1 — C-24 + Product Lab Principle + Product Lab Standard); 2026-07-15 (v1.2 — Hidden Platform Principle §18); 2026-07-15 (v1.3 — C-26 Project Workspace / C-27 Premium Visual Restraint / C-28 Content First / C-29 Less But Better)
 **Next Review**: 2027-07-11 (1년)
 **Owner**: 사장님 (박흥식 / Tim Park)
 
@@ -642,6 +642,7 @@ git tag -a v1.0.0 -m "Identity Engine v1.0.0"
 | v1.0 | 2026-07-11 | 사장님 최종 확립 후 Frozen (Platform Core v1.0 Freeze 1차) | — |
 | v1.1 | 2026-07-15 | + C-24 Platform Freeze Rule / + Product Lab Principle / + Product Lab Standard (헌법 §15, §16, §17 신설) | ADR-001 |
 | v1.2 | 2026-07-15 | + §18 Hidden Platform Principle (Client Project Mode 운영 원칙) | ADR-002 (filed under PCR-003) |
+| v1.3 | 2026-07-15 | + §20-§23 Platform Client Rules (C-26 Workspace / C-27 Visual Restraint / C-28 Content First / C-29 Less But Better) | ADR-003 (filed under Chair direct adoption) |
 
 ### 9.3 헌법 vs ADR
 
@@ -1725,8 +1726,232 @@ This re-designation does **not** require new Platform assets. It is a **framing 
 
 ---
 
-**End of Platform Constitution v1.1 + §18 (Hidden Platform Principle; pending ADR-002 formalization)**
+**End of Platform Constitution v1.3 (frozen v1.0 + ADR-001 / + ADR-002 / + ADR-003 amendments)**
 
-> 사장님 확립 (2026-07-15, PCR-003): "플랫폼은 보이지 않는다. 고객의 결과물만 보인다. 고객은 엔진을 몰라도 됩니다. 그 이상도 아닙니다."
->
-> 사장님 확립 (2026-07-15, ADR-002): "플랫폼은 보이지 않는다. 고객의 결과물만 보인다. The client must never need to understand PRD, TRD, Agency OS, QES, Skills, Playbooks, or Platform internals. The Platform performs all of these automatically."
+> 사장님 확립 (2026-07-15, ADR-003): "이 규칙은 Envoy만을 위한 것이 아니라 앞으로 모든 고객 프로젝트의 기본 원칙으로 삼는 것이 좋습니다."
+
+---
+
+## 20. Platform Client Rules — §20-§23 [ADR-003]
+
+> **Authority**: ADR-003 (Council Chair direct adoption, 2026-07-15; supersedes CFD-001 STOP clause as a direct Chair exception).
+> **Source text**: Verbatim from Council Chair's instruction "추가할 Platform Client Rules" of 2026-07-15.
+> **Effective**: Immediately upon ADR-003 adoption.
+> **Scope**: All client projects under the Platform, including Envoy (today) and all future clients (restaurant, pilgrimage, transport, marketplace, etc.).
+
+### 20.1 §20. C-26 — Project Workspace Standard
+
+```
+C-26 Project Workspace Standard
+
+모든 고객 프로젝트는 반드시 독립된 프로젝트 Workspace를 가진다.
+
+예시
+
+clients/
+└── envoy/
+    ├── hostel/
+    │   ├── discovery/
+    │   ├── prd/
+    │   ├── trd/
+    │   ├── design/
+    │   ├── frontend/
+    │   ├── backend/
+    │   ├── cms/
+    │   ├── assets/
+    │   ├── seo/
+    │   ├── qa/
+    │   ├── qes/
+    │   ├── deployment/
+    │   └── docs/
+    │
+    └── tours/
+        ├── discovery/
+        ├── prd/
+        ├── trd/
+        ├── design/
+        ├── frontend/
+        ├── backend/
+        ├── cms/
+        ├── assets/
+        ├── seo/
+        ├── qa/
+        ├── qes/
+        ├── deployment/
+        └── docs/
+
+원칙
+
+* Hostel과 Tours는 독립 프로젝트
+* 공통 기능은 Platform 재사용
+* 고객 산출물은 clients 아래에만 존재
+* Platform과 Client를 절대 섞지 않는다.
+```
+
+### 20.2 Envoy Project Structure (C-26 Special Case — verbatim from Chair)
+
+```
+clients/
+└── envoy/
+    │
+    ├── shared/
+    │   ├── assets/
+    │   ├── brand/
+    │   ├── design-system/
+    │   ├── components/
+    │   └── content/
+    │
+    ├── hostel/
+    │
+    └── tours/
+```
+
+### 20.3 §21. C-27 — Premium Visual Restraint Principle
+
+```
+C-27 Premium Visual Restraint Principle
+
+Premium websites use restraint.
+
+Never design for decoration.
+
+Design for trust.
+```
+
+#### 20.3.1 기본 규칙 (verbatim)
+
+```
+금지
+
+* Emoji 남용
+* Icon 남용
+* Gradient 남용
+* Glass 효과 남용
+* Animation 남용
+* Card 남용
+* Shadow 남용
+* Badge 남용
+* Color 남용
+
+허용
+
+* 의미가 있는 아이콘
+* CTA를 위한 최소한의 강조
+* 브랜드 컬러 중심
+* 충분한 여백
+* 타이포그래피 중심
+* 사진 중심
+* 콘텐츠 중심
+```
+
+#### 20.3.2 Emoji Rule (verbatim)
+
+```
+기본값
+
+0 emojis
+
+허용되는 경우
+
+* 여행 후기
+* 블로그
+* SNS
+* 이벤트
+* 마케팅 배너
+
+금지
+
+* Hero
+* Navigation
+* Pricing
+* Booking
+* Hotel Information
+* Contact
+* About
+* FAQ
+* Footer
+```
+
+#### 20.3.3 Icon Rule (verbatim)
+
+```
+아이콘은 장식이 아니다.
+
+아이콘은
+
+* 정보를 빠르게 이해시키거나
+* 행동을 유도하거나
+* 상태를 설명할 때만 사용한다.
+```
+
+#### 20.3.4 Premium Reference (verbatim)
+
+```
+디자인 우선순위
+
+1. Aman
+2. Apple
+3. Stripe
+4. Linear
+5. Airbnb
+
+참고는 하되 복제하지 않는다.
+```
+
+### 20.4 §22. C-28 — Content First
+
+```
+C-28 Content First
+
+사용자가 보는 순서
+
+Photo
+
+↓
+
+Headline
+
+↓
+
+Content
+
+↓
+
+CTA
+
+↓
+
+Decoration
+
+Decoration은 항상 마지막이다.
+```
+
+### 20.5 §23. C-29 — Less But Better
+
+```
+C-29 Less But Better
+
+한 화면에서는
+
+* 하나의 핵심 메시지
+* 하나의 핵심 CTA
+* 하나의 시선 흐름
+
+을 원칙으로 한다.
+```
+
+---
+
+## 21. Cross-references for §20-§23
+
+| Companion artifact | Path |
+|---|---|
+| Charter (verbatim source) | `.charters/PLATFORM_CLIENT_RULES_C26_to_C29.md` |
+| ADR-003 (full rationale) | `docs/ADR/ADR-003-platform-client-rules.md` |
+| Hidden Platform Principle (§18) | `docs/000_PLATFORM_CONSTITUTION.md` §18 |
+| Product Lab Standard (§17) | `docs/000_PLATFORM_CONSTITUTION.md` §17 |
+| Council Final Directive | `.charters/COUNCIL_FINAL_DIRECTIVE.md` |
+
+---
+
+**End of Platform Constitution v1.3**
