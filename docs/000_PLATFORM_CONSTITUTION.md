@@ -1,8 +1,8 @@
 # Platform Constitution
 
-**Version**: **v1.1 — FROZEN + ADR-001 amendments** (v1.0 from 2026-07-11, amended by ADR-001 on 2026-07-15)
+**Version**: **v1.2 — FROZEN + ADR-001 amendments + ADR-002 amendments** (v1.0 from 2026-07-11; v1.1 from 2026-07-15 via ADR-001; v1.2 from 2026-07-15 via ADR-002)
 **Status**: 🔒 **FROZEN** — 변경은 ADR 절차로만 가능
-**Effective Date**: 2026-07-11 (v1.0); 2026-07-15 (v1.1 — C-24 + Product Lab Principle + Product Lab Standard)
+**Effective Date**: 2026-07-11 (v1.0); 2026-07-15 (v1.1 — C-24 + Product Lab Principle + Product Lab Standard); 2026-07-15 (v1.2 — C-25 + Customer Charter)
 **Next Review**: 2027-07-11 (1년)
 **Owner**: 사장님 (박흥식 / Tim Park)
 
@@ -15,6 +15,10 @@
 > **"After Platform Freeze, new Engines are prohibited. new Standards are prohibited. new Playbooks are prohibited. unless production evidence requires them."**
 > **"Every Product is a Laboratory for the Platform."**
 > **"Every Product must define Hypotheses, Metrics, Experiments, Success Criteria, Learning Goals before coding starts."**
+>
+> **사장님 명령 (2026-07-15, by ADR-002)**:
+> **"플랫폼은 보이지 않는다. 고객의 결과물만 보인다."**
+> **"The client must never need to understand PRD, TRD, Agency OS, QES, Skills, Playbooks, or Platform internals. The Platform performs all of these automatically."**
 
 ---
 
@@ -637,6 +641,7 @@ git tag -a v1.0.0 -m "Identity Engine v1.0.0"
 | v0.1-draft | 2026-07-11 | Initial draft (사장님 확립 대기) | — |
 | v1.0 | 2026-07-11 | 사장님 최종 확립 후 Frozen (Platform Core v1.0 Freeze 1차) | — |
 | v1.1 | 2026-07-15 | + C-24 Platform Freeze Rule / + Product Lab Principle / + Product Lab Standard (헌법 §15, §16, §17 신설) | ADR-001 |
+| v1.2 | 2026-07-15 | + C-25 Client Project Principle / + Customer Charter (헌법 §18, §19 신설) / + PVP-001 re-designation Product Lab 001 → Client Project 001 | ADR-002 |
 
 ### 9.3 헌법 vs ADR
 
@@ -1590,6 +1595,77 @@ This gate mirrors the Charter's "No reconstruction from memory" and the Knowledg
 
 ---
 
-**End of Platform Constitution v1.1 (frozen v1.0 + ADR-001 amendments)**
+## 18. Client Project Principle (C-25) [ADR-002]
+
+> **Authority**: ADR-002, accepted by 사장님 (Architecture Review Board) on 2026-07-15.
+> **Source text**: Verbatim from Council Chair's "Client Project Kickoff" of 2026-07-15.
+> **Effective**: Immediately upon ADR-002 acceptance.
+
+### 18.1 C-25 — Client Project Principle (canonical)
+
+```
+플랫폼은 보이지 않는다. 고객의 결과물만 보인다.
+```
+
+(English working translation, non-normative: "The platform is invisible. Only the customer's deliverable is visible.")
+
+### 18.2 Operating interpretation (non-normative)
+
+- "플랫폼" = Platform Core v1.2 + internal pipeline + governance artifacts (33 engines + frozen ADR-001 amendments + C-24 binding).
+- "고객" = the external person or organization that commissions a deliverable (e.g., a hostel owner who says "우리 호텔 홈페이지를 만들어 주세요").
+- "결과물" = client-visible deliverables (8 outputs: design, speed, booking, CMS, AI chat, SEO, admin, mobile).
+- This rule **re-orients** attention: the Platform Agency optimizes for the customer's deliverable, not for the Platform's internal completeness.
+- This rule **operates within** C-24 (Constitution §15): no new Engines/Standards/Playbooks during Client Project execution.
+
+### 18.3 What C-25 does NOT change
+
+- Platform Core v1.2 stays FROZEN.
+- C-24 stays in force.
+- The 33 frozen Engines remain the only substrate.
+- The Agency OS / Skills / Playbooks / QES / PAG / Knowledge Governance / EPS / Discovery Framework all remain binding for the Platform Agency team — they are internal mechanisms that produce the visible output.
+
+### 18.4 Customer Charter (incorporation by reference)
+
+Per ADR-002, the **Customer Charter** (adopted 2026-07-15) at `.charters/CUSTOMER_CHARTER.md` is incorporated by reference. The Charter records verbatim:
+
+- C-25 itself (§18.1 above).
+- The Council Chair's full Client Project Kickoff block (16 internal phases; 8 client-visible outputs; the explicit "client must never need to understand" list).
+
+Where the Charter's verbatim text conflicts with §18.1, §18.1 (the Constitutional C-25 rule) prevails; otherwise both bind.
+
+---
+
+## 19. Customer Charter (incorporation) [ADR-002]
+
+> **Authority**: ADR-002, accepted 2026-07-15.
+> **Status**: This section incorporates the Customer Charter by reference; the Charter itself is a non-Constitutional companion document at `.charters/CUSTOMER_CHARTER.md`.
+
+### 19.1 Customer Charter verbatim quotes (canonical subset)
+
+The Customer Charter quotes two verbatim text blocks. The first, the **C-25 Client Project Principle**, is reproduced in §18.1 above. The second is the Council Chair's full Client Project Kickoff block, reproduced in PCR-003 §1 verbatim.
+
+### 19.2 Why a separate Charter
+
+The Customer Charter is a companion document (not a Constitutional rule) because:
+
+- The full PCR-003 block is operational and verbose (16 internal phases; 8 visible outputs). It does not belong in the Constitution, which is for binding principles.
+- The C-25 principle itself **does** belong in the Constitution (§18.1) because it changes the Platform's orientation.
+
+The split is: **principle in Constitution, full operational declaration in Charter**, mirroring how C-24 (Constitution §15) has its principle in the Constitution and its full operational interpretation in ADR-001.
+
+### 19.3 Cross-references
+
+| Artifact | Path |
+|---|---|
+| Customer Charter | `.charters/CUSTOMER_CHARTER.md` |
+| ADR-002 | `docs/ADR/ADR-002-client-project-mode.md` |
+| PCR-003 | `.platform-governance/resolutions/PCR-003.md` |
+| §18 Client Project Principle (C-25) | `docs/000_PLATFORM_CONSTITUTION.md` §18 |
+
+---
+
+**End of Platform Constitution v1.2 (frozen v1.0 + ADR-001 amendments + ADR-002 amendments)**
 
 > 사장님 확립 (2026-07-15, ADR-001): "After Platform Freeze, no new Engines, no new Standards, no new Playbooks — unless production evidence requires them. Every Product is a Laboratory for the Platform. Every Product must define Hypotheses, Metrics, Experiments, Success Criteria, Learning Goals before coding starts."
+>
+> 사장님 확립 (2026-07-15, ADR-002): "플랫폼은 보이지 않는다. 고객의 결과물만 보인다. The client must never need to understand PRD, TRD, Agency OS, QES, Skills, Playbooks, or Platform internals. The Platform performs all of these automatically."

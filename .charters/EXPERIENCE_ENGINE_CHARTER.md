@@ -105,15 +105,19 @@ Platform knowledge evolves **from production**, **never from reconstruction** of
 
 | Related artifact | Path | Status |
 |---|---|---|
-| Platform Constitution v1.1 (FROZEN + ADR-001 amendments) | `docs/000_PLATFORM_CONSTITUTION.md` | Adopted 2026-07-11 (v1.0) and amended 2026-07-15 (v1.1); this Charter supplements, does not amend |
+| Platform Constitution v1.2 (FROZEN + ADR-001 + ADR-002 amendments) | `docs/000_PLATFORM_CONSTITUTION.md` | Adopted 2026-07-11 (v1.0); v1.1 (2026-07-15, ADR-001); v1.2 (2026-07-15, ADR-002); this Charter supplements, does not amend |
 | ADR-001 | `docs/ADR/ADR-001-platform-freeze-rule.md` | Authority for v1.1 amendment (C-24 + Product Lab Principle + Product Lab Standard) |
+| **ADR-002** | `docs/ADR/ADR-002-client-project-mode.md` | Authority for v1.2 amendment (C-25 + Customer Charter + PVP-001 Client Project re-designation) |
 | Platform Knowledge Governance Standard | `/opt/data/Knowledge_Governance_Standard.md` | Adopted 2026-07-14; this Charter aligns |
 | Product Lab Standard (operative) | `/opt/data/Product_Lab_Standard.md` | Adopted 2026-07-15; pre-coding gate enforced by PVC |
+| **Customer Charter (C-25)** | `.charters/CUSTOMER_CHARTER.md` | Adopted 2026-07-15; binds client-centric re-orientation |
 | Evidence Promotion Standard | `/opt/data/Evidence_Promotion_Standard.md` | Adopted 2026-07-14 |
 | Discovery Alpha / Beta Framework | `/opt/data/Discovery_Alpha_Framework.md`, `/opt/data/Discovery_Beta_Framework.md` | Adopted 2026-07-14 |
 | Provenance Audit (UNKNOWN PROVENANCE) | `Experience_Recovery_Classification.md` (repo root) | Filed 2026-07-14 |
 | Known Exception | `.platform-governance/exceptions/EXC-EXPERIENCE-001.md` | Registered 2026-07-14 |
 | PCR-001 (Council Resolution) | `.platform-governance/resolutions/PCR-001.md` | Adopted 2026-07-14 |
+| **PCR-002** | `.platform-governance/resolutions/PCR-002.md` | Adopted 2026-07-15; Product Development era |
+| **PCR-003** | `.platform-governance/resolutions/PCR-003.md` | Adopted 2026-07-15; Client Project Mode |
 
 ---
 

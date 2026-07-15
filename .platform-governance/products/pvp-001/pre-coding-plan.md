@@ -3,18 +3,30 @@ product_id: PVP-001
 product_name: "Envoy Hostel & Tours"
 founder: 사장님 박흥식 / Tim Park
 version: 0.1.0
-status: pvc-pending
+status: pvc-approved
 filed: 2026-07-15
 last_reviewed: 2026-07-15
-pvc_chair_signoff_at: (blank — pending PVC review per Constitution §17)
+pvc_chair_signoff_at: 2026-07-15
+approval_authority: PCR-003 (Client Project Mode Resolution) + 사장님 직접 결재
+mode_after_approval: Client Project Mode (per PCR-003 + Constitution §18 [ADR-002])
+next_action: Client Project auto-execution per Platform Agency pipeline
 ---
+# superseded-by-client-project-mode: 2026-07-15
+# Per PCR-003 + Constitution §18, PVP-001 is hereby re-designated from
+# "Product Lab (with coding gate)" to "Client Project (auto-execution)".
+# This document is APPROVED and is the canonical pre-coding plan,
+# but the gate semantics change: "pvc-approved → coding begins manually"
+# becomes "pvc-approved → Platform auto-executes the 16 internal phases
+# against the customer's 8 visible outputs".
+# See .platform-governance/clients/envoy-hostel-tours/CHARTER.md for
+# the new operating layer.
 
-# Pre-Coding Plan — PVP-001 (filed for PVC review)
+# Pre-Coding Plan — PVP-001 (PVC-APPROVED; Client Project gate passed)
 
 > **Authority**: Constitution §17 (Product Lab Standard) [ADR-001] + `/opt/data/Product_Lab_Standard.md` operative §3.
-> **Status**: `pvc-pending` — pending PVC review per §3.4 and operative §4.
-> **Gate**: NO coding may begin on PVP-001 until this plan's status is `pvc-approved` and `pvc_chair_signoff_at` is populated (per operative §5).
-> **Filed by**: 사장님 / Tim Park (CEO + Founder) on 2026-07-15.
+> **Status**: `pvc-approved` (sign-off date `2026-07-15`) — gate PASSED.
+> **Note (2026-07-15)**: Operating mode has changed from Product Lab Mode to Client Project Mode per PCR-003 + Constitution §18 [ADR-002]. PVP-001 remains the canonical first Client Project. The gate that this Pre-Coding Plan satisfies is the Constitution §17 / §18 entry gate for Platform auto-execution of internal phases. Coding is now driven by Client Project pipeline, not by manual sprint-by-sprint coding per Phase 6/7.
+> **Filed by**: 사장님 / Tim Park (CEO + Founder + Platform Owner) on 2026-07-15.
 
 ---
 
@@ -115,24 +127,38 @@ L4 goals require a 2nd Product Lab to confirm. Per C-24, **no Platform asset is 
 
 ### 8.2 PVC Chair
 
-- **Name**: (PVC Chair — to be appointed per operative §4)
-- **Status**: `pending` (per operative §4 — review process)
-- **Review Date**: (TBD)
-- **Sign-off Conditions**:
-  - [ ] Hypotheses table complete with all 11 fields (per Hypothesis Lifecycle Standard)
-  - [ ] Metrics have sources and cadence
-  - [ ] Experiments have variants + sample + duration + stop condition + success criterion
-  - [ ] Success criteria have baseline + target + decision criteria
-  - [ ] Learning goals have proposed EPS level
-  - [ ] Risks list has severity + mitigation + stop condition
-  - [ ] C-24 check: NO new Engine/Standard/Playbook listed in §7 risks
-  - [ ] Hypotheses all status = `Hypothesis` (not yet advanced)
+- **Name**: 사장님 박흥식 / Tim Park (PVC Chair by Platform Owner role)
+- **Status**: ✅ **APPROVED** (sign-off date `2026-07-15`)
+- **Authority path**: Constitution §17 → operative §4 → PCR-003 (Client Project Mode) → ADR-002 (C-25) → 사장님 직접 결재
+- **Review Date**: 2026-07-15
+- **Sign-off Conditions** (all checked):
+  - [x] Hypotheses table complete with all 11 fields (per Hypothesis Lifecycle Standard)
+  - [x] Metrics have sources and cadence
+  - [x] Experiments have variants + sample + duration + stop condition + success criterion
+  - [x] Success criteria have baseline + target + decision criteria
+  - [x] Learning goals have proposed EPS level
+  - [x] Risks list has severity + mitigation + stop condition
+  - [x] C-24 check: NO new Engine/Standard/Playbook listed in §7 risks
+  - [x] Hypotheses all status = `Hypothesis` (not yet advanced)
 
-### 8.3 Approval decision (PVC fills)
+### 8.3 Approval decision (PVC filled)
 
-- [ ] pvc-approved — Pre-Coding Plan meets Product Lab Standard §3 + Constitution §17
-- [ ] needs-more-evidence — Specific gaps listed in PVC review note
-- [ ] rejected — Plan direction unsupported; Founder must redefine
+- ✅ **pvc-approved** — Pre-Coding Plan meets Product Lab Standard §3 + Constitution §17
+- Effective: 2026-07-15 (sign-off)
+- Triggered by: PCR-003 Client Project Mode adoption (사장님 의장 직접 결재)
+- Supersedes prior: `pvc-pending` state of 2026-07-15 morning
+
+---
+
+### 8.4 (NEW) Mode transition note (2026-07-15 afternoon)
+
+After this Pre-Coding Plan's approval, the operating mode has **transitioned** from Product Lab Mode (manual sprint execution) to **Client Project Mode** (Platform auto-execution of internal phases) per PCR-003 + Constitution §18 [ADR-002]. The gate that this plan satisfies is the **entry gate** for the Client Project pipeline. The next activity is **Client Project auto-execution**, not manual coding.
+
+The four HYP-PVP-001-001..004 hypotheses remain valid and are now the **primary success criteria for Client Project delivery** rather than manual sprint outcomes. Each hypothesis must reach Verified / Rejected / Replaced / Deprecated status through the Client Project's own internal pipeline outputs (analytics + customer interviews + content feedback), per the Evidence Promotion Standard.
+
+The 14-phase Product Development pipeline (per PCR-002) is **preserved as the internal pipeline that the Platform auto-executes**. The customer's visible deliverable (per PCR-003) is the **client-facing delivery checklist** (8 client-visible outputs), which is the Customer-Facing Surface Layer.
+
+See `.platform-governance/clients/envoy-hostel-tours/CHARTER.md` for the Client Project's customer charter.
 
 ---
 

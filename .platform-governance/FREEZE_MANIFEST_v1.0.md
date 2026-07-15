@@ -1,8 +1,8 @@
-# Platform Core v1.1 — Freeze Manifest
+# Platform Core v1.2 — Freeze Manifest
 
-**Version**: 1.1 (FROZEN; v1.0 + ADR-001 amendments)
-**Freeze date**: 2026-07-14 (v1.0); 2026-07-15 (v1.1 — Constitution amended by ADR-001)
-**Authority**: Platform Council Resolution PCR-001 §1 item 1 + ADR-001 [accepted 2026-07-15]
+**Version**: 1.2 (FROZEN; v1.0 + ADR-001 amendments + ADR-002 amendments)
+**Freeze date**: 2026-07-14 (v1.0); 2026-07-15 (v1.1 — Constitution amended by ADR-001); 2026-07-15 (v1.2 — Constitution amended by ADR-002)
+**Authority**: Platform Council Resolution PCR-001 §1 item 1 + ADR-001 [accepted 2026-07-15] + ADR-002 [accepted 2026-07-15]
 **Adopted**: by Council Chair (사장님 박흥식 / Tim Park) unanimous vote
 **Status**: 🔒 FROZEN (no further Platform-side additions except via new ADR per C-24)
 
@@ -113,14 +113,21 @@ These artifacts are referenced by this freeze and must remain discoverable along
 | Companion governance artifacts bound to this freeze | Path | Role |
 |---|---|---|
 | Platform Council Resolution PCR-001 | `.platform-governance/resolutions/PCR-001.md` | Authority for this freeze |
+| **PCR-002** | `.platform-governance/resolutions/PCR-002.md` | Product Development era; PVP-001 Product Lab 001 |
+| **PCR-003** | `.platform-governance/resolutions/PCR-003.md` | Client Project Mode; PVP-001 re-designated |
 | **ADR-001** | `docs/ADR/ADR-001-platform-freeze-rule.md` | Authority for v1.1 amendment (C-24 + Product Lab Principle + Product Lab Standard) |
+| **ADR-002** | `docs/ADR/ADR-002-client-project-mode.md` | Authority for v1.2 amendment (C-25 + Customer Charter + PVP-001 Client Project re-designation) |
 | Known Exception (Experience Engine) | `.platform-governance/exceptions/EXC-EXPERIENCE-001.md` | Documents what is deferred |
 | Experience Engine Charter | `.charters/EXPERIENCE_ENGINE_CHARTER.md` | Binds future Experience evolution to product evidence only |
+| **Customer Charter (C-25)** | `.charters/CUSTOMER_CHARTER.md` | Binds client-centric re-orientation; "플랫폼은 보이지 않는다. 고객의 결과물만 보인다." |
 | Product Lab Standard (operative) | `/opt/data/Product_Lab_Standard.md` | Pre-coding gate enforced by PVC per Constitution §17 |
 | Recovery Council Closure Notice | `.platform-governance/councils/RECOVERY-COUNCIL-CLOSED.md` | Discharges the disposition authority |
 | Product Validation Council Charter | `.platform-governance/councils/PRODUCT-VALIDATION-COUNCIL.md` | Defines the next-step council |
-| Envoy Product Lab Authorization | `.platform-governance/envoy/ENVOY-MVP-AUTHORIZATION.md` | First Product Lab under PVC + C-24 |
-| Platform Constitution v1.1 (FROZEN + ADR-001 amendments) | `docs/000_PLATFORM_CONSTITUTION.md` | Highest-level governance; amended to v1.1 by ADR-001 |
+| **Envoy Client Project Charter** | `.platform-governance/clients/envoy-hostel-tours/CHARTER.md` | First Client Project (PVP-001 re-designated) |
+| **Envoy Auto-Execution Pipeline** | `.platform-governance/clients/envoy-hostel-tours/AUTO-EXECUTION-PIPELINE.md` | 16 internal phases × 8 visible outputs |
+| **Envoy Delivery Checklist** | `.platform-governance/clients/envoy-hostel-tours/DELIVERY-CHECKLIST.md` | 8 client-visible deliverables (verbatim from PCR-003) |
+| **Envoy Premium Delivery Check** | `.platform-governance/clients/envoy-hostel-tours/PREMIUM-DELIVERY-CHECK.md` | $10k+ gate criteria |
+| Platform Constitution v1.2 (FROZEN + ADR-001 + ADR-002 amendments) | `docs/000_PLATFORM_CONSTITUTION.md` | Highest-level governance; amended to v1.2 by ADR-001 + ADR-002 |
 
 ## 6. Scope of the freeze
 
@@ -165,25 +172,32 @@ These files were inspected by the Provenance Audit; their disk presence is docum
 | Envoy MVP authorized | ✅ per PCR-001 §1 item 5 |
 | Sequencing per Council Chair's directive (Freeze → Envoy → Discovery Beta → Experience v2) | ✅ recorded |
 
-## 9. Next step (per PCR-001 + ADR-001)
+## 9. Next step (per PCR-001 + ADR-001 + ADR-002)
 
-Authorized next step: **Envoy Product Lab** (pre-coding plan filing → pvc-approved → then coding). Authorized by:
+Authorized next step: **Envoy Hostel & Tours Client Project** auto-execution. Authorized by:
 
 - PCR-001 §1 items 5–6 (Envoy as canonical validation project)
 - Constitution §16 (Product Lab Principle) [ADR-001]
 - Constitution §17 (Product Lab Standard) [ADR-001]
+- Constitution §18 (Client Project Principle, C-25) [ADR-002]
 - ADR-001 §5 (Implementation Plan)
+- **ADR-002 (Client Project Mode)**
+- **PCR-003 (Client Project Mode Resolution)**
 
 ```
-Platform Freeze v1.1   ← YOU ARE HERE (frozen with C-24 binding)
+Platform Freeze v1.2   ← YOU ARE HERE (frozen with C-24 + C-25 binding)
    ↓
-Envoy Product Lab: file Pre-Coding Plan at .platform-governance/products/envoy/pre-coding-plan.md
+Envoy Client Project: Pre-Coding Plan = pvc-approved (2026-07-15)
    ↓
-PVC review (pvc-approved / needs-more-evidence / rejected)
+Platform Agency auto-execution (16 internal phases, customer-invisible)
    ↓
-Envoy PRD -> TRD -> UI/UX -> Development -> QES -> Deploy -> Analytics -> Customer Interviews -> Evidence -> Platform Learning
+Customer-facing delivery (8 visible outputs per PCR-003)
    ↓
-Discovery Beta cycles accumulate production evidence
+Premium Delivery Check ($10k+ valuation stamp at final delivery)
+   ↓
+Production launch
+   ↓
+Discovery Beta cycles accumulate production evidence (for Future Product Lab)
    ↓
 PVC promotes evidence -> Platform patterns (EPS L0 -> L4+)
    ↓
@@ -192,21 +206,26 @@ Experience Engine v2 (only after EPS L4 multi-product / repeat-production)
 
 Order shall not be reversed. Experience Engine v2 is **not** a freeze-time deliverable; it is a Beta-time and post-Beta-time deliverable.
 
-C-24 (Constitution §15) is in force: no new Platform Engines/Standards/Playbooks may be added unless production evidence from a Product Lab demands them. This applies to every team member, including the Envoy Product Lab team.
+C-24 (Constitution §15) is in force: no new Platform Engines/Standards/Playbooks may be added unless production evidence from a Product Lab / Client Project demands them.
+
+C-25 (Constitution §18) is in force: the Platform is invisible to the customer. The customer sees only the 8 client-visible deliverables.
 
 ## 10. Seal
 
 ```
-PLATFORM CORE v1.1 FROZEN 2026-07-15.
+PLATFORM CORE v1.2 FROZEN 2026-07-15.
 PCR-001 §1 items 1–9 executed.
 ADR-001 ACCEPTED 2026-07-15; Constitution v1.0 -> v1.1.
+ADR-002 ACCEPTED 2026-07-15; Constitution v1.1 -> v1.2.
 C-24 Platform Freeze Rule in force (Constitution §15).
-Product Lab Principle binding (Constitution §16).
+C-25 Client Project Principle in force (Constitution §18).
+Customer Charter SEALED 2026-07-15 (.charters/CUSTOMER_CHARTER.md).
 Product Lab Standard pre-coding gate enforced (Constitution §17 + /opt/data/Product_Lab_Standard.md).
 7 RC engines MERGED into Platform Core.
 1 RC engine (Experience) DEFERRED to Known Exception EXC-EXPERIENCE-001.
 Recovery Council CLOSED.
 Product Validation Council OPENED.
-Envoy Product Lab AUTHORIZED (renamed from "Envoy MVP"; canonical Experience Engine validation project).
-Next permitted step: Envoy Product Lab file Pre-Coding Plan.
+PVP-001 'Envoy Hostel & Tours' re-designated Product Lab 001 -> Client Project 001 (per ADR-002 / PCR-003).
+Pre-Coding Plan = pvc-approved (sign-off 2026-07-15).
+Next permitted step: Platform Agency auto-execution of 16 internal phases against 8 client-visible outputs.
 ```
