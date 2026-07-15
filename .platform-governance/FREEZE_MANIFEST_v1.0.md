@@ -1,10 +1,10 @@
-# Platform Core v1.0 — Freeze Manifest
+# Platform Core v1.1 — Freeze Manifest
 
-**Version**: 1.0 (FROZEN)
-**Freeze date**: 2026-07-14
-**Authority**: Platform Council Resolution PCR-001 §1 item 1
+**Version**: 1.1 (FROZEN; v1.0 + ADR-001 amendments)
+**Freeze date**: 2026-07-14 (v1.0); 2026-07-15 (v1.1 — Constitution amended by ADR-001)
+**Authority**: Platform Council Resolution PCR-001 §1 item 1 + ADR-001 [accepted 2026-07-15]
 **Adopted**: by Council Chair (사장님 박흥식 / Tim Park) unanimous vote
-**Status**: 🔒 FROZEN
+**Status**: 🔒 FROZEN (no further Platform-side additions except via new ADR per C-24)
 
 ---
 
@@ -110,14 +110,17 @@ Provenance evidence: `Experience_Provenance_Report.md`, `Experience_Recovery_Cla
 
 These artifacts are referenced by this freeze and must remain discoverable alongside the freeze tag:
 
-| Artifact | Path | Role |
+| Companion governance artifacts bound to this freeze | Path | Role |
 |---|---|---|
 | Platform Council Resolution PCR-001 | `.platform-governance/resolutions/PCR-001.md` | Authority for this freeze |
+| **ADR-001** | `docs/ADR/ADR-001-platform-freeze-rule.md` | Authority for v1.1 amendment (C-24 + Product Lab Principle + Product Lab Standard) |
 | Known Exception (Experience Engine) | `.platform-governance/exceptions/EXC-EXPERIENCE-001.md` | Documents what is deferred |
 | Experience Engine Charter | `.charters/EXPERIENCE_ENGINE_CHARTER.md` | Binds future Experience evolution to product evidence only |
+| Product Lab Standard (operative) | `/opt/data/Product_Lab_Standard.md` | Pre-coding gate enforced by PVC per Constitution §17 |
 | Recovery Council Closure Notice | `.platform-governance/councils/RECOVERY-COUNCIL-CLOSED.md` | Discharges the disposition authority |
 | Product Validation Council Charter | `.platform-governance/councils/PRODUCT-VALIDATION-COUNCIL.md` | Defines the next-step council |
-| Platform Constitution v1.0 (FROZEN 2026-07-11) | `docs/000_PLATFORM_CONSTITUTION.md` | Highest-level governance; unchanged by this freeze |
+| Envoy Product Lab Authorization | `.platform-governance/envoy/ENVOY-MVP-AUTHORIZATION.md` | First Product Lab under PVC + C-24 |
+| Platform Constitution v1.1 (FROZEN + ADR-001 amendments) | `docs/000_PLATFORM_CONSTITUTION.md` | Highest-level governance; amended to v1.1 by ADR-001 |
 
 ## 6. Scope of the freeze
 
@@ -162,35 +165,48 @@ These files were inspected by the Provenance Audit; their disk presence is docum
 | Envoy MVP authorized | ✅ per PCR-001 §1 item 5 |
 | Sequencing per Council Chair's directive (Freeze → Envoy → Discovery Beta → Experience v2) | ✅ recorded |
 
-## 9. Next step (per PCR-001)
+## 9. Next step (per PCR-001 + ADR-001)
 
-Authorized next step: **Envoy MVP**. Authorized by PCR-001 §1 items 5 and 6.
+Authorized next step: **Envoy Product Lab** (pre-coding plan filing → pvc-approved → then coding). Authorized by:
+
+- PCR-001 §1 items 5–6 (Envoy as canonical validation project)
+- Constitution §16 (Product Lab Principle) [ADR-001]
+- Constitution §17 (Product Lab Standard) [ADR-001]
+- ADR-001 §5 (Implementation Plan)
 
 ```
-Platform Freeze   ← YOU ARE HERE
+Platform Freeze v1.1   ← YOU ARE HERE (frozen with C-24 binding)
    ↓
-Envoy MVP
+Envoy Product Lab: file Pre-Coding Plan at .platform-governance/products/envoy/pre-coding-plan.md
    ↓
-Discovery Beta
+PVC review (pvc-approved / needs-more-evidence / rejected)
    ↓
-Experiment
+Envoy PRD -> TRD -> UI/UX -> Development -> QES -> Deploy -> Analytics -> Customer Interviews -> Evidence -> Platform Learning
    ↓
-Evidence
+Discovery Beta cycles accumulate production evidence
    ↓
-Experience Engine v2
+PVC promotes evidence -> Platform patterns (EPS L0 -> L4+)
+   ↓
+Experience Engine v2 (only after EPS L4 multi-product / repeat-production)
 ```
 
 Order shall not be reversed. Experience Engine v2 is **not** a freeze-time deliverable; it is a Beta-time and post-Beta-time deliverable.
 
+C-24 (Constitution §15) is in force: no new Platform Engines/Standards/Playbooks may be added unless production evidence from a Product Lab demands them. This applies to every team member, including the Envoy Product Lab team.
+
 ## 10. Seal
 
 ```
-PLATFORM CORE v1.0 FROZEN 2026-07-14.
+PLATFORM CORE v1.1 FROZEN 2026-07-15.
 PCR-001 §1 items 1–9 executed.
+ADR-001 ACCEPTED 2026-07-15; Constitution v1.0 -> v1.1.
+C-24 Platform Freeze Rule in force (Constitution §15).
+Product Lab Principle binding (Constitution §16).
+Product Lab Standard pre-coding gate enforced (Constitution §17 + /opt/data/Product_Lab_Standard.md).
 7 RC engines MERGED into Platform Core.
 1 RC engine (Experience) DEFERRED to Known Exception EXC-EXPERIENCE-001.
 Recovery Council CLOSED.
 Product Validation Council OPENED.
-Envoy MVP AUTHORIZED.
-Next permitted step: Envoy MVP.
+Envoy Product Lab AUTHORIZED (renamed from "Envoy MVP"; canonical Experience Engine validation project).
+Next permitted step: Envoy Product Lab file Pre-Coding Plan.
 ```

@@ -1,8 +1,8 @@
 # Platform Constitution
 
-**Version**: **v1.0 — FROZEN** (사장님 Platform CTO + Product Owner 확립, 2026-07-11)
+**Version**: **v1.1 — FROZEN + ADR-001 amendments** (v1.0 from 2026-07-11, amended by ADR-001 on 2026-07-15)
 **Status**: 🔒 **FROZEN** — 변경은 ADR 절차로만 가능
-**Effective Date**: 2026-07-11
+**Effective Date**: 2026-07-11 (v1.0); 2026-07-15 (v1.1 — C-24 + Product Lab Principle + Product Lab Standard)
 **Next Review**: 2027-07-11 (1년)
 **Owner**: 사장님 (박흥식 / Tim Park)
 
@@ -10,6 +10,11 @@
 > **"Constitution v1.0 Frozen 선언. 단, 아래 조건: Platform Constitution v1.0 Frozen. Only by ADR. No direct editing."**
 >
 > 이 헌법은 **ADR로만 변경 가능**합니다. 직접 편집 금지.
+>
+> **사장님 명령 (2026-07-15, by ADR-001)**:
+> **"After Platform Freeze, new Engines are prohibited. new Standards are prohibited. new Playbooks are prohibited. unless production evidence requires them."**
+> **"Every Product is a Laboratory for the Platform."**
+> **"Every Product must define Hypotheses, Metrics, Experiments, Success Criteria, Learning Goals before coding starts."**
 
 ---
 
@@ -627,10 +632,11 @@ git tag -a v1.0.0 -m "Identity Engine v1.0.0"
 
 ### 9.2 헌법 버전 히스토리
 
-| 버전 | 날짜 | 변경 |
-|---|---|---|
-| v0.1-draft | 2026-07-11 | Initial draft (사장님 확립 대기) |
-| v1.0 | (예정) | 사장님 최종 확립 후 Frozen |
+| 버전 | 날짜 | 변경 | ADR |
+|---|---|---|---|
+| v0.1-draft | 2026-07-11 | Initial draft (사장님 확립 대기) | — |
+| v1.0 | 2026-07-11 | 사장님 최종 확립 후 Frozen (Platform Core v1.0 Freeze 1차) | — |
+| v1.1 | 2026-07-15 | + C-24 Platform Freeze Rule / + Product Lab Principle / + Product Lab Standard (헌법 §15, §16, §17 신설) | ADR-001 |
 
 ### 9.3 헌법 vs ADR
 
@@ -1397,6 +1403,193 @@ Platform Core v1.0 Foundation은 다음을 포함합니다:
 
 ---
 
-**End of Platform Constitution v0.1-draft (C-8 ~ C-13 added)**
+## 15. Platform Freeze Rule (C-24) [ADR-001]
 
-> 사장님 확립: "이 문서는 앞으로 Platform Core의 헌법이 됩니다."
+> **Authority**: ADR-001, accepted by 사장님 (Architecture Review Board) on 2026-07-15.
+> **Source text**: Verbatim from Council Chair's resolution of 2026-07-15.
+> **Effective**: Immediately upon ADR-001 acceptance.
+
+### 15.1 C-24 — Platform Freeze Rule (canonical)
+
+```
+C-24 Platform Freeze Rule
+
+After Platform Freeze,
+
+new Engines are prohibited.
+
+new Standards are prohibited.
+
+new Playbooks are prohibited.
+
+unless
+
+production evidence requires them.
+```
+
+### 15.2 Operating interpretation (non-normative)
+
+- "After Platform Freeze" means from tag `platform-core-v1.0-freeze` onward (2026-07-14).
+- "New Engines / Standards / Playbooks" refers to **net-new platform assets** intended to be added to Platform Core. Refactoring, consolidation, or deprecation of existing assets does not constitute "new".
+- "Production evidence requires them" is interpreted as **EPS Level 4 (Platform Pattern) or higher** — i.e., the asset has crossed from product-specific learning to platform-wide relevance via validated cross-product or repeatable production evidence per the Evidence Promotion Standard (`/opt/data/Evidence_Promotion_Standard.md`).
+- The decision to add a new Engine / Standard / Playbook is itself subject to a new ADR (per ADR Rule 5.2). C-24 is the **substantive** gate; ADR is the **procedural** gate.
+
+### 15.3 What C-24 does NOT prohibit
+
+- Adding new Hypotheses (managed by Hypothesis Lifecycle Standard).
+- Adding new Experiment Records (managed by Experiment Standard + Experiment Registry Specification).
+- Adding new Evidence Artifacts (managed by Evidence Classification Standard + EPS).
+- Adding new Validation Records (managed by PVC).
+- Adding new Product assets that do not enter Platform Core (managed by Platform Boundary Review).
+
+### 15.4 Anti-loop clause
+
+The following reasoning loop is explicitly forbidden:
+
+```
+Platform → Platform → Platform → Platform
+```
+
+That is, Platform extensions that exist solely because Platform itself wants to be more complete — without referencing production evidence — are forbidden by C-24.
+
+---
+
+## 16. Product Lab Principle [ADR-001]
+
+> **Authority**: ADR-001, accepted 2026-07-15.
+> **Status**: Doctrine (binds interpretations; not a mechanically enforced rule).
+
+### 16.1 Canonical text
+
+```
+Product Lab Principle
+
+Every Product
+
+is
+
+a Laboratory
+
+for the Platform.
+```
+
+### 16.2 Canonical Product Lab loop (verbatim from Council Chair)
+
+```
+Envoy Discovery Beta
+↓
+PRD
+↓
+TRD
+↓
+UI / UX
+↓
+Development
+↓
+QES
+↓
+Deploy
+↓
+Analytics
+↓
+Customer Interviews
+↓
+Evidence
+↓
+Platform Learning
+```
+
+This sequence is the canonical order of operations for a Product Lab cycle. Each pass through the loop produces:
+
+1. A Discovery Beta PASS, accumulating production evidence.
+2. A promotion candidate entering the Evidence Promotion Standard ladder.
+3. Optionally, a proposal for Platform evolution — but only via ADR-001/C-24 process if it requires a new Platform asset.
+
+### 16.3 Direction binding
+
+```
+Platform
+↓
+Product
+↓
+Evidence
+↓
+Platform
+```
+
+The reverse direction (Platform → Platform → Platform → Platform) is forbidden (per §15.4).
+
+### 16.4 Envoy's role (as of 2026-07-15)
+
+Envoy (formerly "Envoy Hostel") is hereby **re-designated as the first Product Lab**: **Envoy Product Lab**. Its purpose is to:
+
+- Build a real product (hostel website) for real customers.
+- Operate as a Laboratory for the Platform: capture Hypotheses, metrics, experiments, evidence.
+- Feed learnings back to Platform via the canonical loop, gated by C-24 / EPS.
+
+Envoy's prior Alpha artifacts (Brand DNA, Customer Discovery, Decision Architecture, Trust Evidence Blueprint, Content Strategy, Product Strategy, PRD, TRD, IRP) are positioned as **Discovery Alpha Planning Evidence inputs** to the Product Lab Standard's pre-coding plan.
+
+---
+
+## 17. Product Lab Standard [ADR-001]
+
+> **Authority**: ADR-001, accepted 2026-07-15.
+> **Status**: Mandatory pre-coding standard. Enforced as a gate by the Product Validation Council.
+
+### 17.1 Canonical text
+
+```
+Every Product
+
+must define
+
+Hypotheses
+
+Metrics
+
+Experiments
+
+Success Criteria
+
+Learning Goals
+
+before coding starts.
+```
+
+### 17.2 The six required plan fields
+
+| Field | Question | Owner | Output |
+|---|---|---|---|
+| **Hypotheses** | What testable beliefs is the Product built on? | Product Founder | Hypothesis Register (referencing `/opt/data/Hypothesis_Lifecycle_Standard.md`) |
+| **Metrics** | What numbers measure the Product's effect? | Product Founder + Ana (analytics) | Metric Dictionary (with definitions, sources, refresh cadence) |
+| **Experiments** | What experiments will test each hypothesis? | Product Founder + PVC | Experiment Plan (referencing `/opt/data/Experiment_Standard.md`) |
+| **Success Criteria** | What result counts as a pass? | Product Founder | Threshold table (with baseline, target, and stop conditions) |
+| **Learning Goals** | What does the Platform learn if the Product passes? | Product Founder + PVC | Platform Learning Goals (per §16.2 loop) |
+| **(pre-coding)** | All six fields signed off before any line of code is written | PVC | Pre-Coding Plan file at `.platform-governance/products/<product>/pre-coding-plan.md` |
+
+### 17.3 Pre-coding gate
+
+PRD / TRD / UI / UX / Development cannot begin until the Pre-Coding Plan is:
+
+1. Filed at `.platform-governance/products/<product>/pre-coding-plan.md`.
+2. Reviewed by the Product Validation Council (PVC).
+3. Signed off by the Product Founder and the PVC Chair.
+
+This gate mirrors the Charter's "No reconstruction from memory" and the Knowledge Governance Standard's "Reality over speculation". The Product Lab Standard forbids coding without a plan, on the principle that **plans can be updated cheaply; products cannot**.
+
+### 17.4 Cross-references
+
+| Standard | Path | Used |
+|---|---|---|
+| Hypothesis Lifecycle Standard | `/opt/data/Hypothesis_Lifecycle_Standard.md` | Hypotheses field |
+| Experiment Standard | `/opt/data/Experiment_Standard.md` | Experiments field |
+| Evidence Promotion Standard | `/opt/data/Evidence_Promotion_Standard.md` | Success Criteria thresholds |
+| Knowledge Governance Standard | `/opt/data/Knowledge_Governance_Standard.md` | Learning Goals |
+| Product Validation Council Charter | `.platform-governance/councils/PRODUCT-VALIDATION-COUNCIL.md` | Gate enforcement |
+| PCR-001 | `.platform-governance/resolutions/PCR-001.md` | Establishes PVC |
+
+---
+
+**End of Platform Constitution v1.1 (frozen v1.0 + ADR-001 amendments)**
+
+> 사장님 확립 (2026-07-15, ADR-001): "After Platform Freeze, no new Engines, no new Standards, no new Playbooks — unless production evidence requires them. Every Product is a Laboratory for the Platform. Every Product must define Hypotheses, Metrics, Experiments, Success Criteria, Learning Goals before coding starts."

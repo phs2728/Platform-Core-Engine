@@ -1,8 +1,10 @@
-# Envoy MVP Authorization
+# Envoy Product Lab Authorization (formerly "Envoy MVP Authorization")
 
-**Status**: 🟢 AUTHORIZED (effective 2026-07-14)
-**Authority**: Platform Council Resolution PCR-001 §1 items 5 and 6
-**Sequence position**: After Platform Freeze, Before Discovery Beta
+**Project name**: **Envoy Product Lab** (re-designated 2026-07-15 per Constitution §16.4 / ADR-001)
+**Former name**: Envoy Hostel MVP (renamed)
+**Status**: 🟢 AUTHORIZED (effective 2026-07-14 under PCR-001; re-designated 2026-07-15 by ADR-001)
+**Authority**: Platform Council Resolution PCR-001 §1 items 5 and 6; **Platform Constitution §16 (Product Lab Principle) [ADR-001]**; **§17 (Product Lab Standard) [ADR-001]**
+**Sequence position**: After Platform Freeze v1.1, Before Discovery Beta
 
 ---
 
@@ -11,10 +13,13 @@
 PCR-001 §1 item 5: **Begin Envoy MVP immediately.**
 PCR-001 §1 item 6: **The Envoy project becomes the canonical Experience Engine validation project.**
 
-Envoy Hostel is the first product to operate under Platform Core v1.0 (frozen at tag `platform-core-v1.0-freeze`). Envoy's role is twofold:
+ADR-001 / Constitution §16.4 (2026-07-15): Envoy is re-designated **Envoy Product Lab**. Envoy operates as a **Laboratory for the Platform**: its purpose is to (a) ship a real product (hostel website for real customers) AND (b) generate production evidence that may flow back into Platform knowledge through the canonical Product Lab loop (§16.2).
+
+Envoy is the first product to operate under Platform Core v1.0 (frozen at tag `platform-core-v1.0-freeze`). Envoy's role is threefold:
 
 1. **As a Product**: Build a real hostel website and acquire real customers.
 2. **As a Validation Project**: Generate the production evidence that will become Experience Engine v2.
+3. **As a Laboratory**: Operate the canonical Product Lab loop (Constitution §16.2), producing Hypotheses → Metrics → Experiments → Success Criteria → Learning Goals.
 
 ## 2. Envoy's relationship to the 4-council structure
 
@@ -47,6 +52,8 @@ Envoy already has Discovery Alpha artifacts in place:
 
 Per the Discovery Framework adopted 2026-07-14, these Alpha artifacts are **Planning Evidence** — they justify building the MVP. They are NOT yet Production Evidence. Beta is what converts them to Verified/Observed.
 
+Per ADR-001 / Constitution §17 (Product Lab Standard), these artifacts will be re-positioned as **inputs to the Pre-Coding Plan** (`.platform-governance/products/envoy/pre-coding-plan.md`) — they are content, not the formal container. The Six Required Fields (Hypotheses, Metrics, Experiments, Success Criteria, Learning Goals, Pre-Coding Sign-off) is the formal container; Alpha artifacts provide the substance.
+
 ## 4. Initial Hypothesis Register (per Council Chair's directives)
 
 The Council Chair identified four evidence questions as the first concerns Envoy must validate. These are hereby **registered as the first set of Alpha-level Hypotheses** for the Product Validation Council:
@@ -60,64 +67,111 @@ The Council Chair identified four evidence questions as the first concerns Envoy
 
 These four hypotheses are the canonical Beta questions for Envoy. **None of them are answered today.** They are explicitly **Unknowns**, not fact. They are the things Beta must validate.
 
-## 5. What Envoy MVP means — concretely
+## 5. What Envoy Product Lab means — concretely
 
-Per PCR-001 §1 item 5 ("Begin Envoy MVP immediately"), Envoy MVP authorization permits the following sequence:
+Per PCR-001 §1 item 5 ("Begin Envoy MVP immediately") AND Constitution §16 (Product Lab Principle) AND §17 (Product Lab Standard):
+
+### 5.1 Envoy Product Lab canonical loop (Constitution §16.2, verbatim)
 
 ```
-Envoy MVP Build
+Envoy Discovery Beta
+↓
+PRD
+↓
+TRD
+↓
+UI / UX
+↓
+Development
+↓
+QES
+↓
+Deploy
+↓
+Analytics
+↓
+Customer Interviews
+↓
+Evidence
+↓
+Platform Learning
+```
+
+This is the canonical order of operations for an Envoy Product Lab cycle. Order shall not be reversed.
+
+### 5.2 Higher-level sequence
+
+```
+Envoy Product Lab Build (cycles of §5.1)
   ↓
-Envoy MVP Release (real public URL)
+Discovery Beta Evidence accumulates across cycles
   ↓
-Real customer traffic accumulates
+HYP-ENVOY-001, 002, 003, 004 are tested and resolved
   ↓
-Discovery Beta Evidence Collection begins
-  ↓
-HYP-ENVOY-001, 002, 003, 004 are tested
-  ↓
-Experiment Records are filed at .platform-governance/experiments/
+Experiment Records filed at .platform-governance/experiments/
   ↓
 Validation Records feed PVC
   ↓
 Promotion (per EPS) gates capability that becomes Experience Engine v2
 ```
 
-## 6. Forbidden activities (per Charter + PCR-001)
+### 5.3 Pre-coding gate (Constitution §17 + Product Lab Standard operative)
 
-Envoy MVP **MUST NOT**:
+Envoy's coding MAY begin ONLY after Envoy's Pre-Coding Plan (`.platform-governance/products/envoy/pre-coding-plan.md`) is `pvc-approved`. Until then, only:
+
+- Filing the Pre-Coding Plan.
+- Self-review (§3.2 of operative document).
+- PVC review (§4 of operative document).
+
+are permitted. See `/opt/data/Product_Lab_Standard.md` §4 for the gating process.
+
+## 6. Forbidden activities (per Charter + PCR-001 + C-24)
+
+Envoy Product Lab **MUST NOT**:
 
 - Reverse-engineer or re-implement Experience Engine source code (Charter §1).
 - Manufacture "evidence" to validate Hypotheses (PCR-001 §1 item 8 + Knowledge Governance Standard: "Platform must learn only from validated reality").
 - Edit Platform Core v1.0 (Core is frozen; only tag `platform-core-v1.0-freeze`).
 - Promote any Envoy-specific learning to Platform-wide pattern without EPS Level 4 (multi-product or repeatable production evidence).
+- **Add a new Platform Engine, Standard, or Playbook** without production evidence (Constitution §15 / C-24) — applies to every team member, including the Envoy team.
+- **Begin coding** without a Pre-Coding Plan approved by PVC (Constitution §17 / Product Lab Standard).
 
-Envoy MVP **SHOULD**:
+Envoy Product Lab **SHOULD**:
 
 - Operate against frozen Platform Core v1.0.
 - Capture hypothesis status transitions (Hypothesis → Testing → Verified/Rejected/Replaced/Deprecated).
 - File Experiment Records at `.platform-governance/experiments/` per Experiment Standard.
 - Treat A/B-test results as Product Evidence, not Platform Knowledge — promotion comes later.
+- File Pre-Coding Plan at the canonical path before any line of code is written.
 
 ## 7. Cross-references
 
 | Artifact | Path |
 |---|---|
 | PCR-001 | `.platform-governance/resolutions/PCR-001.md` |
+| ADR-001 | `docs/ADR/ADR-001-platform-freeze-rule.md` |
+| Platform Constitution §15-§17 [ADR-001] | `docs/000_PLATFORM_CONSTITUTION.md` |
 | Product Validation Council Charter | `.platform-governance/councils/PRODUCT-VALIDATION-COUNCIL.md` |
+| **Product Lab Standard (operative)** | `/opt/data/Product_Lab_Standard.md` |
 | Discovery Alpha Framework | `/opt/data/Discovery_Alpha_Framework.md` |
 | Discovery Beta Framework | `/opt/data/Discovery_Beta_Framework.md` |
 | Hypothesis Lifecycle Standard | `/opt/data/Hypothesis_Lifecycle_Standard.md` |
 | Evidence Promotion Standard | `/opt/data/Evidence_Promotion_Standard.md` |
 | Experience Engine Charter | `.charters/EXPERIENCE_ENGINE_CHARTER.md` |
-| Envoy MVP PRD | `/opt/data/envoy-hostel-prd.md` |
+| Envoy PRD (legacy) | `/opt/data/envoy-hostel-prd.md` |
+| Envoy Pre-Coding Plan (to be filed) | `.platform-governance/products/envoy/pre-coding-plan.md` |
 
 ## 8. Seal
 
 ```
-ENVOY MVP AUTHORIZED 2026-07-14.
-PCR-001 §1 items 5–6 executed.
+ENVOY PRODUCT LAB AUTHORIZED 2026-07-14.
+RE-DESIGNATED 2026-07-15: Envoy -> Envoy Product Lab (Constitution §16.4).
+Authority now anchored in PCR-001 + Constitution §16, §17 + ADR-001.
 Discovery Alpha already PASSED via prior artifacts.
-Next step: Discovery Beta → HYP-ENVOY-001, 002, 003, 004 are the first registered hypotheses.
-PVC receives Envoy's Evidence Collection per its Charter.
+Canonical Product Lab loop per Constitution §16.2 (11 steps; verbatim).
+Pre-coding gate enforced by PVC per Constitution §17 + Product Lab Standard.
+First registered hypotheses: HYP-ENVOY-001, 002, 003, 004.
+Knowledge flow direction: Platform -> Product -> Evidence -> Platform (only).
+Reverse direction forbidden.
 Experience Engine v2 will be built from validated Envoy reality, never from memory.
 ```
