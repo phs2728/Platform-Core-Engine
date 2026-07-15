@@ -224,6 +224,13 @@ export async function runFullPlatformScanUseCase(
   await buildCompatibilityMatrixUseCase(deps);
   await buildEventGraphUseCase(deps);
   await calculateHealthScoresUseCase(deps);
-  await generateReleaseReportsUseCase(deps);
-  return calculatePlatformReadinessUseCase(deps);
+  const readiness = await calculatePlatformReadinessUseCase(deps);
+  if (!readiness.ok) return readiness;
+  const manifests = await deps.manifestLoader.loadAll();
+  const totalPublicApis = manifests.reduce((sum, manifest) => sum + manifest.provides.length, 0);
+  const totalEvents = manifests.reduce((sum, manifest) => sum + manifest.events_emitted.length, 0);
+  if (manifests.length === 0 || totalPublicApis === 0 || totalEvents === 0) {
+    return Err(new Error('Manifest discovery failed: engines, public APIs, and events must all be discovered'));
+  }
+  return readiness;
 }

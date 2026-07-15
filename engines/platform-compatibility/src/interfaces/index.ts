@@ -34,6 +34,14 @@ export interface EngineManifest {
   };
 }
 
+export interface ManifestLoadResult {
+  manifests: EngineManifest[];
+  discovered: boolean;
+  manifestCount: number;
+  invalidManifestPaths: string[];
+  rootDir: string;
+}
+
 // ═══════════════════════════════════════════
 // Contract Types
 // ═══════════════════════════════════════════

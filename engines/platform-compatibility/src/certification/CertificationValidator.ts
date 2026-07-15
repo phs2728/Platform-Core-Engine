@@ -130,11 +130,12 @@ export function calculatePlatformReadiness(
       }
     }
   }
+  const discoveryFailed = totalEngines === 0 || totalPublicApis === 0 || totalEvents === 0;
   const compatibilityPercent = compatCells > 0
     ? Math.round((passCells / compatCells) * 100)
     : 100;
 
-  const status = brokenContracts > 0 || breakingChanges > 0 || dependencyResult.cycles.length > 0
+  const status = discoveryFailed || brokenContracts > 0 || breakingChanges > 0 || dependencyResult.cycles.length > 0
     ? 'FAIL'
     : warnings > 0 || compatibilityPercent < 100
       ? 'WARNING'

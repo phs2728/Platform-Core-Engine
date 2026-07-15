@@ -1,0 +1,43 @@
+{
+  "id": "experience",
+  "name": "Experience Engine",
+  "version": "1.0.0-rc1",
+  "phase": 6,
+  "status": "RC1",
+  "description": "[Platform Phase 6] UX Standardization Engine — defines all UX models across the platform (Hero, Banner, Layout, Navigation, Dashboard, UX Pattern, Responsive, Accessibility, Animation, Personalization, Search Experience). Data models only. NOT a UI framework.",
+  "depends_on": ["core-sdk", "policy", "organization", "event-bus"],
+  "provides": [
+    "createExperience", "updateExperience", "deleteExperience", "archiveExperience", "restoreExperience", "getExperience", "listExperiences", "searchExperiences",
+    "createLayout", "updateLayout", "publishLayout", "cloneLayout", "validateLayout",
+    "createHero", "updateHero", "publishHero",
+    "createBanner", "updateBanner", "publishBanner",
+    "createNavigation", "updateNavigation", "publishNavigation",
+    "createDashboard", "updateDashboard", "publishDashboard",
+    "createSearchExperience", "updateSearchExperience", "publishSearchExperience",
+    "createPersonalization", "updatePersonalization",
+    "registerPattern", "publishPattern", "clonePattern",
+    "calculateUXScore", "recommendExperience"
+  ],
+  "events_emitted": [
+    "experience.created", "experience.updated", "experience.deleted", "experience.archived", "experience.restored",
+    "layout.created", "layout.updated", "layout.published", "layout.cloned", "layout.validated",
+    "hero.created", "hero.updated", "hero.published",
+    "banner.created", "banner.updated", "banner.published",
+    "navigation.created", "navigation.updated", "navigation.published",
+    "dashboard.created", "dashboard.updated", "dashboard.published",
+    "searchExperience.created", "searchExperience.updated", "searchExperience.published",
+    "pattern.published", "pattern.cloned",
+    "ux.scored", "ux.validated"
+  ],
+  "events_subscribed": [],
+  "strict_boundaries": {
+    "owns": [
+      "Experience", "Layout", "Hero", "Banner", "Navigation", "Dashboard", "SearchExperience", "UXPattern", "ResponsiveProfile", "AccessibilityProfile", "AnimationProfile", "PersonalizationProfile", "UXScore", "ExperienceAuditRecord"
+    ],
+    "forbidden": [
+      "CSSGeneration", "SCSSCompilation", "ReactComponent", "VueComponent", "FlutterWidget", "AngularComponent", "WebComponent",
+      "BusinessLogic", "Authentication", "Password", "Session", "OAuth", "MFA", "Permission", "Role",
+      "DirectDatabaseConnection", "IndustrySpecificField", "ChartRendering", "LayoutRender"
+    ]
+  }
+}

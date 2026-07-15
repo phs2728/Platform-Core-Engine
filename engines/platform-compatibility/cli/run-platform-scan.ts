@@ -20,7 +20,7 @@ import {
 } from '../src/index.js';
 
 async function main(): Promise<void> {
-  const rootDir = process.cwd();
+  const rootDir = process.env.PLATFORM_REPO_ROOT ?? process.cwd();
   console.log('═══════════════════════════════════════════════════');
   console.log('  Platform Compatibility Suite — Full Platform Scan');
   console.log('═══════════════════════════════════════════════════\n');
@@ -89,6 +89,11 @@ async function main(): Promise<void> {
       console.log(`    ${h.engineId.padEnd(20)} ${bar} ${h.score}/100 (${h.grade})`);
     }
     console.log('');
+  }
+
+  if (readiness.totalEngines === 0 || readiness.totalPublicApis === 0 || readiness.totalEvents === 0) {
+    console.error('  ❌ Manifest discovery failed: engines, public APIs, and events are required.');
+    process.exit(1);
   }
 
   if (readiness.status === 'FAIL') {

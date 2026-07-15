@@ -56,6 +56,28 @@ export class FileSystemEngineManifestLoader implements IEngineManifestLoader {
     return all.find((m) => m.id === engineId) ?? null;
   }
 
+  async loadWithEvidence(): Promise<import('../interfaces/index.js').ManifestLoadResult> {
+    const invalidManifestPaths: string[] = [];
+    if (!existsSync(this.enginesDir)) {
+      return { manifests: [], discovered: false, manifestCount: 0, invalidManifestPaths, rootDir: this.rootDir };
+    }
+    const manifests: EngineManifest[] = [];
+    for (const entry of readdirSync(this.enginesDir)) {
+      const engineDir = join(this.enginesDir, entry);
+      if (!statSync(engineDir).isDirectory()) continue;
+      const manifestPath = join(engineDir, 'engine.json');
+      if (!existsSync(manifestPath)) continue;
+      try {
+        manifests.push(this.normalize(JSON.parse(readFileSync(manifestPath, 'utf-8')) as Partial<EngineManifest>));
+      } catch {
+        invalidManifestPaths.push(manifestPath);
+      }
+    }
+    const sorted = manifests.sort((a, b) => a.id.localeCompare(b.id));
+    return { manifests: sorted, discovered: sorted.length > 0 && invalidManifestPaths.length === 0,
+      manifestCount: sorted.length, invalidManifestPaths, rootDir: this.rootDir };
+  }
+
   private normalize(parsed: Partial<EngineManifest>): EngineManifest {
     const result: EngineManifest = {
       id: parsed.id ?? 'unknown',

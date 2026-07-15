@@ -21,8 +21,8 @@
     "guardian:scan": "tsx cli/run-guardian.ts",
     "guardian:merge": "tsx cli/run-merge.ts",
     "guardian:release": "tsx cli/run-release.ts",
-    "guardian:roadmap": "tsx cli/run-roadmap.ts",
-    "guardian:health": "tsx cli/run-health.ts"
+    "guardian:health": "tsx cli/run-health.ts",
+    "guardian:repo": "tsx cli/run-repository-guardian.ts"
   },
   "dependencies": {
     "@platform/core-sdk": "workspace:*"

@@ -29,6 +29,7 @@ export type {
   PlatformReadiness,
   EventGraphEdge, EventGraph,
   IEngineManifestLoader, IApiSnapshotStore, IReportWriter, ICompatibilityResultStore,
+  ManifestLoadResult,
 } from './interfaces/index.js';
 
 // ═══════════════════════════════════════════

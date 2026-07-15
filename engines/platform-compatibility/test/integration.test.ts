@@ -105,25 +105,22 @@ describe('Integration: Full Platform Scan', () => {
     expect(capabilities.length).toBe(10);
   });
 
-  it('handles platform with no engines gracefully', async () => {
+  it('fails closed when platform has no engines', async () => {
     const deps = makeFullDeps([]);
     const r = await runFullPlatformScanUseCase(deps);
-    expect(r.ok).toBe(true);
-    if (r.ok) {
-      expect(r.value.totalEngines).toBe(0);
-      expect(r.value.totalPublicApis).toBe(0);
-    }
+    expect(r.ok).toBe(false);
+    if (!r.ok) expect(r.error.message).toContain('Manifest discovery failed');
   });
 
-  it('handles engine with empty provides and events', async () => {
+  it('fails closed when engines have no public APIs or events', async () => {
     const manifests = [{
       id: 'empty', name: 'Empty', version: '0.1.0', phase: 1,
       depends_on: [], provides: [], events_emitted: [], events_subscribed: [],
     }];
     const deps = makeFullDeps(manifests);
     const r = await runFullPlatformScanUseCase(deps);
-    expect(r.ok).toBe(true);
-    if (r.ok) expect(r.value.totalEngines).toBe(1);
+    expect(r.ok).toBe(false);
+    if (!r.ok) expect(r.error.message).toContain('Manifest discovery failed');
   });
 
   it('detects all broken contracts across a complex platform', async () => {
