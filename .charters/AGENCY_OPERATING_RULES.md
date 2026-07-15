@@ -1,18 +1,150 @@
 # Agency Operating Charter — From Platform Development to Agency Operations
 
 > **Charter ID**: PCR-AGENCY-001
+> **Version**: v1.1 (chair-instruction patch, 2026-07-15 — Deliverable-First direction)
 > **Adopted**: 2026-07-15
 > **Authority**: Platform Council Chair (사장님 박흥식 / Tim Park) — direct adoption.
-> **Status**: 🔒 SEALED — Verbatim from Council Chair's instruction "Agency 모드 전환" of 2026-07-15.
+> **Status**: 🔒 SEALED — Verbatim from Council Chair's instruction of 2026-07-15.
 > **Effective**: Immediately upon adoption.
 > **Relation to Constitution**: This Charter **operationalizes** the Constitutional cadence (§24-§26 C-30/31/32) into **Agency-grade** working rules. It does NOT amend the Constitution (which is saturated at v1.4 per Chair's "마지막 rules layer" indication). It binds all Platform Agency / Client Project delivery work going forward.
-> **Supersedes**: nothing — this Charter complements the existing Constitutional + Advisory instruments, transforming team operating posture from Platform-Developer to Agency.
+> **v1.1 patch (2026-07-15)**: Chair's "Deliverable First / Don't build pages — build experiences / Living Design System / No Fake Components" addition. **No further Charter layer is opened** — v1.1 is the final form.
 
 ---
 
-## 0. Provenance
+## 0. v1.1 addendum — Deliverable-First Mode (verbatim from Chair)
 
-This Charter is captured **verbatim** from the Council Chair's instruction "에이전시 모드 전환" of 2026-07-15. Each of the 7 rules and the project structure update is recorded verbatim below.
+> "지금은 너무 문서 중심입니다. **고객 프로젝트에서는 생산성이 떨어집니다.**"
+>
+> "**Deliverable First.**"
+>
+> "앞으로는 하루가 끝나면 반드시 브라우저에서 열리는 결과물이 있어야 합니다."
+
+### 0.1 Operational consequence
+
+| Past (charter factory) | Now (Agency Mode v1.1) |
+|---|---|
+| Charter / ADR / Constitution / PCR / Freeze / Council 산출물 누적 | **stop producing governance artifacts** |
+| 문서 검토 = 진행 신호 | **브라우저에서 여는 것 = 진행 신호** |
+| Day 1 = Discovery → IA → Prd → Trd → UI → Frontend → Backend (sequential) | **Day 1 = Homepage.html** |
+| Plan-then-execute (perfect plan first) | Design-as-you-build (Living Design System) |
+
+### 0.2 Updated 10-step execution sequence (verbatim from Chair)
+
+```
+01
+
+Research
+
+↓
+
+02
+
+Brand Direction
+
+↓
+
+03
+
+Design System
+
+↓
+
+04
+
+Homepage
+
+↓
+
+05
+
+Room Pages
+
+↓
+
+06
+
+Booking
+
+↓
+
+07
+
+Tours
+
+↓
+
+08
+
+CMS
+
+↓
+
+09
+
+Admin
+
+↓
+
+10
+
+Optimization
+```
+
+> "**Homepage를 가장 먼저 완성**합니다. 왜냐하면 Homepage가 만들어지면 나머지 디자인은 거의 따라오기 때문입니다."
+
+### 0.3 Living Design System (verbatim from Chair)
+
+> "지금처럼 Design System → 끝 으로 보입니다. 하지만 실제 Agency는 Homepage → 새 Component 발견 → Design System 추가 → 다음 페이지 제작 → 또 Component 발견 → 추가 입니다."
+>
+> **Design System은 완성되는 것이 아니라 계속 성장해야 합니다.**
+
+Operationally: Design System is a **living document in /components**. Each new page cycle may add a new component. Pages never wait for Design System completion.
+
+### 0.4 No Fake Components (verbatim from Chair)
+
+> "AI들이 가장 많이 하는 실수가 일반적인 컴포넌트 (Hero, Card, Feature, CTA, Review, FAQ, Gallery, Contact)를 만드는 것입니다."
+>
+> **Envoy에는 Envoy만의 컴포넌트가 있어야 합니다.**
+
+Forbidden (AI default components):
+- Hero (generic)
+- Card (generic)
+- Feature (generic)
+- CTA (generic)
+- Review (generic)
+- FAQ (generic)
+- Gallery (generic)
+- Contact (generic)
+
+Required (Envoy-specific):
+- Hostel Community Timeline
+- Local Experience Cards
+- Morning Cafe Section
+- Common Ground Highlight
+- Rooftop Experience
+- Meet Travelers
+- Trip Extension
+- Guest Story
+- Recommended Tours
+- Our Impact
+
+**The Envoy Design System is composed of these Envoy-named components only. No generic-named sections.**
+
+### 0.5 Don't build pages. Build experiences. (verbatim from Chair)
+
+> "Don't build pages. Build experiences.
+>
+> 홈페이지를 만드는 것이 아니라 **예약하고 싶게 만드는 경험**을 만드는 것입니다.
+> 객실 페이지를 만드는 것이 아니라 **이 방에서 머물고 싶다는 감정을 만드는 것**입니다.
+> 투어 페이지를 만드는 것이 아니라 **'이 여행은 Envoy에서 예약해야겠다.'라는 신뢰를 만드는 것**입니다."
+
+### 0.6 Final declaration (verbatim from Chair)
+
+> "지금부터의 목표는 단 하나입니다.
+>
+> 더 이상 플랫폼을 증명하는 것이 아니라, **Envoy Hostel과 Envoy Tours가 실제로 사용할 수 있는 세계적 수준의 웹사이트를 완성하는 것**입니다.
+>
+> 플랫폼은 이미 충분한 기반을 갖추었습니다. 이제는 모든 규칙과 엔진이 **고객에게 보이는 결과물**로 이어지는지를 검증하는 단계입니다. 그 기준은 문서의 수가 아니라, **실제 화면의 품질과 예약 전환율**입니다."
 
 ---
 
