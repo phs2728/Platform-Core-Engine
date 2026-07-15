@@ -1,7 +1,7 @@
 # Agency Operating Charter — From Platform Development to Agency Operations
 
 > **Charter ID**: PCR-AGENCY-001
-> **Version**: v1.1 (chair-instruction patch, 2026-07-15 — Deliverable-First direction)
+> **Version**: v1.2 (chair-instruction patch, 2026-07-15 — Design Language First direction)
 > **Adopted**: 2026-07-15
 > **Authority**: Platform Council Chair (사장님 박흥식 / Tim Park) — direct adoption.
 > **Status**: 🔒 SEALED — Verbatim from Council Chair's instruction of 2026-07-15.
@@ -147,6 +147,150 @@ Required (Envoy-specific):
 > 플랫폼은 이미 충분한 기반을 갖추었습니다. 이제는 모든 규칙과 엔진이 **고객에게 보이는 결과물**로 이어지는지를 검증하는 단계입니다. 그 기준은 문서의 수가 아니라, **실제 화면의 품질과 예약 전환율**입니다."
 
 ---
+
+
+
+---
+
+## 0.7. v1.2 addendum — Design Language First (verbatim from Chair, 2026-07-15)
+
+### 0.7.1 The next-order direction (per Chair)
+
+> "지금까지는 **플랫폼을 만드는 엔지니어의 방식**이었다면, 이제는 **디지털 에이전시의 방식**으로 바뀌어야 합니다."
+
+> "다음 목표는 더 많은 HTML 파일이나 규칙을 만드는 것이 아니라, **Envoy만의 디자인 언어(Design Language)를 먼저 확립하고, 그 언어로 모든 화면을 일관되게 구축하는 것**입니다."
+
+### 0.7.2 Operational consequences (verbatim from Chair)
+
+#### a. Stop HTML-file-first
+
+> "실제 프로젝트는 이렇게 만들면 안 됩니다." (HTML file / index.html / etc.)
+>
+> Production structure:
+>
+> ```
+> hostel/
+>   frontend/
+>     app/
+>       (layout)
+>       page.tsx
+>       rooms/
+>       book/
+>       about/
+>       ...
+>     components/
+>       sections/
+>         blocks/
+> ```
+>
+> "처럼 실제 서비스 구조에서 개발해야 합니다."
+
+#### b. "Page"가 아니라 "Section" 단위로
+
+> "Section 단위로 만드는 것이 좋습니다. 그러면 모든 페이지가 같은 Section을 재사용합니다."
+
+#### c. Living Design System → Atomic Design 계층 연결
+
+> ```
+> Atoms
+>   ↓
+> Molecules
+>   ↓
+> Sections
+>   ↓
+> Templates
+>   ↓
+> Pages
+> ```
+>
+> Worked example: `Primary Button -> Booking CTA -> Booking Hero -> Homepage Hero -> Homepage`
+
+#### d. Photography First
+
+> "디자인보다 사진이 중요합니다."
+>
+> Hierarchy:
+>
+> ```
+> Photo
+>   ↓
+> Emotion
+>   ↓
+> Typography
+>   ↓
+> Content
+>   ↓
+> Button
+>   ↓
+> Decoration
+> ```
+
+#### e. Typography Rule
+
+> AI가 font-size / line-height / spacing / margin 을 마음대로 만들면 안 됩니다. Typography Scale을 먼저 만들고 모든 페이지가 그것만 사용해야 합니다.
+
+#### f. Spacing Rule
+
+> Apple / Aman / Stripe를 보면 **공통점은 Spacing**입니다. Component보다 Spacing이 디자인를 만듭니다. Spacing Token도 Design System에 포함되어야 합니다.
+
+#### g. Animation Rule
+
+> "AI들이 제일 많이 하는 실수입니다. 스크롤마다 움직입니다. 절대 안 됩니다."
+>
+> ```
+> Animation
+> Purpose
+> Only.
+> ```
+>
+> 애니메이션은 행동을 설명할 때만. 장식용은 사용하지 않습니다.
+
+#### h. No Design Without Photo
+
+> "저는 반대로 합니다. 앞으로 사진 없이 디자인하지 않습니다. 왜냐하면 Envoy는 사진이 브랜드의 절반입니다."
+
+### 0.7.3 Single canonical deliverable — Envoy Design Language
+
+Chair's directive (verbatim): "제가 다음 단계에서 가장 먼저 만들라고 할 것은 HTML이 아닙니다. **Envoy Design Language** 단 하나입니다."
+
+The Design Language is **the** canonical source of truth. Its scope (verbatim from Chair):
+
+> ```
+> Typography
+> Spacing
+> Grid
+> Photography
+> Motion
+> Buttons
+> Forms
+> Cards
+> Sections
+> Navigation
+> Footer
+> Icons
+> Color
+> ```
+
+**File location**: `clients/envoy/shared/design-system/envoy-design-language.md`.
+
+### 0.7.4 Sequence reset (per Chair §"다음 목표")
+
+1. **Envoy Design Language first** (today).
+2. **Homepage next** (after Design Language signed off by Chair). When Homepage is built, **80% of the rest follows automatically** (per Chair §"최종 의견": "이렇게 하면 … 나머지는 80%가 자동으로 따라옵니다").
+
+### 0.7.5 Compatibility with prior instruments
+
+| Instrument | Compatible? | Notes |
+|---|---|---|
+| Constitution v1.4 (Cadence §24-§26) | Yes | v1.2's design-first cadence composes with §26 Working Website First (we ship working design language before page-by-page mass-produce). |
+| Charter v1.0 (Rules 1-7) | Yes | v1.2 refines the *order* and *unit* (Sections / Design Language first; HTML files still produced as final output) — Rules 1-7 still binding. |
+| Charter v1.1 (Deliverable-First + 10-step + Living DS + No Fake Components + Don't build pages) | Yes | v1.2 layers on top — adds Design Language First + Section-not-Page + Photography First + Typography Scale + Spacing Token + Animation Purpose-only + No Design Without Photo. |
+| Production HTML Day 1-4 (already shipped) | **Preserved for review** | These are **exploration artifacts** that informed the Design Language. They are **not** production structure. They get **replaced** under `clients/envoy/hostel/frontend/app/` (per §0.7.2a) once Design Language is approved and production structure begins. |
+
+### 0.7.6 Charter version-final declaration
+
+Per Charter §0 closing convention (v1.1 declared final-form): **v1.2 is the new final-form**. No further addenda expected under PCR-AGENCY-001. Future design language updates open **new Design Language v0.X majors** (per Envoy Design Language §"Seal of binding"), not new Charter versions.
+
 
 ## 1. Mental model transformation (verbatim from Chair)
 
